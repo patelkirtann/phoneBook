@@ -10,10 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public class AllRecord extends AppCompatActivity {
-    ExpandableListView expandableListView;
-    ExpandableAdapter expandableAdapter;
-    List<String> listHead;
-    HashMap<String, List<String>> listChild;
+    ExpandableListView mExpandableListView;
+    ExpandableAdapter mExpandableAdapter;
+    List<String> mListHead;
+    HashMap<String, List<String>> mListChild;
 
     DBForm dbForm = new DBForm(AllRecord.this);
 
@@ -22,19 +22,19 @@ public class AllRecord extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_record);
 
-        expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
+        mExpandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
         listData();
 
-        expandableAdapter = new ExpandableAdapter(this, listHead, listChild);
-        expandableListView.setAdapter(expandableAdapter);
+        mExpandableAdapter = new ExpandableAdapter(this, mListHead, mListChild);
+        mExpandableListView.setAdapter(mExpandableAdapter);
     }
 
     private void listData() {
-        listHead = new ArrayList<>();
-        listChild = new HashMap<>();
+        mListHead = new ArrayList<>();
+        mListChild = new HashMap<>();
 
         for (int i = 0; i < dbForm.getID().size(); i++) {
-            listHead.add(i, dbForm.getName().get(i).toUpperCase());
+            mListHead.add(i, dbForm.getName().get(i).toUpperCase());
 
             List<String> data = new ArrayList<>();
             data.add(dbForm.getID().get(i));
@@ -43,7 +43,7 @@ public class AllRecord extends AppCompatActivity {
             data.add(dbForm.getStreet().get(i));
             data.add(dbForm.getCity().get(i));
 
-            listChild.put(listHead.get(i), data);
+            mListChild.put(mListHead.get(i), data);
         }
     }
 

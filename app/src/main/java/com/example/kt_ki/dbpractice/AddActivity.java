@@ -11,13 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import static android.R.id.edit;
-
 public class AddActivity extends AppCompatActivity {
     final static int INTENT_VALUE = 2;
 
-    Button save;
-    Button cancel;
+    Button mSave;
+    Button mCancel;
 
     EditText name, email, phone, street, city;
 
@@ -28,8 +26,8 @@ public class AddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
-        save = (Button) findViewById(R.id.save);
-        cancel = (Button) findViewById(R.id.cancel);
+        mSave = (Button) findViewById(R.id.save);
+        mCancel = (Button) findViewById(R.id.cancel);
 
         name = (EditText) findViewById(R.id.name_field);
         String getName = name.getText().toString();
@@ -40,14 +38,14 @@ public class AddActivity extends AppCompatActivity {
 
         final Context context = AddActivity.this;
 
-        save.setOnClickListener(new View.OnClickListener() {
+        mSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if (!isEmpty(name) && !isEmpty(email) && contains(email , "@")) {
                     final AlertDialog.Builder dialog = new AlertDialog.Builder(AddActivity.this);
                     dialog.setTitle("Confirmation");
-                    dialog.setMessage("Do you wanna save?");
+                    dialog.setMessage("Do you wanna mSave?");
 //                dialog.setIcon(R.drawable.);
                     dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
@@ -78,7 +76,7 @@ public class AddActivity extends AppCompatActivity {
         });
 
 
-        cancel.setOnClickListener(new View.OnClickListener() {
+        mCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(context);

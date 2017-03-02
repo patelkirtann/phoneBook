@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -15,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     Button add;
     Button all;
     Button delete;
+    Button mListNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         add = (Button) findViewById(R.id.add_record);
         all = (Button) findViewById(R.id.all_record);
         delete = (Button) findViewById(R.id.delete);
+        mListNames = (Button) findViewById(R.id.list_names);
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +72,15 @@ public class MainActivity extends AppCompatActivity {
                 });
                 AlertDialog alert = dialog.create();
                 alert.show();
+            }
+        });
+
+        mListNames.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this , ListActivity.class);
+                intent.putExtra("All Names" , INTENT_VALUE );
+                startActivity(intent);
             }
         });
     }
