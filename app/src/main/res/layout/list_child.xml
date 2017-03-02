@@ -3,8 +3,10 @@
     android:id="@+id/child"
     android:layout_width="match_parent"
     android:layout_height="30dp"
-    android:paddingLeft="40dp"
-    android:background="@android:color/holo_orange_light"
+    android:padding="7dp"
+    android:background="#1e2e49"
+    android:textColor="#ffffff"
+    android:textAlignment="center"
     android:orientation="vertical">
 
 </TextView>

@@ -62,7 +62,7 @@ public class AddActivity extends AppCompatActivity {
                     dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Toast.makeText(AddActivity.this , " Saving Canceled " , Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddActivity.this , " Canceled " , Toast.LENGTH_SHORT).show();
 
 //                            Intent intent = new Intent(context, MainActivity.class);
 //                            intent.putExtra("Canceled", INTENT_VALUE);
@@ -87,7 +87,7 @@ public class AddActivity extends AppCompatActivity {
                 dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(AddActivity.this , " Saving Canceled " , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddActivity.this , " Canceled " , Toast.LENGTH_SHORT).show();
 
                         Intent intent = new Intent(AddActivity.this, MainActivity.class);
                         intent.putExtra("Cancel", INTENT_VALUE);

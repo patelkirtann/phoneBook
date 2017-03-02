@@ -160,6 +160,4 @@ class DBForm extends SQLiteOpenHelper {
         res.close();
         return array_list;
     }
-
-
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.kt_ki.dbpractice">
 
     <application
@@ -15,8 +16,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddActivity" />
-        <activity android:name=".AllRecord" />
+        <activity android:name=".AddActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".AllRecord"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

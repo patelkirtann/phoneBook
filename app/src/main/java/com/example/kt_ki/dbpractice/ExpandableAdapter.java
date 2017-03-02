@@ -20,7 +20,8 @@ class ExpandableAdapter extends BaseExpandableListAdapter {
     private List<String> headData;
     private HashMap<String, List<String>> childData;
 
-    ExpandableAdapter(Context context, List<String> headData, HashMap<String, List<String>> childData) {
+    ExpandableAdapter(Context context, List<String> headData,
+                      HashMap<String, List<String>> childData) {
         super();
         this.context = context;
         this.headData = headData;
@@ -82,7 +83,8 @@ class ExpandableAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View view, ViewGroup child) {
+    public View getChildView(int groupPosition, int childPosition,
+                             boolean isLastChild, View view, ViewGroup child) {
         final String childText = (String) getChild(groupPosition, childPosition);
 
         if (view == null) {

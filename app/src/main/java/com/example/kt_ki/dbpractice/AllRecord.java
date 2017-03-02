@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-class AllRecord extends AppCompatActivity {
+public class AllRecord extends AppCompatActivity {
     ExpandableListView expandableListView;
     ExpandableAdapter expandableAdapter;
     List<String> listHead;
@@ -47,9 +47,9 @@ class AllRecord extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        System.exit(0);
-    }
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        System.exit(0);
+//    }
 }

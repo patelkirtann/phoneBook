@@ -3,10 +3,11 @@
     android:id="@+id/head"
     android:layout_width="match_parent"
     android:layout_height="40dp"
-    android:background="@android:color/holo_red_light"
+    android:background="#121b2b"
+    android:textColor="#ffffff"
     android:orientation="vertical"
-    android:paddingStart="50dp"
-    android:textStyle="italic"
-    android:paddingLeft="50dp">
+    android:textAlignment="center"
+    android:padding="20dp"
+    android:textStyle="italic">
 
 </TextView>
