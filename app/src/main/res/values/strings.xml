@@ -22,4 +22,5 @@
     <string name="action_settings">Settings</string>
     <string name="delete_all">Delete All</string>
     <string name="info_max_300">Info(Max. 300)</string>
+    <string name="choose_operations">Choose Operations</string>
 </resources>

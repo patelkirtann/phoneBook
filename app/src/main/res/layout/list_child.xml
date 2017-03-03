@@ -9,10 +9,11 @@
         android:id="@+id/tv_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#1e2e49"
+        android:background="#8f9193"
         android:orientation="vertical"
         android:padding="7dp"
-        android:textAlignment="center"
+        android:textIsSelectable="true"
+        android:textAlignment="gravity"
         android:textColor="#ffffff" />
 </ScrollView>
 

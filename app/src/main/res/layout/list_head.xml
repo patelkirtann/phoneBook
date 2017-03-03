@@ -10,6 +10,4 @@
     android:padding="20dp"
     android:textStyle="italic">
     <!--android:background="#121b2b"-->
-
-
 </TextView>
