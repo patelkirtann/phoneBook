@@ -17,7 +17,7 @@ public class AddActivity extends AppCompatActivity {
     Button mSave;
     Button mCancel;
 
-    EditText name, email, phone, street, city;
+    EditText name, email, phone, street, city, info;
 
     DBForm dbForm = new DBForm(this);
 
@@ -30,11 +30,12 @@ public class AddActivity extends AppCompatActivity {
         mCancel = (Button) findViewById(R.id.cancel);
 
         name = (EditText) findViewById(R.id.name_field);
-        String getName = name.getText().toString();
+//        String getName = name.getText().toString();
         email = (EditText) findViewById(R.id.email_field);
         phone = (EditText) findViewById(R.id.phone_field);
         street = (EditText) findViewById(R.id.street_field);
         city = (EditText) findViewById(R.id.city_field);
+        info = (EditText) findViewById(R.id.tv_auto);
 
         final Context context = AddActivity.this;
 
@@ -125,6 +126,7 @@ public class AddActivity extends AppCompatActivity {
         String phoneText = phone.getText().toString();
         String streetText = street.getText().toString();
         String cityText = city.getText().toString();
+//        String infoText = info.getText().toString();
 
         dbForm.insertValue(nameText, emailText, phoneText, streetText, cityText);
 

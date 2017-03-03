@@ -42,6 +42,7 @@ public class AllRecord extends AppCompatActivity {
             data.add(dbForm.getPhone().get(i));
             data.add(dbForm.getStreet().get(i));
             data.add(dbForm.getCity().get(i));
+//            data.add(dbForm.getInfo().get(i));
 
             mListChild.put(mListHead.get(i), data);
         }
