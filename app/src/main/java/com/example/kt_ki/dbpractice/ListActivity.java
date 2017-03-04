@@ -6,7 +6,6 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +23,10 @@ public class ListActivity extends AppCompatActivity {
         mListNames.setSelector(R.color.colorAccent);
 
         mNames = new ArrayList<>();
-//        for (int i = 0; i < dbForm.getName().size(); i++) {
-//            mNames.add(i, dbForm.getName().get(i).toUpperCase());
-//        }
-        mNames.addAll(dbForm.getName());
-        ListAdapter adapter = new ArrayAdapter<>(this, R.layout.list_head, R.id.head, mNames);
+        for (int i = 0; i < dbForm.getName().size(); i++) {
+            mNames.add(dbForm.getName().get(i).toUpperCase());
+        }
+        ListAdapter adapter = new ArrayAdapter<>(this, R.layout.list_view, R.id.list_names, mNames);
         mListNames.setAdapter(adapter);
-//        this.setListAdapter(new ArrayAdapter<>(this, R.layout.list_head, R.id.head , mNames));
     }
 }

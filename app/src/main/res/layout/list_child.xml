@@ -9,13 +9,12 @@
         android:id="@+id/tv_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#8f9193"
+        android:background="@color/dark_gray_background"
         android:orientation="vertical"
-        android:lineSpacingExtra="1.5dp"
         android:padding="7dp"
         android:textIsSelectable="true"
         android:textAlignment="gravity"
-        android:textColor="#ffffff" />
+        android:textColor="@color/whiteText" />
 </RelativeLayout>
 
     <!--<TextView-->

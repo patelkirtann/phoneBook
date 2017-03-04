@@ -3,6 +3,7 @@ package com.example.kt_ki.dbpractice;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.content.IntentCompat;
 import android.view.LayoutInflater;
 import android.view.View;
