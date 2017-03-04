@@ -24,10 +24,11 @@ public class ListActivity extends AppCompatActivity {
         mListNames.setSelector(R.color.colorAccent);
 
         mNames = new ArrayList<>();
-        for (int i = 0; i < dbForm.getID().size(); i++) {
-            mNames.add(i , dbForm.getName().get(i).toUpperCase());
-        }
-        ListAdapter adapter = new ArrayAdapter<>(this, R.layout.list_head, R.id.head , mNames);
+//        for (int i = 0; i < dbForm.getName().size(); i++) {
+//            mNames.add(i, dbForm.getName().get(i).toUpperCase());
+//        }
+        mNames.addAll(dbForm.getName());
+        ListAdapter adapter = new ArrayAdapter<>(this, R.layout.list_head, R.id.head, mNames);
         mListNames.setAdapter(adapter);
 //        this.setListAdapter(new ArrayAdapter<>(this, R.layout.list_head, R.id.head , mNames));
     }

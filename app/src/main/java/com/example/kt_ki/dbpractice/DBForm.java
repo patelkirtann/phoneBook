@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -22,7 +24,7 @@ class DBForm extends SQLiteOpenHelper {
     private static final String CONTACTS_COLUMN_PHONE = "phone";
     private static final String CONTACTS_COLUMN_STREET = "street";
     private static final String CONTACTS_COLUMN_CITY = "city";
-//    private static final String CONTACTS_COLUMN_INFO = "info";
+//    private static final String CONTACTS_COLUMN_INTRO = "intro";
 
     DBForm(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -57,7 +59,7 @@ class DBForm extends SQLiteOpenHelper {
         contentValues.put(CONTACTS_COLUMN_PHONE, phone);
         contentValues.put(CONTACTS_COLUMN_STREET, street);
         contentValues.put(CONTACTS_COLUMN_CITY, city);
-//        contentValues.put(CONTACTS_COLUMN_INFO, info);
+//        contentValues.put(CONTACTS_COLUMN_INTRO, intro);
 
         sqLiteDatabase.insert(CONTACTS_TABLE_NAME, null, contentValues);
         return true;
@@ -67,7 +69,7 @@ class DBForm extends SQLiteOpenHelper {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select id from contacts" , null);
+        Cursor res = db.rawQuery("select id from contacts", null);
         res.moveToFirst();
 
         while (!res.isAfterLast()) {
@@ -82,12 +84,13 @@ class DBForm extends SQLiteOpenHelper {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select name from contacts" , null);
+        Cursor res = db.rawQuery("select name from contacts", null);
         res.moveToFirst();
-
-        while (!res.isAfterLast()) {
-            array_list.add(res.getString(res.getColumnIndex(CONTACTS_COLUMN_NAME)));
-            res.moveToNext();
+        if (res.moveToFirst()) {
+            while (!res.isAfterLast()) {
+                array_list.add(res.getString(res.getColumnIndex(CONTACTS_COLUMN_NAME)));
+                res.moveToNext();
+            }
         }
         res.close();
         return array_list;
@@ -97,7 +100,7 @@ class DBForm extends SQLiteOpenHelper {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select email from contacts" , null);
+        Cursor res = db.rawQuery("select email from contacts", null);
         res.moveToFirst();
 
         while (!res.isAfterLast()) {
@@ -112,7 +115,7 @@ class DBForm extends SQLiteOpenHelper {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select phone from contacts" , null);
+        Cursor res = db.rawQuery("select phone from contacts", null);
         res.moveToFirst();
 
         while (!res.isAfterLast()) {
@@ -127,7 +130,7 @@ class DBForm extends SQLiteOpenHelper {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select street from contacts" , null);
+        Cursor res = db.rawQuery("select street from contacts", null);
         res.moveToFirst();
 
         while (!res.isAfterLast()) {
@@ -142,7 +145,7 @@ class DBForm extends SQLiteOpenHelper {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select city from contacts" , null);
+        Cursor res = db.rawQuery("select city from contacts", null);
         res.moveToFirst();
 
         while (!res.isAfterLast()) {
@@ -153,21 +156,50 @@ class DBForm extends SQLiteOpenHelper {
         return array_list;
     }
 
-//    public ArrayList<String> getInfo() {
+//    public ArrayList<String> getIntro() {
 //        ArrayList<String> array_list = new ArrayList<>();
 //
 //        SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor res = db.rawQuery("select info from contacts" , null);
+//        Cursor res = db.rawQuery("select intro from contacts", null);
 //        res.moveToFirst();
 //
 //        while (!res.isAfterLast()) {
-//            array_list.add(res.getString(res.getColumnIndex(CONTACTS_COLUMN_INFO)));
+//            array_list.add(res.getString(res.getColumnIndex(CONTACTS_COLUMN_INTRO)));
 //            res.moveToNext();
 //        }
 //        res.close();
 //        return array_list;
 //    }
 
+    public ArrayList<String> deleteContactByName(String name) {
+        ArrayList<String> array_list = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("delete from contacts where id=" + name, null);
+        res.moveToFirst();
+
+        while (!res.isAfterLast()) {
+            array_list.add(res.getString(res.getColumnIndex(CONTACTS_COLUMN_NAME)));
+            res.moveToNext();
+        }
+        res.close();
+        return array_list;
+    }
+
+    public ArrayList<String> deleteContactByID(int id) {
+        ArrayList<String> array_list = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("delete from contacts where id=" + id, null);
+        res.moveToFirst();
+
+        while (!res.isAfterLast()) {
+            array_list.add(res.getString(res.getColumnIndex(CONTACTS_COLUMN_ID)));
+            res.moveToNext();
+        }
+        res.close();
+        return array_list;
+    }
 
     ArrayList<String> deleteAll() {
         ArrayList<String> array_list = new ArrayList<>();

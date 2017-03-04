@@ -17,7 +17,7 @@ public class AddActivity extends AppCompatActivity {
     Button mSave;
     Button mCancel;
 
-    EditText name, email, phone, street, city, info;
+    EditText name, email, phone, street, city, intro;
 
     DBForm dbForm = new DBForm(this);
 
@@ -35,7 +35,7 @@ public class AddActivity extends AppCompatActivity {
         phone = (EditText) findViewById(R.id.phone_field);
         street = (EditText) findViewById(R.id.street_field);
         city = (EditText) findViewById(R.id.city_field);
-        info = (EditText) findViewById(R.id.tv_auto);
+        intro = (EditText) findViewById(R.id.tv_auto);
 
         final Context context = AddActivity.this;
 
@@ -43,16 +43,18 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if (!isEmpty(name) && !isEmpty(email) && contains(email , "@")) {
+                if (!isEmpty(name) && !isEmpty(email) && contains(email ,"@")
+                        && contains(email ,".")) {
                     final AlertDialog.Builder dialog = new AlertDialog.Builder(AddActivity.this);
                     dialog.setTitle("Confirmation");
-                    dialog.setMessage("Do you wanna mSave?");
+                    dialog.setMessage("Do you wanna Save?");
 //                dialog.setIcon(R.drawable.);
                     dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             AddedToRecords();
                             Toast.makeText(AddActivity.this , " Contact Saved " , Toast.LENGTH_SHORT).show();
+                            onRestart();
 //                        Intent intent = new Intent(context,AddActivity.class);
 //                        intent.putExtra("Add Record", INTENT_VALUE);
 //                        startActivity(intent);
@@ -126,9 +128,16 @@ public class AddActivity extends AppCompatActivity {
         String phoneText = phone.getText().toString();
         String streetText = street.getText().toString();
         String cityText = city.getText().toString();
-//        String infoText = info.getText().toString();
+//        String introText = intro.getText().toString();
 
         dbForm.insertValue(nameText, emailText, phoneText, streetText, cityText);
 
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Intent intent = new Intent(AddActivity.this , AddActivity.class);
+        startActivity(intent);
     }
 }

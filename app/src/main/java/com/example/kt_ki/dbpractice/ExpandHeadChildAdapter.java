@@ -1,34 +1,24 @@
 package com.example.kt_ki.dbpractice;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
-import android.support.v4.content.IntentCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
- * Created by kt_ki on 12/2/2016.
+ * Created by kt_ki on 3/3/2017.
  */
 
-class ExpandableAdapter extends BaseExpandableListAdapter {
-    private Context context;
-    private List<String> headData;
-    private HashMap<String, List<String>> childData;
+public class ExpandHeadChildAdapter extends BaseExpandableListAdapter {
 
-    ExpandableAdapter(Context context, List<String> headData,
-                      HashMap<String, List<String>> childData) {
-        super();
-        this.context = context;
-        this.headData = headData;
-        this.childData = childData;
-    }
+    private Context context;
+    private ArrayList<String> headData;
+    private ArrayList<String> childData;
 
     @Override
     public int getGroupCount() {
@@ -37,7 +27,7 @@ class ExpandableAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return this.childData.get(this.headData.get(groupPosition)).size();
+        return Integer.parseInt(this.childData.get(headData.size()));
 //        return 0;
     }
 
@@ -48,7 +38,7 @@ class ExpandableAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return this.childData.get(this.headData.get(groupPosition)).get(childPosition);
+        return this.childData.get(Integer.parseInt(headData.get(groupPosition)));
     }
 
     @Override
