@@ -24,4 +24,5 @@
     <string name="info_max_300">Info(Max. 300)</string>
     <string name="choose_operations">Choose Operations</string>
     <string name="share">Share</string>
+    <string name="search">Search</string>
 </resources>

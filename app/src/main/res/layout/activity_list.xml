@@ -7,9 +7,15 @@
     android:padding="16dp"
     tools:context="com.example.kt_ki.dbpractice.ListActivity">
 
+    <EditText
+        android:id="@+id/search_names"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/search"/>
+
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-   >
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/search_names"/>
 </RelativeLayout>

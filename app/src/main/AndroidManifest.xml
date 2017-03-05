@@ -23,7 +23,8 @@
             android:name=".AllRecord"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".ListActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="stateHidden"/>
     </application>
 
 </manifest>
