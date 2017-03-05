@@ -1,15 +1,14 @@
 package com.example.kt_ki.dbpractice;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -51,14 +50,13 @@ public class ListActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.search_list , menu);
+        getMenuInflater().inflate(R.menu.refresh_list, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -67,10 +65,18 @@ public class ListActivity extends AppCompatActivity {
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-
+                onRestart();
                 return false;
             }
         });
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onRestart() {
+        Intent intent = new Intent(ListActivity.this , ListActivity.class);
+        startActivity(intent);
+        this.finish();
+        super.onRestart();
     }
 }
