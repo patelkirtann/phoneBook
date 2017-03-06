@@ -164,7 +164,7 @@ class DBForm extends SQLiteOpenHelper {
 //        res.moveToFirst();
 //
 //        while (!res.isAfterLast()) {
-//            array_list.add(res.getString(res.getColumnIndex(CONTACTS_COLUMN_INTRO)));
+//            array_list.mAdd(res.getString(res.getColumnIndex(CONTACTS_COLUMN_INTRO)));
 //            res.moveToNext();
 //        }
 //        res.close();
@@ -175,7 +175,7 @@ class DBForm extends SQLiteOpenHelper {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("delete from contacts where id=" + name, null);
+        Cursor res = db.rawQuery("mDelete from contacts where id=" + name, null);
         res.moveToFirst();
 
         while (!res.isAfterLast()) {
@@ -190,7 +190,7 @@ class DBForm extends SQLiteOpenHelper {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("delete from contacts where id=" + id, null);
+        Cursor res = db.rawQuery("mDelete from contacts where id=" + id, null);
         res.moveToFirst();
 
         while (!res.isAfterLast()) {
@@ -205,7 +205,7 @@ class DBForm extends SQLiteOpenHelper {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("delete from contacts", null);
+        Cursor res = db.rawQuery("mDelete from contacts", null);
         res.moveToFirst();
 
         while (!res.isAfterLast()) {

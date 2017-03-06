@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.kt_ki.dbpractice">
 
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,9 +23,12 @@
         <activity
             android:name=".AllRecord"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".ListActivity"
+        <activity
+            android:name=".ListActivity"
             android:parentActivityName=".MainActivity"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".UserDetailOperationActivity"
+            android:parentActivityName=".ListActivity"/>
     </application>
 
 </manifest>

@@ -37,12 +37,12 @@ public class AllRecord extends AppCompatActivity {
             mListHead.add(i, dbForm.getName().get(i).toUpperCase());
 
             List<String> data = new ArrayList<>();
-            data.add(dbForm.getID().get(i));
-            data.add(dbForm.getEmail().get(i));
-            data.add(dbForm.getPhone().get(i));
-            data.add(dbForm.getStreet().get(i));
-            data.add(dbForm.getCity().get(i));
-//            data.add(dbForm.getIntro().get(i));
+            data.add("    ID:      ".toUpperCase() + dbForm.getID().get(i));
+            data.add(" Email:      ".toUpperCase() + dbForm.getEmail().get(i));
+            data.add(" Phone:      ".toUpperCase() + dbForm.getPhone().get(i));
+            data.add("Street:      ".toUpperCase() + dbForm.getStreet().get(i));
+            data.add("  City:      ".toUpperCase() + dbForm.getCity().get(i));
+//            data.mAdd(dbForm.getIntro().get(i));
 
             mListChild.put(mListHead.get(i), data);
         }

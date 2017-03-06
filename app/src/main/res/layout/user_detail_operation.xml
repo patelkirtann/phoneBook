@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_gray_background"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="30dp">
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_name"
+            android:padding="10dp"
+            android:textColor="@color/colorAccent" />
+
+        <Button
+            android:id="@+id/bt_gotoCall"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/tv_id"
+            android:background="@drawable/ic_phone"
+            android:padding="10dp"
+            android:clickable="true"/>
+
+        <TextView
+            android:id="@+id/tv_phoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/bt_gotoCall"
+            android:layout_alignBottom="@+id/bt_gotoCall"
+            android:layout_toEndOf="@+id/bt_gotoEmail"
+            android:layout_toRightOf="@+id/bt_gotoEmail"
+            android:background="@color/dark_gray_background"
+            android:padding="10dp"
+            android:textColor="@color/colorAccent" />
+
+        <Button
+            android:id="@+id/bt_gotoEmail"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/bt_gotoCall"
+            android:background="@drawable/ic_email"
+            android:clickable="true"
+            android:padding="10dp" />
+
+        <TextView
+            android:id="@+id/tv_emailAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/bt_gotoEmail"
+            android:layout_alignBottom="@+id/bt_gotoCall"
+            android:layout_toEndOf="@+id/bt_gotoMap"
+            android:layout_toRightOf="@+id/bt_gotoMap"
+            android:background="@color/dark_gray_background"
+            android:padding="10dp"
+            android:textColor="@color/colorAccent" />
+
+        <Button
+            android:id="@+id/bt_gotoMap"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/bt_gotoEmail"
+            android:background="@drawable/ic_location"
+            android:padding="10dp"
+            android:clickable="true"/>
+
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/bt_gotoMap"
+            android:layout_toEndOf="@+id/bt_gotoEmail"
+            android:layout_toRightOf="@+id/bt_gotoEmail"
+            android:background="@color/dark_gray_background"
+            android:padding="10dp"
+            android:textColor="@color/colorAccent" />
+
+        <TextView
+            android:id="@+id/tv_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/bt_gotoMap"
+            android:layout_marginTop="10dp"
+            android:background="@color/dark_gray_background"
+            android:padding="10dp"
+            android:textColor="@color/colorAccent" />
+    </RelativeLayout>
+</ScrollView>

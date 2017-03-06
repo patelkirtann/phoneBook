@@ -26,4 +26,7 @@
     <string name="share">Share</string>
     <string name="search">Search</string>
     <string name="refresh">Refresh</string>
+    <string name="Call">bt_gotoCall</string>
+    <string name="Email">bt_gotoEmail</string>
+    <string name="Location">bt_gotoMap</string>
 </resources>

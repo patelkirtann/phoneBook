@@ -10,29 +10,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     final static int INTENT_VALUE = 2;
 
-    Button add;
-    Button all;
-    Button delete;
-    Button mListNames;
+    Button mAdd, mAll, mDelete, mListNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        add = (Button) findViewById(R.id.add_record);
-        all = (Button) findViewById(R.id.all_record);
-        delete = (Button) findViewById(R.id.delete);
+        mAdd = (Button) findViewById(R.id.add_record);
+        mAll = (Button) findViewById(R.id.all_record);
+        mDelete = (Button) findViewById(R.id.delete);
         mListNames = (Button) findViewById(R.id.list_names);
 
-        add.setOnClickListener(new View.OnClickListener() {
+        mAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, AddActivity.class);
@@ -41,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        all.setOnClickListener(new View.OnClickListener() {
+        mAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, AllRecord.class);
@@ -50,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        delete.setOnClickListener(new View.OnClickListener() {
+        mDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final DBForm dbForm = new DBForm(MainActivity.this);
@@ -97,9 +92,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
                 String mimetype = "text/plain";
                 String title = "title";
                 String text = "Link Here";
@@ -108,9 +100,6 @@ public class MainActivity extends AppCompatActivity {
                         .setType(mimetype)
                         .setText(text)
                         .startChooser();
-                return false;
-            }
-        });
         return super.onOptionsItemSelected(item);
     }
 }
