@@ -42,7 +42,7 @@ public class AllRecord extends AppCompatActivity {
             data.add(" Phone:      ".toUpperCase() + dbForm.getPhone().get(i));
             data.add("Street:      ".toUpperCase() + dbForm.getStreet().get(i));
             data.add("  City:      ".toUpperCase() + dbForm.getCity().get(i));
-//            data.mAdd(dbForm.getIntro().get(i));
+            data.add(" Intro:      ".toUpperCase() + dbForm.getIntro().get(i));
 
             mListChild.put(mListHead.get(i), data);
         }

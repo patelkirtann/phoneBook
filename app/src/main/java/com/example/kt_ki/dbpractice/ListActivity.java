@@ -68,16 +68,16 @@ public class ListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 position = mListNames.getPositionForView(view);
                 for (int i = 0; i < mNames.size(); i++) {
-                    if (position == i){
-                        Toast.makeText(ListActivity.this , adapter.getItem(i).toString(),
+                    if (position == i) {
+                        Toast.makeText(ListActivity.this, adapter.getItem(i).toString(),
                                 Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(ListActivity.this , UserDetailOperationActivity.class);
-                        intent.putExtra(NAME_INTENT , dbForm.getPhone().get(i));
-                        intent.putExtra(ID_INTENT , dbForm.getPhone().get(i));
-                        intent.putExtra(PHONE_NUMBER_INTENT , dbForm.getPhone().get(i));
-                        intent.putExtra(EMAIL_ADDRESS_INTENT , dbForm.getPhone().get(i));
-                        intent.putExtra(MAP_LOCATION_INTENT , dbForm.getPhone().get(i));
-                        intent.putExtra(INTRO_INTENT , dbForm.getPhone().get(i));
+                        Intent intent = new Intent(ListActivity.this, UserDetailOperationActivity.class);
+                        intent.putExtra(NAME_INTENT, dbForm.getPhone().get(i));
+                        intent.putExtra(ID_INTENT, dbForm.getPhone().get(i));
+                        intent.putExtra(PHONE_NUMBER_INTENT, dbForm.getPhone().get(i));
+                        intent.putExtra(EMAIL_ADDRESS_INTENT, dbForm.getPhone().get(i));
+                        intent.putExtra(MAP_LOCATION_INTENT, dbForm.getPhone().get(i));
+                        intent.putExtra(INTRO_INTENT, dbForm.getPhone().get(i));
                         startActivity(intent);
                     }
                 }
@@ -95,13 +95,13 @@ public class ListActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-                onRestart();
+        onRestart();
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     protected void onRestart() {
-        Intent intent = new Intent(ListActivity.this , ListActivity.class);
+        Intent intent = new Intent(ListActivity.this, ListActivity.class);
         startActivity(intent);
         this.finish();
         super.onRestart();

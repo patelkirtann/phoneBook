@@ -47,7 +47,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                     if (isCallPermissionGranted()){
                         startActivity(mCallIntent);
                     }else {
-                        Toast.makeText(UserDetailOperationActivity.this, "Grant Permission ",
+                        Toast.makeText(UserDetailOperationActivity.this, "Grant Permission to call ",
                                 Toast.LENGTH_SHORT).show();
                     }
                 }catch (Exception e){

@@ -24,7 +24,7 @@ class DBForm extends SQLiteOpenHelper {
     private static final String CONTACTS_COLUMN_PHONE = "phone";
     private static final String CONTACTS_COLUMN_STREET = "street";
     private static final String CONTACTS_COLUMN_CITY = "city";
-//    private static final String CONTACTS_COLUMN_INTRO = "intro";
+    private static final String CONTACTS_COLUMN_INTRO = "intro";
 
     DBForm(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -39,7 +39,8 @@ class DBForm extends SQLiteOpenHelper {
                         "phone text," +
                         "email text, " +
                         "street text," +
-                        "city text)"
+                        "city text," +
+                        "intro text)"
         );
     }
 
@@ -50,7 +51,7 @@ class DBForm extends SQLiteOpenHelper {
     }
 
     boolean insertValue(String name, String email, String phone,
-                        String street, String city) {
+                        String street, String city, String intro) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
@@ -59,7 +60,7 @@ class DBForm extends SQLiteOpenHelper {
         contentValues.put(CONTACTS_COLUMN_PHONE, phone);
         contentValues.put(CONTACTS_COLUMN_STREET, street);
         contentValues.put(CONTACTS_COLUMN_CITY, city);
-//        contentValues.put(CONTACTS_COLUMN_INTRO, intro);
+        contentValues.put(CONTACTS_COLUMN_INTRO, intro);
 
         sqLiteDatabase.insert(CONTACTS_TABLE_NAME, null, contentValues);
         return true;
@@ -156,20 +157,20 @@ class DBForm extends SQLiteOpenHelper {
         return array_list;
     }
 
-//    public ArrayList<String> getIntro() {
-//        ArrayList<String> array_list = new ArrayList<>();
-//
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor res = db.rawQuery("select intro from contacts", null);
-//        res.moveToFirst();
-//
-//        while (!res.isAfterLast()) {
-//            array_list.mAdd(res.getString(res.getColumnIndex(CONTACTS_COLUMN_INTRO)));
-//            res.moveToNext();
-//        }
-//        res.close();
-//        return array_list;
-//    }
+    public ArrayList<String> getIntro() {
+        ArrayList<String> array_list = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select intro from contacts", null);
+        res.moveToFirst();
+
+        while (!res.isAfterLast()) {
+            array_list.add(res.getString(res.getColumnIndex(CONTACTS_COLUMN_INTRO)));
+            res.moveToNext();
+        }
+        res.close();
+        return array_list;
+    }
 
     public ArrayList<String> deleteContactByName(String name) {
         ArrayList<String> array_list = new ArrayList<>();

@@ -128,9 +128,9 @@ public class AddActivity extends AppCompatActivity {
         String phoneText = phone.getText().toString();
         String streetText = street.getText().toString();
         String cityText = city.getText().toString();
-//        String introText = intro.getText().toString();
+        String introText = intro.getText().toString();
 
-        dbForm.insertValue(nameText, emailText, phoneText, streetText, cityText);
+        dbForm.insertValue(nameText, emailText, phoneText, streetText, cityText, introText);
 
     }
 
