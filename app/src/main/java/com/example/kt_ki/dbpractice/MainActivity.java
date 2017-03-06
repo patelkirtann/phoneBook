@@ -58,9 +58,9 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dbForm.deleteAll();
                         Toast.makeText(MainActivity.this, "All Data Deleted", Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(MainActivity.this, AllRecord.class);
-//                        intent.putExtra("Cancel", INTENT_VALUE);
-//                        startActivity(intent);
+//                        Intent mCallIntent = new Intent(MainActivity.this, AllRecord.class);
+//                        mCallIntent.putExtra("Cancel", INTENT_VALUE);
+//                        startActivity(mCallIntent);
                     }
                 });
                 dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {

@@ -55,9 +55,9 @@ public class AddActivity extends AppCompatActivity {
                             AddedToRecords();
                             Toast.makeText(AddActivity.this , " Contact Saved " , Toast.LENGTH_SHORT).show();
                             onRestart();
-//                        Intent intent = new Intent(context,AddActivity.class);
-//                        intent.putExtra("Add Record", INTENT_VALUE);
-//                        startActivity(intent);
+//                        Intent mCallIntent = new Intent(context,AddActivity.class);
+//                        mCallIntent.putExtra("Add Record", INTENT_VALUE);
+//                        startActivity(mCallIntent);
                         }
                     });
                     dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -65,9 +65,9 @@ public class AddActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Toast.makeText(AddActivity.this , " Canceled " , Toast.LENGTH_SHORT).show();
 
-//                            Intent intent = new Intent(context, MainActivity.class);
-//                            intent.putExtra("Canceled", INTENT_VALUE);
-//                            startActivity(intent);
+//                            Intent mCallIntent = new Intent(context, MainActivity.class);
+//                            mCallIntent.putExtra("Canceled", INTENT_VALUE);
+//                            startActivity(mCallIntent);
                         }
                     });
                     AlertDialog alert = dialog.create();
