@@ -11,28 +11,29 @@
         android:padding="30dp">
 
         <TextView
+            android:id="@+id/tv_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent" />
+
+        <TextView
             android:id="@+id/tv_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:textAlignment="center"
             android:textColor="@color/colorAccent"
+            android:layout_below="@+id/tv_id"
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tv_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_name"
-            android:padding="10dp"
-            android:textColor="@color/colorAccent" />
 
         <Button
             android:id="@+id/bt_gotoCall"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_below="@+id/tv_id"
+            android:layout_below="@+id/tv_name"
             android:background="@drawable/ic_phone"
             android:padding="10dp"
             android:clickable="true"/>
@@ -45,7 +46,7 @@
             android:layout_alignBottom="@+id/bt_gotoCall"
             android:layout_toEndOf="@+id/bt_gotoEmail"
             android:layout_toRightOf="@+id/bt_gotoEmail"
-            android:background="@color/dark_gray_background"
+            android:background="@color/cardview_dark_background"
             android:padding="10dp"
             android:textColor="@color/colorAccent" />
 
@@ -67,7 +68,7 @@
             android:layout_alignBottom="@+id/bt_gotoCall"
             android:layout_toEndOf="@+id/bt_gotoMap"
             android:layout_toRightOf="@+id/bt_gotoMap"
-            android:background="@color/dark_gray_background"
+            android:background="@color/cardview_dark_background"
             android:padding="10dp"
             android:textColor="@color/colorAccent" />
 
@@ -87,7 +88,7 @@
             android:layout_alignBottom="@+id/bt_gotoMap"
             android:layout_toEndOf="@+id/bt_gotoEmail"
             android:layout_toRightOf="@+id/bt_gotoEmail"
-            android:background="@color/dark_gray_background"
+            android:background="@color/cardview_dark_background"
             android:padding="10dp"
             android:textColor="@color/colorAccent" />
 
@@ -97,8 +98,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/bt_gotoMap"
             android:layout_marginTop="10dp"
-            android:background="@color/dark_gray_background"
-            android:padding="10dp"
+            android:background="@color/cardview_dark_background"
+            android:padding="20dp"
+            android:isScrollContainer="true"
             android:textColor="@color/colorAccent" />
     </RelativeLayout>
 </ScrollView>

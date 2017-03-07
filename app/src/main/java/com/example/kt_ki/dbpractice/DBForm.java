@@ -33,20 +33,20 @@ class DBForm extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
-                "create table contacts " +
-                        "(id integer not null primary key, " +
-                        "name text ," +
-                        "phone text," +
-                        "email text, " +
-                        "street text," +
-                        "city text," +
-                        "intro text)"
+                "create table " + CONTACTS_TABLE_NAME +
+                        "(" + CONTACTS_COLUMN_ID + " integer not null primary key, " +
+                        CONTACTS_COLUMN_NAME + " text," +
+                        CONTACTS_COLUMN_PHONE + " text," +
+                        CONTACTS_COLUMN_EMAIL + " text, " +
+                        CONTACTS_COLUMN_STREET + " text," +
+                        CONTACTS_COLUMN_CITY + " text," +
+                        CONTACTS_COLUMN_INTRO + " text)"
         );
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS contacts");
+        db.execSQL("DROP TABLE IF EXISTS " + CONTACTS_TABLE_NAME);
         onCreate(db);
     }
 
@@ -70,7 +70,7 @@ class DBForm extends SQLiteOpenHelper {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select id from contacts", null);
+        Cursor res = db.rawQuery("select " + CONTACTS_COLUMN_ID + " from " + CONTACTS_TABLE_NAME, null);
         res.moveToFirst();
 
         while (!res.isAfterLast()) {
@@ -85,7 +85,7 @@ class DBForm extends SQLiteOpenHelper {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select name from contacts", null);
+        Cursor res = db.rawQuery("select " + CONTACTS_COLUMN_NAME + " from " + CONTACTS_TABLE_NAME, null);
         res.moveToFirst();
         if (res.moveToFirst()) {
             while (!res.isAfterLast()) {
@@ -101,7 +101,7 @@ class DBForm extends SQLiteOpenHelper {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select email from contacts", null);
+        Cursor res = db.rawQuery("select " + CONTACTS_COLUMN_EMAIL + " from " + CONTACTS_TABLE_NAME, null);
         res.moveToFirst();
 
         while (!res.isAfterLast()) {
@@ -116,7 +116,7 @@ class DBForm extends SQLiteOpenHelper {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select phone from contacts", null);
+        Cursor res = db.rawQuery("select " + CONTACTS_COLUMN_PHONE + " from " + CONTACTS_TABLE_NAME, null);
         res.moveToFirst();
 
         while (!res.isAfterLast()) {
@@ -131,7 +131,7 @@ class DBForm extends SQLiteOpenHelper {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select street from contacts", null);
+        Cursor res = db.rawQuery("select " + CONTACTS_COLUMN_STREET + " from " + CONTACTS_TABLE_NAME, null);
         res.moveToFirst();
 
         while (!res.isAfterLast()) {
@@ -146,7 +146,7 @@ class DBForm extends SQLiteOpenHelper {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select city from contacts", null);
+        Cursor res = db.rawQuery("select " + CONTACTS_COLUMN_CITY + " from " + CONTACTS_TABLE_NAME, null);
         res.moveToFirst();
 
         while (!res.isAfterLast()) {
@@ -161,7 +161,7 @@ class DBForm extends SQLiteOpenHelper {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select intro from contacts", null);
+        Cursor res = db.rawQuery("select " + CONTACTS_COLUMN_INTRO + " from " + CONTACTS_TABLE_NAME, null);
         res.moveToFirst();
 
         while (!res.isAfterLast()) {
@@ -206,7 +206,7 @@ class DBForm extends SQLiteOpenHelper {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("mDelete from contacts", null);
+        Cursor res = db.rawQuery("delete from contacts", null);
         res.moveToFirst();
 
         while (!res.isAfterLast()) {

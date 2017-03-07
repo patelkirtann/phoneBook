@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,12 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListActivity extends AppCompatActivity {
-    public final static String NAME_INTENT = "sendName";
-    public final static String ID_INTENT = "sendID";
-    public final static String PHONE_NUMBER_INTENT = "sendPhoneNumber";
-    public final static String EMAIL_ADDRESS_INTENT = "sendEmailAddress";
-    public final static String MAP_LOCATION_INTENT = "sendMapLocation";
-    public final static String INTRO_INTENT = "sendIntro";
 
     ListView mListNames;
     List<String> mNames;
@@ -69,19 +64,26 @@ public class ListActivity extends AppCompatActivity {
                 position = mListNames.getPositionForView(view);
                 for (int i = 0; i < mNames.size(); i++) {
                     if (position == i) {
-                        Toast.makeText(ListActivity.this, adapter.getItem(i).toString(),
+
+                        Toast.makeText(ListActivity.this, (CharSequence) adapter.getItem(i),
                                 Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(ListActivity.this, UserDetailOperationActivity.class);
-                        intent.putExtra(NAME_INTENT, dbForm.getPhone().get(i));
-                        intent.putExtra(ID_INTENT, dbForm.getPhone().get(i));
-                        intent.putExtra(PHONE_NUMBER_INTENT, dbForm.getPhone().get(i));
-                        intent.putExtra(EMAIL_ADDRESS_INTENT, dbForm.getPhone().get(i));
-                        intent.putExtra(MAP_LOCATION_INTENT, dbForm.getPhone().get(i));
-                        intent.putExtra(INTRO_INTENT, dbForm.getPhone().get(i));
+
+                        Intent intent = new Intent(ListActivity.this,
+                                UserDetailOperationActivity.class);
+                        Bundle extra = new Bundle();
+//                        intent.putExtra(Intent.EXTRA_TEXT, dbForm.getName().get(i));
+
+                        intent.putExtra("NAME_INTENT", dbForm.getName().get(i));
+                        intent.putExtra("ID_INTENT", dbForm.getID().get(i));
+                        intent.putExtra("PHONE_NUMBER_INTENT", dbForm.getPhone().get(i));
+                        intent.putExtra("EMAIL_ADDRESS_INTENT", dbForm.getEmail().get(i));
+                        intent.putExtra("MAP_LOCATION_INTENT", dbForm.getStreet().get(i) +
+                                                             dbForm.getCity().get(i));
+                        intent.putExtra("INTRO_INTENT", dbForm.getIntro().get(i));
+
                         startActivity(intent);
                     }
                 }
-
             }
         });
     }
@@ -101,9 +103,17 @@ public class ListActivity extends AppCompatActivity {
 
     @Override
     protected void onRestart() {
-        Intent intent = new Intent(ListActivity.this, ListActivity.class);
-        startActivity(intent);
-        this.finish();
         super.onRestart();
+        Intent intent = getIntent();
+        this.finish();
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

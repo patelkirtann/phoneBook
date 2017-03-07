@@ -6,6 +6,7 @@ import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
                 String mimetype = "text/plain";
-                String title = "title";
+                String title = "Share with";
                 String text = "Link Here";
                 ShareCompat.IntentBuilder.from(MainActivity.this)
                         .setChooserTitle(title)
@@ -101,5 +102,13 @@ public class MainActivity extends AppCompatActivity {
                         .setText(text)
                         .startChooser();
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

@@ -1,6 +1,5 @@
 package com.example.kt_ki.dbpractice;
 
-
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ExpandableListView;
@@ -24,9 +23,10 @@ public class AllRecord extends AppCompatActivity {
 
         mExpandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
         listData();
-
-        mExpandableAdapter = new ExpandableAdapter(this, mListHead, mListChild);
+        mExpandableAdapter = new ExpandableAdapter(AllRecord.this, mListHead, mListChild);
         mExpandableListView.setAdapter(mExpandableAdapter);
+
+
     }
 
     private void listData() {

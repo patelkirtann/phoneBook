@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,8 +44,8 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if (!isEmpty(name) && !isEmpty(email) && contains(email ,"@")
-                        && contains(email ,".")) {
+                if (!isEmpty(name) && !isEmpty(email) && contains(email, "@")
+                        && contains(email, ".")) {
                     final AlertDialog.Builder dialog = new AlertDialog.Builder(AddActivity.this);
                     dialog.setTitle("Confirmation");
                     dialog.setMessage("Do you wanna Save?");
@@ -53,27 +54,24 @@ public class AddActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             AddedToRecords();
-                            Toast.makeText(AddActivity.this , " Contact Saved " , Toast.LENGTH_SHORT).show();
-                            onRestart();
-//                        Intent mCallIntent = new Intent(context,AddActivity.class);
-//                        mCallIntent.putExtra("Add Record", INTENT_VALUE);
-//                        startActivity(mCallIntent);
+                            Toast.makeText(AddActivity.this, " Contact Saved ", Toast.LENGTH_SHORT).show();
+                            Intent intent = getIntent();
+                            finish();
+                            startActivity(intent);
+
                         }
                     });
                     dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Toast.makeText(AddActivity.this , " Canceled " , Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddActivity.this, " Canceled ", Toast.LENGTH_SHORT).show();
 
-//                            Intent mCallIntent = new Intent(context, MainActivity.class);
-//                            mCallIntent.putExtra("Canceled", INTENT_VALUE);
-//                            startActivity(mCallIntent);
                         }
                     });
                     AlertDialog alert = dialog.create();
                     alert.show();
-                }else {
-                    Toast.makeText(context , " Fill the details " , Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, " Fill the details ", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -88,11 +86,8 @@ public class AddActivity extends AppCompatActivity {
                 dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(AddActivity.this , " Canceled " , Toast.LENGTH_SHORT).show();
-
-                        Intent intent = new Intent(AddActivity.this, MainActivity.class);
-                        intent.putExtra("Cancel", INTENT_VALUE);
-                        startActivity(intent);
+                        Toast.makeText(AddActivity.this, " Canceled ", Toast.LENGTH_SHORT).show();
+                        AddActivity.this.finish();
                     }
                 });
                 dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -114,8 +109,8 @@ public class AddActivity extends AppCompatActivity {
         return true;
     }
 
-    private boolean contains(EditText edit , String str){
-        if (edit.getText().toString().contains(str)){
+    private boolean contains(EditText edit, String str) {
+        if (edit.getText().toString().contains(str)) {
             return true;
         }
         return false;
@@ -137,7 +132,21 @@ public class AddActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        Intent intent = new Intent(AddActivity.this , AddActivity.class);
+        Intent intent = new Intent(AddActivity.this, AddActivity.class);
         startActivity(intent);
+    }
+
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        System.exit(0);
+//    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
