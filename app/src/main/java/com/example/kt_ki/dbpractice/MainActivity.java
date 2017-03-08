@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 String mimetype = "text/plain";
                 String title = "Share with";
                 String text = "Link Here";
-                ShareCompat.IntentBuilder.from(MainActivity.this)
+                ShareCompat.IntentBuilder.from(this)
                         .setChooserTitle(title)
                         .setType(mimetype)
                         .setText(text)
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            finish();
+            finishActivity(0);
         }
         return super.onKeyDown(keyCode, event);
     }

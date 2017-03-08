@@ -2,6 +2,7 @@ package com.example.kt_ki.dbpractice;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -96,26 +97,31 @@ public class ListActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.refresh_list, menu);
+        getMenuInflater().inflate(R.menu.share_link, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.link_share:
+                String mimetype = "text/plain";
+                String title = "Share with";
+                String text = "Link Here";
+                ShareCompat.IntentBuilder.from(this)
+                        .setChooserTitle(title)
+                        .setType(mimetype)
+                        .setText(text)
+                        .startChooser();
+                break;
+        }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Intent intent = getIntent();
-        startActivity(intent);
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            finish();
+            finishActivity(0);
         }
         return super.onKeyDown(keyCode, event);
     }

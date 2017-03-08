@@ -85,28 +85,32 @@
             android:gravity="left"
             android:hint="@string/info_max_300"
             android:lines="2"
-            android:scrollbars="vertical"
-            android:maxLength="300" />
+            android:maxLength="300"
+            android:scrollbars="vertical" />
 
         <Button
             android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/tv_auto"
-            android:layout_below="@+id/tv_auto"
             android:layout_alignParentBottom="true"
             android:layout_alignRight="@+id/tv_auto"
-            android:text="@string/cancel" />
+            android:layout_below="@+id/tv_auto"
+            android:background="@color/cardview_dark_background"
+            android:text="@string/cancel"
+            android:textColor="@color/colorAccent" />
 
         <Button
             android:id="@+id/save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/tv_auto"
-            android:layout_below="@+id/tv_auto"
             android:layout_alignParentBottom="true"
             android:layout_alignStart="@+id/tv_auto"
-            android:text="@string/save" />
+            android:layout_below="@+id/tv_auto"
+            android:background="@color/cardview_dark_background"
+            android:text="@string/save"
+            android:textColor="@color/colorAccent" />
     </RelativeLayout>
 
 </ScrollView>

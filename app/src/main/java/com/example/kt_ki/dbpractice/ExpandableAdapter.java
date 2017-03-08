@@ -6,6 +6,8 @@ import android.graphics.Typeface;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.content.IntentCompat;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -114,4 +116,5 @@ class ExpandableAdapter extends BaseExpandableListAdapter {
     public void onGroupCollapsed(int groupPosition) {
         super.onGroupCollapsed(groupPosition);
     }
+
 }

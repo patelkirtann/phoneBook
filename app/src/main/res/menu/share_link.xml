@@ -2,9 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:actionLayout="@android:layout/simple_list_item_1"
-        android:id="@+id/nav_share"
+        android:id="@+id/link_share"
         android:title="@string/share"
         android:icon="@drawable/ic_menu_share"
         app:showAsAction="ifRoom" />
-
 </menu>

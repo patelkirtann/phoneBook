@@ -7,9 +7,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -97,17 +100,16 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         mEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(UserDetailOperationActivity.this, "Email Clicked",
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(UserDetailOperationActivity.this, "Email Clicked",
+//                        Toast.LENGTH_SHORT).show();
 
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
 
-                emailIntent.putExtra(Intent.EXTRA_EMAIL ,address);
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, " Subject here");
+                emailIntent.putExtra(Intent.EXTRA_EMAIL ,new String[]{address});
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Sending from Fleet");
                 emailIntent.setType("message/rfc822");
 
                 startActivity(Intent.createChooser(emailIntent , " Sending... "));
-
             }
         });
 
@@ -116,8 +118,8 @@ public class UserDetailOperationActivity extends AppCompatActivity {
             public void onClick(View view) {
 //                String addressString = "10705 Rose Ave, LA";
 
-                Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + location);
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                Uri uri = Uri.parse("geo:0,0?q=" + location);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, uri);
                 mapIntent.setPackage("com.google.android.apps.maps");
                 startActivity(mapIntent);
             }
@@ -171,5 +173,24 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         outState.putString("MAP_LOCATION_INTENT" , location);
         outState.putString("INTRO_INTENT" , intro);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.share_link, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        String mimetype = "text/plain";
+        String title = "Share with";
+        String text = "Link Here";
+        ShareCompat.IntentBuilder.from(this)
+                .setChooserTitle(title)
+                .setType(mimetype)
+                .setText(text)
+                .startChooser();
+        return super.onOptionsItemSelected(item);
     }
 }

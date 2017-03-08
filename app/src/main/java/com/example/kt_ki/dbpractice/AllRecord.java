@@ -1,7 +1,10 @@
 package com.example.kt_ki.dbpractice;
 
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ExpandableListView;
 
 import java.util.ArrayList;
@@ -46,6 +49,24 @@ public class AllRecord extends AppCompatActivity {
 
             mListChild.put(mListHead.get(i), data);
         }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.share_link, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        String mimetype = "text/plain";
+        String title = "Share with";
+        String text = "Link Here";
+        ShareCompat.IntentBuilder.from(this)
+                .setChooserTitle(title)
+                .setType(mimetype)
+                .setText(text)
+                .startChooser();
+        return super.onOptionsItemSelected(item);
     }
 
 //    @Override
