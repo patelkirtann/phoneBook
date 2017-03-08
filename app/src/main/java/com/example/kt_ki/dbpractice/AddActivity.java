@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.ShareCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,8 +20,7 @@ import android.widget.Toast;
 public class AddActivity extends AppCompatActivity {
     final static int INTENT_VALUE = 2;
 
-    Button mSave;
-    Button mCancel;
+    Button mSave, mCancel;
 
     EditText name, email, phone, street, city, intro;
 
@@ -29,6 +30,11 @@ public class AddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         mSave = (Button) findViewById(R.id.save);
         mCancel = (Button) findViewById(R.id.cancel);
@@ -138,14 +144,19 @@ public class AddActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        String mimetype = "text/plain";
-        String title = "Share with";
-        String text = "Link Here";
-        ShareCompat.IntentBuilder.from(this)
-                .setChooserTitle(title)
-                .setType(mimetype)
-                .setText(text)
-                .startChooser();
+        switch (item.getItemId()){
+            case R.id.link_share:
+                String mimetype = "text/plain";
+                String title = "Share with";
+                String text = "Link Here";
+                ShareCompat.IntentBuilder.from(this)
+                        .setChooserTitle(title)
+                        .setType(mimetype)
+                        .setText(text)
+                        .startChooser();
+                break;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

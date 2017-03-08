@@ -93,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.link_share:
                 String mimetype = "text/plain";
                 String title = "Share with";
                 String text = "Link Here";
@@ -101,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
                         .setType(mimetype)
                         .setText(text)
                         .startChooser();
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.kt_ki.dbpractice">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -19,16 +20,20 @@
         </activity>
         <activity
             android:name=".AddActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            tools:targetApi="jelly_bean" />
         <activity
             android:name=".AllRecord"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            tools:targetApi="jelly_bean" />
         <activity
             android:name=".ListActivity"
             android:parentActivityName=".MainActivity"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            tools:targetApi="jelly_bean" />
         <activity android:name=".UserDetailOperationActivity"
-            android:parentActivityName=".ListActivity"/>
+            android:parentActivityName=".ListActivity"
+            tools:targetApi="jelly_bean" />
     </application>
 
 </manifest>
