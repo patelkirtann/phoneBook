@@ -11,7 +11,8 @@
         android:id="@+id/search_names"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/search"/>
+        android:hint="@string/search"
+        android:focusableInTouchMode="true"/>
 
     <ListView
         android:id="@android:id/list"

@@ -49,7 +49,6 @@ public class AddActivity extends AppCompatActivity {
                     final AlertDialog.Builder dialog = new AlertDialog.Builder(AddActivity.this);
                     dialog.setTitle("Confirmation");
                     dialog.setMessage("Do you wanna Save?");
-//                dialog.setIcon(R.drawable.);
                     dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -135,12 +134,6 @@ public class AddActivity extends AppCompatActivity {
         Intent intent = new Intent(AddActivity.this, AddActivity.class);
         startActivity(intent);
     }
-
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        System.exit(0);
-//    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

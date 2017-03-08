@@ -21,7 +21,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_CALL_CONTACTS = 0;
     Button mPhone, mEmail, mMap;
     TextView mName, mID, mPhoneNumber, mEmailAddress, mMapLocation, mIntro;
-
+    String name , id, number, address, location, intro;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +37,6 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         mEmailAddress = (TextView) findViewById(R.id.tv_emailAddress);
         mMapLocation = (TextView) findViewById(R.id.tv_location);
         mIntro = (TextView) findViewById(R.id.tv_info);
-
-        final String name , id, number, address, location, intro;
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
@@ -104,7 +102,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
 
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
 
-                emailIntent.putExtra(Intent.EXTRA_EMAIL, address);
+                emailIntent.putExtra(Intent.EXTRA_EMAIL ,address);
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, " Subject here");
                 emailIntent.setType("message/rfc822");
 
@@ -160,5 +158,18 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString("NAME_INTENT" , name);
+        outState.putString("ID_INTENT" , id);
+        outState.putString("PHONE_NUMBER_INTENT" , number);
+        outState.putString("EMAIL_ADDRESS_INTENT" , address);
+        outState.putString("MAP_LOCATION_INTENT" , location);
+        outState.putString("INTRO_INTENT" , intro);
+
     }
 }

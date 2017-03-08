@@ -77,8 +77,7 @@ class ExpandableAdapter extends BaseExpandableListAdapter {
             view = inflater.inflate(R.layout.list_head, null);
         }
 
-        TextView lblListHeader = (TextView) view
-                .findViewById(R.id.head);
+        TextView lblListHeader = (TextView) view.findViewById(R.id.head);
         lblListHeader.setTypeface(null, Typeface.BOLD);
         lblListHeader.setText(headerTitle);
 

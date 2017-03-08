@@ -17,14 +17,15 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ListActivity extends AppCompatActivity {
 
     ListView mListNames;
     List<String> mNames;
     DBForm dbForm = new DBForm(this);
-    EditText search;
-    ArrayAdapter adapter;
+    EditText mSearch;
+    ArrayAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,28 +34,29 @@ public class ListActivity extends AppCompatActivity {
         mListNames = (ListView) findViewById(android.R.id.list);
         mListNames.setSelector(R.color.colorAccent);
 
-        search = (EditText) findViewById(R.id.search_names);
+        mSearch = (EditText) findViewById(R.id.search_names);
+        mSearch.setSingleLine(true);
 
         mNames = new ArrayList<>();
         for (int i = 0; i < dbForm.getName().size(); i++) {
-            mNames.add(dbForm.getName().get(i).toUpperCase());
+            mNames.add(i, dbForm.getName().get(i).toUpperCase());
         }
-        adapter = new ArrayAdapter<>(this, R.layout.list_view, R.id.list_names, mNames);
-        mListNames.setAdapter(adapter);
+        mAdapter = new ArrayAdapter<>(this, R.layout.list_view, R.id.list_names, mNames);
+        mListNames.setAdapter(mAdapter);
 
-        search.addTextChangedListener(new TextWatcher() {
+        mSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                ListActivity.this.adapter.getFilter().filter(charSequence);
+                ListActivity.this.mAdapter.getFilter().filter(charSequence);
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                ListActivity.this.mAdapter.getFilter().filter(charSequence);
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
+
             }
         });
 
@@ -65,23 +67,26 @@ public class ListActivity extends AppCompatActivity {
                 for (int i = 0; i < mNames.size(); i++) {
                     if (position == i) {
 
-                        Toast.makeText(ListActivity.this, (CharSequence) adapter.getItem(i),
+                        Toast.makeText(ListActivity.this, (CharSequence) mAdapter.getItem(i),
                                 Toast.LENGTH_SHORT).show();
+                        try{
+                            Intent intent = new Intent(ListActivity.this,
+                                    UserDetailOperationActivity.class);
 
-                        Intent intent = new Intent(ListActivity.this,
-                                UserDetailOperationActivity.class);
-                        Bundle extra = new Bundle();
-//                        intent.putExtra(Intent.EXTRA_TEXT, dbForm.getName().get(i));
 
-                        intent.putExtra("NAME_INTENT", dbForm.getName().get(i));
-                        intent.putExtra("ID_INTENT", dbForm.getID().get(i));
-                        intent.putExtra("PHONE_NUMBER_INTENT", dbForm.getPhone().get(i));
-                        intent.putExtra("EMAIL_ADDRESS_INTENT", dbForm.getEmail().get(i));
-                        intent.putExtra("MAP_LOCATION_INTENT", dbForm.getStreet().get(i) +
-                                                             dbForm.getCity().get(i));
-                        intent.putExtra("INTRO_INTENT", dbForm.getIntro().get(i));
+                            intent.putExtra("NAME_INTENT", dbForm.getName().get(i));
+                            intent.putExtra("ID_INTENT", dbForm.getID().get(i));
+                            intent.putExtra("PHONE_NUMBER_INTENT", dbForm.getPhone().get(i));
+                            intent.putExtra("EMAIL_ADDRESS_INTENT", dbForm.getEmail().get(i));
+                            intent.putExtra("MAP_LOCATION_INTENT", dbForm.getStreet().get(i)
+                                    + " , "
+                                    + dbForm.getCity().get(i));
+                            intent.putExtra("INTRO_INTENT", dbForm.getIntro().get(i));
 
-                        startActivity(intent);
+                            startActivity(intent);
+                        }catch (Exception e){
+                            Toast.makeText(ListActivity.this, "No data found", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             }
@@ -91,13 +96,12 @@ public class ListActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.refresh_list, menu);
+//        getMenuInflater().inflate(R.menu.refresh_list, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        onRestart();
         return super.onOptionsItemSelected(item);
     }
 
@@ -105,7 +109,6 @@ public class ListActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         Intent intent = getIntent();
-        this.finish();
         startActivity(intent);
     }
 
