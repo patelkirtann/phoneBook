@@ -1,24 +1,23 @@
 package com.example.kt_ki.dbpractice;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 public class ListActivity extends AppCompatActivity {
 
@@ -27,6 +26,7 @@ public class ListActivity extends AppCompatActivity {
     DBForm dbForm = new DBForm(this);
     EditText mSearch;
     ArrayAdapter mAdapter;
+    ProgressBar mProgressbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +38,12 @@ public class ListActivity extends AppCompatActivity {
         mSearch = (EditText) findViewById(R.id.search_names);
         mSearch.setSingleLine(true);
 
+        mProgressbar = (ProgressBar) findViewById(R.id.pb_progress);
+
+        new LoadData().execute("");
         mNames = new ArrayList<>();
-        for (int i = 0; i < dbForm.getName().size(); i++) {
-            mNames.add(i, dbForm.getName().get(i).toUpperCase());
-        }
+
         mAdapter = new ArrayAdapter<>(this, R.layout.list_view, R.id.list_names, mNames);
-        mListNames.setAdapter(mAdapter);
 
         mSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -55,6 +55,7 @@ public class ListActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 ListActivity.this.mAdapter.getFilter().filter(charSequence);
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
 
@@ -66,27 +67,28 @@ public class ListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 position = mListNames.getPositionForView(view);
                 for (int i = 0; i < mNames.size(); i++) {
-                    if (position == i) {
+                        if (position == i) {
 
-                        Toast.makeText(ListActivity.this, (CharSequence) mAdapter.getItem(i),
+                        Toast.makeText(ListActivity.this, (String) mAdapter.getItem(i),
                                 Toast.LENGTH_SHORT).show();
-                        try{
+                        try {
                             Intent intent = new Intent(ListActivity.this,
                                     UserDetailOperationActivity.class);
+                            int dbPosition = dbForm.findPosition( ((String) mAdapter.getItem(i)));
 
-
-                            intent.putExtra("NAME_INTENT", dbForm.getName().get(i));
-                            intent.putExtra("ID_INTENT", dbForm.getID().get(i));
-                            intent.putExtra("PHONE_NUMBER_INTENT", dbForm.getPhone().get(i));
-                            intent.putExtra("EMAIL_ADDRESS_INTENT", dbForm.getEmail().get(i));
-                            intent.putExtra("MAP_LOCATION_INTENT", dbForm.getStreet().get(i)
+                            intent.putExtra("NAME_INTENT", dbForm.getName().get(dbPosition));
+                            intent.putExtra("ID_INTENT", dbForm.getID().get(dbPosition));
+                            intent.putExtra("PHONE_NUMBER_INTENT", dbForm.getPhone().get(dbPosition));
+                            intent.putExtra("EMAIL_ADDRESS_INTENT", dbForm.getEmail().get(dbPosition));
+                            intent.putExtra("MAP_LOCATION_INTENT", dbForm.getStreet().get(dbPosition)
                                     + " , "
-                                    + dbForm.getCity().get(i));
-                            intent.putExtra("INTRO_INTENT", dbForm.getIntro().get(i));
+                                    + dbForm.getCity().get(dbPosition));
+                            intent.putExtra("INTRO_INTENT", dbForm.getIntro().get(dbPosition));
 
                             startActivity(intent);
-                        }catch (Exception e){
-                            Toast.makeText(ListActivity.this, "No data found", Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            Toast.makeText(ListActivity.this, "No data found",
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -95,33 +97,35 @@ public class ListActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.share_link, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.link_share:
-                String mimetype = "text/plain";
-                String title = "Share with";
-                String text = "Link Here";
-                ShareCompat.IntentBuilder.from(this)
-                        .setChooserTitle(title)
-                        .setType(mimetype)
-                        .setText(text)
-                        .startChooser();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            finishActivity(0);
+            finish();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private class LoadData extends AsyncTask<Object, Object, List<String>> {
+
+        @Override
+        protected void onPreExecute() {
+            mProgressbar.setVisibility(View.VISIBLE);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected List<String> doInBackground(Object... strings) {
+
+            for (int i = 0; i < dbForm.getName().size(); i++) {
+                mNames.add(i, dbForm.getName().get(i));
+            }
+            return mNames;
+        }
+
+        @Override
+        protected void onPostExecute(List<String> aVoid) {
+            mProgressbar.setVisibility(View.INVISIBLE);
+            mListNames.setAdapter(mAdapter);
+            super.onPostExecute(aVoid);
+        }
     }
 }

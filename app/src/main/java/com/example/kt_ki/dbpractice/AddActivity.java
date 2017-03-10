@@ -4,11 +4,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.ShareCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,7 +29,7 @@ public class AddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
@@ -40,7 +38,6 @@ public class AddActivity extends AppCompatActivity {
         mCancel = (Button) findViewById(R.id.cancel);
 
         name = (EditText) findViewById(R.id.name_field);
-//        String getName = name.getText().toString();
         email = (EditText) findViewById(R.id.email_field);
         phone = (EditText) findViewById(R.id.phone_field);
         street = (EditText) findViewById(R.id.street_field);
@@ -61,12 +58,14 @@ public class AddActivity extends AppCompatActivity {
                     dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            AddedToRecords();
-                            Toast.makeText(AddActivity.this, " Contact Saved ", Toast.LENGTH_SHORT).show();
-                            Intent intent = getIntent();
-                            finish();
-                            startActivity(intent);
-
+                            if (addedToRecords()) {
+                                Toast.makeText(AddActivity.this, " Contact Saved ", Toast.LENGTH_SHORT).show();
+                                Intent intent = getIntent();
+                                finish();
+                                startActivity(intent);
+                            }else {
+                                Toast.makeText(context, "Canceled", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
                     dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -124,18 +123,26 @@ public class AddActivity extends AppCompatActivity {
         return false;
     }
 
-    private void AddedToRecords() {
+    private boolean addedToRecords() {
 
-        String nameText = name.getText().toString();
-        String emailText = email.getText().toString();
-        String phoneText = phone.getText().toString();
-        String streetText = street.getText().toString();
-        String cityText = city.getText().toString();
-        String introText = intro.getText().toString();
+        if (!dbForm.checkName(name.getText().toString().toLowerCase())) {
 
-        dbForm.insertValue(nameText, emailText, phoneText, streetText, cityText, introText);
+            String nameText = name.getText().toString().toLowerCase().trim();
+            String emailText = email.getText().toString().toLowerCase();
+            String phoneText = phone.getText().toString();
+            String streetText = street.getText().toString();
+            String cityText = city.getText().toString();
+            String introText = intro.getText().toString();
 
+            dbForm.insertValue(nameText, emailText, phoneText, streetText, cityText, introText);
+            return true;
+        } else {
+            Toast.makeText(this, "Same Name found.\n Try to give unique Name.",
+                    Toast.LENGTH_LONG).show();
+            return false;
+        }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.share_link, menu);
@@ -144,7 +151,7 @@ public class AddActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.link_share:
                 String mimetype = "text/plain";
                 String title = "Share with";

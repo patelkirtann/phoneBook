@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:textAlignment="center"
+            android:textAllCaps="true"
             android:textColor="@color/colorAccent"
             android:layout_below="@+id/tv_id"
             android:textSize="20sp"
@@ -49,10 +50,17 @@
             android:background="@color/cardview_dark_background"
             android:padding="10dp"
             android:textColor="@color/colorAccent" />
+        <QuickContactBadge
+            android:id="@+id/cb_SavePhone"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/tv_name"
+            android:layout_alignEnd="@+id/tv_phoneNumber"
+            android:layout_alignRight="@+id/tv_phoneNumber"
+            android:background="@drawable/ic_phone"/>
 
         <Button
             android:id="@+id/bt_gotoEmail"
-            style="?android:attr/borderlessButtonStyle"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_below="@+id/bt_gotoCall"
@@ -71,6 +79,14 @@
             android:background="@color/cardview_dark_background"
             android:padding="10dp"
             android:textColor="@color/colorAccent" />
+        <QuickContactBadge
+            android:id="@+id/cb_saveEmail"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/cb_SavePhone"
+            android:layout_alignEnd="@+id/tv_emailAddress"
+            android:layout_alignRight="@+id/tv_emailAddress"
+            android:background="@drawable/ic_email"/>
 
         <Button
             android:id="@+id/bt_gotoMap"

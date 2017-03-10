@@ -98,7 +98,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignRight="@+id/tv_auto"
             android:layout_below="@+id/tv_auto"
-            android:background="@color/colorAccent"
+            android:background="@color/colorPrimaryDark"
             android:text="@string/cancel"
             android:textColor="@color/cardview_dark_background" />
 
@@ -110,7 +110,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignStart="@+id/tv_auto"
             android:layout_below="@+id/tv_auto"
-            android:background="@color/colorAccent"
+            android:background="@color/colorPrimaryDark"
             android:text="@string/save"
             android:textColor="@color/cardview_dark_background" />
     </RelativeLayout>

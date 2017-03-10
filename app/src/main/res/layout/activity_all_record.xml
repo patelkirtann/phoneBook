@@ -12,18 +12,31 @@
         android:id="@+id/expandableListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_marginTop="50dp" />
 
     <TextView
-        android:text="@string/contacts"
+        android:id="@+id/heading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/heading"
-        android:textAlignment="center"
-        android:textSize="20sp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="@string/contacts"
+        android:textAlignment="center"
+        android:textSize="20sp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <ProgressBar
+            android:id="@+id/pb_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="invisible" />
+    </FrameLayout>
 </RelativeLayout>

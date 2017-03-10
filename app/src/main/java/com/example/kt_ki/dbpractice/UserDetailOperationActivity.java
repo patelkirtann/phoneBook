@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ShareCompat;
@@ -15,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.QuickContactBadge;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +27,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
     Button mPhone, mEmail, mMap;
     TextView mName, mID, mPhoneNumber, mEmailAddress, mMapLocation, mIntro;
     String name , id, number, address, location, intro;
+    QuickContactBadge mSavePhone, mSaveEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,9 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         mEmailAddress = (TextView) findViewById(R.id.tv_emailAddress);
         mMapLocation = (TextView) findViewById(R.id.tv_location);
         mIntro = (TextView) findViewById(R.id.tv_info);
+
+        mSavePhone = (QuickContactBadge) findViewById(R.id.cb_SavePhone);
+        mSaveEmail = (QuickContactBadge) findViewById(R.id.cb_saveEmail);
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
@@ -75,6 +81,12 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         mPhoneNumber.setText(number);
         mMapLocation.setText(location);
         mIntro.setText(intro);
+
+        mSavePhone.assignContactFromPhone(number , true);
+        mSavePhone.setMode(ContactsContract.QuickContact.MODE_MEDIUM);
+
+        mSaveEmail.assignContactFromEmail(address , true);
+        mSavePhone.setMode(ContactsContract.QuickContact.MODE_MEDIUM);
 
 
         mPhone.setOnClickListener(new View.OnClickListener() {

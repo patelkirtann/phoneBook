@@ -8,8 +8,8 @@
     <string name="street">Street</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
-    <string name="add_record">Add Record</string>
-    <string name="all_record">All Record</string>
+    <string name="add_record">Add Contact</string>
+    <string name="all_record">Quick Look</string>
     <string name="contacts">Contacts</string>
 
     <!-- TODO: Remove or change this placeholder text -->

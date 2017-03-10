@@ -7,6 +7,7 @@
     android:background="@color/cardview_dark_background"
     android:orientation="vertical"
     android:textAlignment="center"
+    android:textAllCaps="true"
     android:padding="20dp"
     android:textStyle="italic">
     <!--android:background="#121b2b"-->

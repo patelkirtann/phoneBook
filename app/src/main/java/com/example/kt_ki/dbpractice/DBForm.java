@@ -6,9 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Created by kt_ki on 11/16/2016.
@@ -187,6 +189,7 @@ class DBForm extends SQLiteOpenHelper {
         return array_list;
     }
 
+
     public ArrayList<String> deleteContactByID(int id) {
         ArrayList<String> array_list = new ArrayList<>();
 
@@ -215,5 +218,17 @@ class DBForm extends SQLiteOpenHelper {
         }
         res.close();
         return array_list;
+    }
+
+    boolean checkName(String name) {
+        return getName().contains(name);
+    }
+
+    int findPosition(String name) {
+        int pos = 0;
+            if (getName().contains(name)) {
+                pos = getName().indexOf(name);
+            }
+        return pos;
     }
 }

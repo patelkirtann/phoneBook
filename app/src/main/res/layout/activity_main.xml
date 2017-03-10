@@ -67,8 +67,7 @@
             android:layout_centerHorizontal="true"
             android:background="@color/cardview_dark_background"
             android:paddingTop="10dp"
-            android:text="ListView"
+            android:text="@string/contacts"
             android:textColor="@color/colorAccent" />
     </RelativeLayout>
-
 </ScrollView>

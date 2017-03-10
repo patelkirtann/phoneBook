@@ -1,11 +1,11 @@
 package com.example.kt_ki.dbpractice;
 
-import android.support.v4.app.ShareCompat;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +18,7 @@ public class AllRecord extends AppCompatActivity {
     HashMap<String, List<String>> mListChild;
 
     DBForm dbForm = new DBForm(AllRecord.this);
+    ProgressBar mProgressbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,53 +26,64 @@ public class AllRecord extends AppCompatActivity {
         setContentView(R.layout.activity_all_record);
 
         mExpandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
+        mProgressbar = (ProgressBar) findViewById(R.id.pb_progress);
+
         listData();
         mExpandableAdapter = new ExpandableAdapter(AllRecord.this, mListHead, mListChild);
-        mExpandableListView.setAdapter(mExpandableAdapter);
-
-
+//        mExpandableListView.setAdapter(mExpandableAdapter);
     }
 
     private void listData() {
         mListHead = new ArrayList<>();
         mListChild = new HashMap<>();
+        new LoadData().execute("");
 
-        for (int i = 0; i < dbForm.getID().size(); i++) {
-            mListHead.add(i, dbForm.getName().get(i).toUpperCase());
 
-            List<String> data = new ArrayList<>();
-            data.add("    ID:      ".toUpperCase() + dbForm.getID().get(i));
-            data.add(" Email:      ".toUpperCase() + dbForm.getEmail().get(i));
-            data.add(" Phone:      ".toUpperCase() + dbForm.getPhone().get(i));
-            data.add("Street:      ".toUpperCase() + dbForm.getStreet().get(i));
-            data.add("  City:      ".toUpperCase() + dbForm.getCity().get(i));
-            data.add(" Intro:      ".toUpperCase() + dbForm.getIntro().get(i));
+//        for (int i = 0; i < dbForm.getID().size(); i++) {
+//            mListHead.add(i, dbForm.getName().get(i).toUpperCase());
+//
+//            List<String> data = new ArrayList<>();
+//            data.add("    ID:      ".toUpperCase() + dbForm.getID().get(i));
+//            data.add(" Email:      ".toUpperCase() + dbForm.getEmail().get(i));
+//            data.add(" Phone:      ".toUpperCase() + dbForm.getPhone().get(i));
+//            data.add("Street:      ".toUpperCase() + dbForm.getStreet().get(i));
+//            data.add("  City:      ".toUpperCase() + dbForm.getCity().get(i));
+//            data.add(" Intro:      ".toUpperCase() + dbForm.getIntro().get(i));
+//
+//            mListChild.put(mListHead.get(i), data);
+//        }
+    }
 
-            mListChild.put(mListHead.get(i), data);
+    private class LoadData extends AsyncTask<Object, Object, HashMap<String, List<String>>> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressbar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected HashMap<String, List<String>> doInBackground(Object... objects) {
+            for (int i = 0; i < dbForm.getID().size(); i++) {
+                mListHead.add(i, dbForm.getName().get(i).toUpperCase());
+
+                List<String> data = new ArrayList<>();
+                data.add("          " + "    ID:      ".toUpperCase() + dbForm.getID().get(i));
+                data.add("     " + " Email:      ".toUpperCase() + dbForm.getEmail().get(i));
+                data.add("    " + " Phone:      ".toUpperCase() + dbForm.getPhone().get(i));
+                data.add("    " + "Street:      ".toUpperCase() + dbForm.getStreet().get(i));
+                data.add("        " + "  City:      ".toUpperCase() + dbForm.getCity().get(i));
+                data.add("     " + " Intro:      ".toUpperCase() + dbForm.getIntro().get(i));
+
+                mListChild.put(mListHead.get(i), data);
+            }
+            return mListChild;
+        }
+
+        @Override
+        protected void onPostExecute(HashMap<String, List<String>> aVoid) {
+            super.onPostExecute(aVoid);
+            mProgressbar.setVisibility(View.INVISIBLE);
+            mExpandableListView.setAdapter(mExpandableAdapter);
         }
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.share_link, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        String mimetype = "text/plain";
-        String title = "Share with";
-        String text = "Link Here";
-        ShareCompat.IntentBuilder.from(this)
-                .setChooserTitle(title)
-                .setType(mimetype)
-                .setText(text)
-                .startChooser();
-        return super.onOptionsItemSelected(item);
-    }
-
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        System.exit(0);
-//    }
 }

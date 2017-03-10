@@ -21,6 +21,8 @@
         <activity
             android:name=".AddActivity"
             android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"
             tools:targetApi="jelly_bean" />
         <activity
             android:name=".AllRecord"
@@ -30,6 +32,7 @@
             android:name=".ListActivity"
             android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"
             tools:targetApi="jelly_bean" />
         <activity android:name=".UserDetailOperationActivity"
             android:parentActivityName=".ListActivity"

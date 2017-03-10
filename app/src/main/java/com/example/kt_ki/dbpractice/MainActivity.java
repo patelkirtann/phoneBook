@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, ListActivity.class);
-                intent.putExtra("All Names", INTENT_VALUE);
+//                intent.putExtra("All Names", INTENT_VALUE);
                 startActivity(intent);
             }
         });
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            finishActivity(0);
+            finish();
         }
         return super.onKeyDown(keyCode, event);
     }
