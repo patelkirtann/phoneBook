@@ -5,22 +5,16 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.QuickContactBadge;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import static com.google.android.gms.internal.zzs.TAG;
 
 public class UserDetailOperationActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_CALL_CONTACTS = 0;
@@ -94,6 +88,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Toast.makeText(UserDetailOperationActivity.this, "Calling...",
                         Toast.LENGTH_SHORT).show();
+
                 Intent mCallIntent = new Intent(Intent.ACTION_CALL);
                 mCallIntent.setData(Uri.parse("tel:" + number));
                 try{
@@ -142,16 +137,16 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(Manifest.permission.CALL_PHONE)
                     == PackageManager.PERMISSION_GRANTED) {
-                Log.v(TAG, "Permission is granted");
+
                 return true;
             } else {
-                Log.v(TAG, "Permission is revoked");
+
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.CALL_PHONE}, 1);
                 return false;
             }
         } else { //permission is automatically granted on sdk<23 upon installation
-            Log.v(TAG, "Permission is granted");
+
             return true;
         }
     }

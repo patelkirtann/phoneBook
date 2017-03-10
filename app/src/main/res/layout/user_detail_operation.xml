@@ -57,7 +57,7 @@
             android:layout_below="@+id/tv_name"
             android:layout_alignEnd="@+id/tv_phoneNumber"
             android:layout_alignRight="@+id/tv_phoneNumber"
-            android:background="@drawable/ic_phone"/>
+            android:background="@drawable/ic_save_phone"/>
 
         <Button
             android:id="@+id/bt_gotoEmail"
@@ -86,7 +86,7 @@
             android:layout_below="@+id/cb_SavePhone"
             android:layout_alignEnd="@+id/tv_emailAddress"
             android:layout_alignRight="@+id/tv_emailAddress"
-            android:background="@drawable/ic_email"/>
+            android:background="@drawable/ic_save_email" />
 
         <Button
             android:id="@+id/bt_gotoMap"

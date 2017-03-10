@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,10 +26,9 @@ public class AllRecord extends AppCompatActivity {
 
         mExpandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
         mProgressbar = (ProgressBar) findViewById(R.id.pb_progress);
-
         listData();
+
         mExpandableAdapter = new ExpandableAdapter(AllRecord.this, mListHead, mListChild);
-//        mExpandableListView.setAdapter(mExpandableAdapter);
     }
 
     private void listData() {
@@ -38,20 +36,6 @@ public class AllRecord extends AppCompatActivity {
         mListChild = new HashMap<>();
         new LoadData().execute("");
 
-
-//        for (int i = 0; i < dbForm.getID().size(); i++) {
-//            mListHead.add(i, dbForm.getName().get(i).toUpperCase());
-//
-//            List<String> data = new ArrayList<>();
-//            data.add("    ID:      ".toUpperCase() + dbForm.getID().get(i));
-//            data.add(" Email:      ".toUpperCase() + dbForm.getEmail().get(i));
-//            data.add(" Phone:      ".toUpperCase() + dbForm.getPhone().get(i));
-//            data.add("Street:      ".toUpperCase() + dbForm.getStreet().get(i));
-//            data.add("  City:      ".toUpperCase() + dbForm.getCity().get(i));
-//            data.add(" Intro:      ".toUpperCase() + dbForm.getIntro().get(i));
-//
-//            mListChild.put(mListHead.get(i), data);
-//        }
     }
 
     private class LoadData extends AsyncTask<Object, Object, HashMap<String, List<String>>> {
