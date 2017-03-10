@@ -31,6 +31,7 @@
             android:name=".ListActivity"
             android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"
             tools:targetApi="jelly_bean" />
         <activity android:name=".UserDetailOperationActivity"
             android:parentActivityName=".ListActivity"

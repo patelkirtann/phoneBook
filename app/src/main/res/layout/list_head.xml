@@ -9,6 +9,6 @@
     android:textAlignment="center"
     android:textAllCaps="true"
     android:padding="20dp"
-    android:textStyle="italic">
+    android:textStyle="bold">
     <!--android:background="#121b2b"-->
 </TextView>

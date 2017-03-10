@@ -14,6 +14,7 @@
             android:background="@color/dark_gray_background"
             android:orientation="vertical"
             android:padding="7dp"
+            android:textSize="14sp"
             android:textAlignment="gravity"
             android:textColor="@color/whiteText"
             android:textIsSelectable="true" />

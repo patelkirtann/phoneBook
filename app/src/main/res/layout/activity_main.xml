@@ -21,6 +21,7 @@
                 android:id="@+id/tv_heading"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:textSize="16sp"
                 android:text="@string/choose_operations"
                 android:textAlignment="center" />
         </RelativeLayout>
@@ -33,6 +34,7 @@
             android:layout_centerHorizontal="true"
             android:background="@color/cardview_dark_background"
             android:paddingTop="10dp"
+            android:textSize="14sp"
             android:text="@string/add_record"
             android:textColor="@color/colorAccent" />
 
@@ -44,6 +46,7 @@
             android:layout_centerHorizontal="true"
             android:background="@color/cardview_dark_background"
             android:paddingTop="10dp"
+            android:textSize="14sp"
             android:text="@string/all_record"
             android:textColor="@color/colorAccent"
             tools:ignore="RelativeOverlap" />
@@ -56,6 +59,7 @@
             android:layout_centerHorizontal="true"
             android:background="@color/cardview_dark_background"
             android:paddingTop="10dp"
+            android:textSize="14sp"
             android:text="@string/delete_all"
             android:textColor="@color/colorAccent" />
 
@@ -67,6 +71,7 @@
             android:layout_centerHorizontal="true"
             android:background="@color/cardview_dark_background"
             android:paddingTop="10dp"
+            android:textSize="14sp"
             android:text="@string/contacts"
             android:textColor="@color/colorAccent" />
     </RelativeLayout>
