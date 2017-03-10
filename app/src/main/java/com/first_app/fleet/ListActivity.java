@@ -1,4 +1,4 @@
-package com.example.kt_ki.dbpractice;
+package com.first_app.fleet;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -15,7 +15,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 

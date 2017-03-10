@@ -1,4 +1,4 @@
-package com.example.kt_ki.dbpractice;
+package com.first_app.fleet;
 
 import android.content.DialogInterface;
 import android.content.Intent;

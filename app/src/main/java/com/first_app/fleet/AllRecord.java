@@ -1,4 +1,4 @@
-package com.example.kt_ki.dbpractice;
+package com.first_app.fleet;
 
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.kt_ki.dbpractice">
+    package="com.first_app.fleet">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -11,7 +11,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.first_app.fleet.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,22 +19,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddActivity"
-            android:parentActivityName=".MainActivity"
+            android:name="com.first_app.fleet.AddActivity"
+            android:parentActivityName="com.first_app.fleet.MainActivity"
             android:windowSoftInputMode="stateHidden"
             tools:targetApi="jelly_bean" />
         <activity
-            android:name=".AllRecord"
-            android:parentActivityName=".MainActivity"
+            android:name="com.first_app.fleet.AllRecord"
+            android:parentActivityName="com.first_app.fleet.MainActivity"
             tools:targetApi="jelly_bean" />
         <activity
-            android:name=".ListActivity"
-            android:parentActivityName=".MainActivity"
+            android:name="com.first_app.fleet.ListActivity"
+            android:parentActivityName="com.first_app.fleet.MainActivity"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"
             tools:targetApi="jelly_bean" />
-        <activity android:name=".UserDetailOperationActivity"
-            android:parentActivityName=".ListActivity"
+        <activity android:name="com.first_app.fleet.UserDetailOperationActivity"
+            android:parentActivityName="com.first_app.fleet.ListActivity"
             tools:targetApi="jelly_bean" />
     </application>
 

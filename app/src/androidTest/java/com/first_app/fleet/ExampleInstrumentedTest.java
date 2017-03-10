@@ -1,4 +1,4 @@
-package com.example.kt_ki.dbpractice;
+package com.first_app.fleet;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.kt_ki.dbpractice", appContext.getPackageName());
+        assertEquals("com.first_app.fleet", appContext.getPackageName());
     }
 }

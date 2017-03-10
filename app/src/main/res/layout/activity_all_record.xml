@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_gray_background"
-    tools:context="com.example.kt_ki.dbpractice.AllRecord">
+    tools:context="com.first_app.fleet.AllRecord">
 
 
     <ExpandableListView
