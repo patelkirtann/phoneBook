@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sv_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_gray_background"
+    android:orientation="vertical">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/ll_all_data_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:id="@+id/ll_image_holder"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/nav_header_height"
+                android:background="@color/colorPrimary"
+                android:orientation="vertical">
+
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_id"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="10dp"-->
+                    <!--android:gravity="center"-->
+                    <!--android:textColor="@color/whiteText" />-->
+
+                <ImageView
+                    android:id="@+id/iv_photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/ic_person_pin"
+                    android:contentDescription="@string/contacts" />
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/whiteText"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_information_holder"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="20dp">
+
+                <Button
+                    android:id="@+id/bt_gotoCall"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/ic_phone"
+                    android:clickable="true"
+                    android:padding="10dp" />
+
+                <TextView
+                    android:id="@+id/tv_phoneNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/bt_gotoCall"
+                    android:layout_alignBottom="@+id/bt_gotoCall"
+                    android:layout_toEndOf="@+id/bt_gotoEmail"
+                    android:layout_toRightOf="@+id/bt_gotoEmail"
+                    android:background="@drawable/tv_back_border"
+                    android:hint="Number"
+                    android:padding="10dp"
+                    android:textColor="@color/colorAccent" />
+
+                <QuickContactBadge
+                    android:id="@+id/cb_SavePhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/tv_phoneNumber"
+                    android:layout_alignRight="@+id/tv_phoneNumber"
+                    android:background="@drawable/ic_save_phone" />
+
+                <Button
+                    android:id="@+id/bt_gotoEmail"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@+id/bt_gotoCall"
+                    android:background="@drawable/ic_email"
+                    android:clickable="true"
+                    android:padding="10dp" />
+
+                <TextView
+                    android:id="@+id/tv_emailAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/bt_gotoEmail"
+                    android:layout_alignBottom="@+id/bt_gotoCall"
+                    android:layout_toEndOf="@+id/bt_gotoMap"
+                    android:layout_toRightOf="@+id/bt_gotoMap"
+                    android:background="@drawable/tv_back_border"
+                    android:hint="@string/Email"
+                    android:padding="10dp"
+                    android:textColor="@color/colorAccent" />
+
+                <QuickContactBadge
+                    android:id="@+id/cb_saveEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/tv_emailAddress"
+                    android:layout_alignRight="@+id/tv_emailAddress"
+                    android:layout_below="@+id/cb_SavePhone"
+                    android:background="@drawable/ic_save_email" />
+
+                <Button
+                    android:id="@+id/bt_gotoMap"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@+id/bt_gotoEmail"
+                    android:background="@drawable/ic_location"
+                    android:clickable="true"
+                    android:padding="10dp" />
+
+                <TextView
+                    android:id="@+id/tv_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/bt_gotoMap"
+                    android:layout_toEndOf="@+id/bt_gotoEmail"
+                    android:layout_toRightOf="@+id/bt_gotoEmail"
+                    android:background="@drawable/tv_back_border"
+                    android:hint="@string/Location"
+                    android:padding="10dp"
+                    android:textColor="@color/colorAccent" />
+
+                <TextView
+                    android:id="@+id/tv_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/bt_gotoMap"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="16dp"
+                    android:background="@drawable/tv_back_border"
+                    android:hint="Intro"
+                    android:isScrollContainer="true"
+                    android:padding="14dp"
+                    android:textColor="@color/colorAccent" />
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:clickable="true"
+            android:src="@drawable/ic_edit"
+            app:layout_anchor="@id/ll_image_holder"
+            app:layout_anchorGravity="bottom|right|end" />
+    </android.support.design.widget.CoordinatorLayout>
+</ScrollView>

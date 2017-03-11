@@ -4,14 +4,17 @@
     package="com.first_app.fleet">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.first_app.fleet.MainActivity">
+        <activity
+            android:name="com.first_app.fleet.ListActivity"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,20 +23,22 @@
         </activity>
         <activity
             android:name=".AddActivity"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ListActivity"
             android:windowSoftInputMode="stateHidden"
             tools:targetApi="jelly_bean" />
         <activity
             android:name=".AllRecord"
             android:parentActivityName=".MainActivity"
             tools:targetApi="jelly_bean" />
+        <!--<activity-->
+            <!--android:name=".MainActivity"-->
+            <!--android:parentActivityName=".MainActivity"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:windowSoftInputMode="stateHidden"-->
+            <!--tools:targetApi="jelly_bean" />-->
+
         <activity
-            android:name=".ListActivity"
-            android:parentActivityName=".MainActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:screenOrientation="portrait"
-            tools:targetApi="jelly_bean" />
-        <activity android:name=".UserDetailOperationActivity"
+            android:name=".UserDetailOperationActivity"
             android:parentActivityName=".ListActivity"
             tools:targetApi="jelly_bean" />
     </application>

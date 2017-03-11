@@ -26,7 +26,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.user_detail_operation);
+        setContentView(R.layout.activity_user_detail_operation);
         mPhone = (Button) findViewById(R.id.bt_gotoCall);
         mEmail = (Button) findViewById(R.id.bt_gotoEmail);
         mMap = (Button) findViewById(R.id.bt_gotoMap);
@@ -70,17 +70,17 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         }
 
         mName.setText(name);
-        mID.setText("#"+id);
+//        mID.setText("#"+id);
         mEmailAddress.setText(address);
         mPhoneNumber.setText(number);
         mMapLocation.setText(location);
         mIntro.setText(intro);
 
         mSavePhone.assignContactFromPhone(number , true);
-        mSavePhone.setMode(ContactsContract.QuickContact.MODE_MEDIUM);
+        mSavePhone.setMode(ContactsContract.QuickContact.MODE_SMALL);
 
         mSaveEmail.assignContactFromEmail(address , true);
-        mSavePhone.setMode(ContactsContract.QuickContact.MODE_MEDIUM);
+        mSavePhone.setMode(ContactsContract.QuickContact.MODE_SMALL);
 
 
         mPhone.setOnClickListener(new View.OnClickListener() {

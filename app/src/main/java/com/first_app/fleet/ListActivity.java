@@ -3,20 +3,27 @@ package com.first_app.fleet;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static com.first_app.fleet.MainActivity.INTENT_VALUE;
 
 public class ListActivity extends AppCompatActivity {
 
@@ -24,6 +31,8 @@ public class ListActivity extends AppCompatActivity {
     ArrayList<String> mNames;
     DBForm dbForm = new DBForm(this);
     EditText mSearch;
+    TextView mInfomationText;
+    FloatingActionButton mAddFloatingButton;
     ArrayAdapter<String> mAdapter;
     ProgressBar mProgressbar;
 
@@ -37,11 +46,19 @@ public class ListActivity extends AppCompatActivity {
         mSearch = (EditText) findViewById(R.id.search_names);
         mSearch.setSingleLine(true);
 
+        mInfomationText = (TextView) findViewById(R.id.tv_information);
+
+        mAddFloatingButton = (FloatingActionButton) findViewById(R.id.fab_addContact);
+
         mProgressbar = (ProgressBar) findViewById(R.id.pb_progress);
         mNames = new ArrayList<>();
         new LoadData().execute("");
 
         mAdapter = new ArrayAdapter<>(this, R.layout.list_view, R.id.list_names, mNames);
+
+        if (mNames == null){
+            mInfomationText.setText("No Contacts");
+        }
 
         mSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -91,6 +108,15 @@ public class ListActivity extends AppCompatActivity {
                 }
             }
         });
+
+        mAddFloatingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ListActivity.this, AddActivity.class);
+                intent.putExtra("Add Record", INTENT_VALUE);
+                startActivity(intent);
+            }
+        });
     }
 
     private class LoadData extends AsyncTask<Object, Object, List<String>> {
@@ -117,5 +143,28 @@ public class ListActivity extends AppCompatActivity {
             mListNames.setAdapter(mAdapter);
             super.onPostExecute(aVoid);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.share_link, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.link_share:
+                String mimetype = "text/plain";
+                String title = "Share with";
+                String text = "Link Here";
+                ShareCompat.IntentBuilder.from(this)
+                        .setChooserTitle(title)
+                        .setType(mimetype)
+                        .setText(text)
+                        .startChooser();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
