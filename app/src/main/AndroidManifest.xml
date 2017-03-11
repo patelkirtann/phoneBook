@@ -19,22 +19,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.first_app.fleet.AddActivity"
-            android:parentActivityName="com.first_app.fleet.MainActivity"
+            android:name=".AddActivity"
+            android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="stateHidden"
             tools:targetApi="jelly_bean" />
         <activity
-            android:name="com.first_app.fleet.AllRecord"
-            android:parentActivityName="com.first_app.fleet.MainActivity"
+            android:name=".AllRecord"
+            android:parentActivityName=".MainActivity"
             tools:targetApi="jelly_bean" />
         <activity
-            android:name="com.first_app.fleet.ListActivity"
-            android:parentActivityName="com.first_app.fleet.MainActivity"
+            android:name=".ListActivity"
+            android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"
             tools:targetApi="jelly_bean" />
-        <activity android:name="com.first_app.fleet.UserDetailOperationActivity"
-            android:parentActivityName="com.first_app.fleet.ListActivity"
+        <activity android:name=".UserDetailOperationActivity"
+            android:parentActivityName=".ListActivity"
             tools:targetApi="jelly_bean" />
     </application>
 

@@ -72,7 +72,7 @@ public class ListActivity extends AppCompatActivity {
                         try {
                             Intent intent = new Intent(ListActivity.this,
                                     UserDetailOperationActivity.class);
-                            int dbPosition = dbForm.findPosition((mAdapter.getItem(i)));
+                            int dbPosition = dbForm.getName().indexOf(mAdapter.getItem(i));
 
                             intent.putExtra("NAME_INTENT", dbForm.getName().get(dbPosition));
                             intent.putExtra("ID_INTENT", dbForm.getID().get(dbPosition));

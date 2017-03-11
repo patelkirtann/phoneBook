@@ -35,7 +35,7 @@ public class AddActivity extends AppCompatActivity {
         }
 
         mSave = (Button) findViewById(R.id.save);
-        mCancel = (Button) findViewById(R.id.cancel);
+//        mCancel = (Button) findViewById(R.id.cancel);
 
         name = (EditText) findViewById(R.id.name_field);
         email = (EditText) findViewById(R.id.email_field);
@@ -84,29 +84,29 @@ public class AddActivity extends AppCompatActivity {
         });
 
 
-        mCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-                dialog.setTitle("Confirmation");
-                dialog.setMessage("Do you wanna Cancel ?");
-                dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(AddActivity.this, " Canceled ", Toast.LENGTH_SHORT).show();
-                        AddActivity.this.finish();
-                    }
-                });
-                dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                });
-                AlertDialog alert = dialog.create();
-                alert.show();
-            }
-        });
+//        mCancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+//                dialog.setTitle("Confirmation");
+//                dialog.setMessage("Do you wanna Cancel ?");
+//                dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        Toast.makeText(AddActivity.this, " Canceled ", Toast.LENGTH_SHORT).show();
+//                        AddActivity.this.finish();
+//                    }
+//                });
+//                dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//
+//                    }
+//                });
+//                AlertDialog alert = dialog.create();
+//                alert.show();
+//            }
+//        });
     }
 
     private boolean isEmpty(EditText edit) {

@@ -6,7 +6,7 @@
     <string name="name">Name</string>
     <string name="phone">Phone</string>
     <string name="street">Street</string>
-    <string name="save">Save</string>
+    <string name="save">Add Contact</string>
     <string name="cancel">Cancel</string>
     <string name="add_record">Add Contact</string>
     <string name="all_record">Quick Look</string>
@@ -22,7 +22,7 @@
     <string name="action_settings">Settings</string>
     <string name="delete_all">Delete All</string>
     <string name="info_max_300">Info(Max. 300)</string>
-    <string name="choose_operations">Choose Operations</string>
+    <string name="quote">\"Save temporary contacts here and access when you need it in future.\"</string>
     <string name="share">Share</string>
     <string name="search">Search</string>
     <string name="refresh">Refresh</string>

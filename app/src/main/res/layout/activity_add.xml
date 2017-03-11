@@ -89,31 +89,31 @@
             android:maxLength="300"
             android:scrollbars="vertical" />
 
-        <Button
-            android:id="@+id/cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/tv_auto"
-            android:layout_alignParentBottom="true"
-            android:layout_alignRight="@+id/tv_auto"
-            android:layout_below="@+id/tv_auto"
-            android:background="@color/colorPrimaryDark"
-            android:textSize="14sp"
-            android:text="@string/cancel"
-            android:textColor="@color/cardview_dark_background" />
+        <!--<Button-->
+        <!--android:id="@+id/cancel"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignEnd="@+id/tv_auto"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignRight="@+id/tv_auto"-->
+        <!--android:layout_below="@+id/tv_auto"-->
+        <!--android:background="@color/colorPrimaryDark"-->
+        <!--android:textSize="14sp"-->
+        <!--android:text="@string/cancel"-->
+        <!--android:textColor="@color/cardview_dark_background" />-->
 
         <Button
             android:id="@+id/save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/tv_auto"
-            android:layout_alignParentBottom="true"
-            android:layout_alignStart="@+id/tv_auto"
             android:layout_below="@+id/tv_auto"
-            android:background="@color/colorPrimaryDark"
+            android:background="@drawable/buttons"
+            android:layout_centerInParent="true"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             android:text="@string/save"
-            android:textSize="14sp"
-            android:textColor="@color/cardview_dark_background" />
+            android:textColor="@color/cardview_dark_background"
+            android:textSize="14sp" />
     </RelativeLayout>
 
 </ScrollView>

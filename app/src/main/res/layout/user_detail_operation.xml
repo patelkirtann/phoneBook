@@ -7,118 +7,149 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="30dp">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_id"
+        <FrameLayout
+            android:id="@+id/fl_upside"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@color/colorAccent" />
+            android:layout_height="@dimen/nav_header_height"
+            android:background="@color/colorPrimary">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:textColor="@color/whiteText" />
 
-        <TextView
-            android:id="@+id/tv_name"
+                <ImageView
+                    android:id="@+id/iv_photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/common_full_open_on_phone"
+                    android:contentDescription="@string/contacts" />
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/whiteText"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+
+
+        </FrameLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_id"
-            android:gravity="center"
-            android:padding="10dp"
-            android:textAllCaps="true"
-            android:textColor="@color/colorAccent"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:layout_height="match_parent"
+            android:layout_below="@id/fl_upside"
+            android:layout_margin="20dp">
+            <Button
+                android:id="@+id/bt_gotoCall"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/ic_phone"
+                android:clickable="true"
+                android:padding="10dp" />
 
+            <TextView
+                android:id="@+id/tv_phoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/bt_gotoCall"
+                android:layout_alignBottom="@+id/bt_gotoCall"
+                android:layout_toEndOf="@+id/bt_gotoEmail"
+                android:layout_toRightOf="@+id/bt_gotoEmail"
+                android:background="@drawable/tv_back_border"
+                android:padding="10dp"
+                android:hint="Number"
+                android:textColor="@color/colorAccent" />
 
-        <Button
-            android:id="@+id/bt_gotoCall"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_below="@+id/tv_name"
-            android:background="@drawable/ic_phone"
-            android:clickable="true"
-            android:padding="10dp" />
+            <QuickContactBadge
+                android:id="@+id/cb_SavePhone"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignEnd="@+id/tv_phoneNumber"
+                android:layout_alignRight="@+id/tv_phoneNumber"
+                android:background="@drawable/ic_save_phone" />
 
-        <TextView
-            android:id="@+id/tv_phoneNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/bt_gotoCall"
-            android:layout_alignBottom="@+id/bt_gotoCall"
-            android:layout_toEndOf="@+id/bt_gotoEmail"
-            android:layout_toRightOf="@+id/bt_gotoEmail"
-            android:background="@color/cardview_dark_background"
-            android:padding="10dp"
-            android:textColor="@color/colorAccent" />
+            <Button
+                android:id="@+id/bt_gotoEmail"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/bt_gotoCall"
+                android:background="@drawable/ic_email"
+                android:clickable="true"
+                android:padding="10dp" />
 
-        <QuickContactBadge
-            android:id="@+id/cb_SavePhone"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignEnd="@+id/tv_phoneNumber"
-            android:layout_alignRight="@+id/tv_phoneNumber"
-            android:layout_below="@+id/tv_name"
-            android:background="@drawable/ic_save_phone" />
+            <TextView
+                android:id="@+id/tv_emailAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/bt_gotoEmail"
+                android:layout_alignBottom="@+id/bt_gotoCall"
+                android:layout_toEndOf="@+id/bt_gotoMap"
+                android:layout_toRightOf="@+id/bt_gotoMap"
+                android:background="@drawable/tv_back_border"
+                android:padding="10dp"
+                android:hint="@string/Email"
+                android:textColor="@color/colorAccent" />
 
-        <Button
-            android:id="@+id/bt_gotoEmail"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_below="@+id/bt_gotoCall"
-            android:background="@drawable/ic_email"
-            android:clickable="true"
-            android:padding="10dp" />
+            <QuickContactBadge
+                android:id="@+id/cb_saveEmail"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignEnd="@+id/tv_emailAddress"
+                android:layout_alignRight="@+id/tv_emailAddress"
+                android:layout_below="@+id/cb_SavePhone"
+                android:background="@drawable/ic_save_email" />
 
-        <TextView
-            android:id="@+id/tv_emailAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/bt_gotoEmail"
-            android:layout_alignBottom="@+id/bt_gotoCall"
-            android:layout_toEndOf="@+id/bt_gotoMap"
-            android:layout_toRightOf="@+id/bt_gotoMap"
-            android:background="@color/cardview_dark_background"
-            android:padding="10dp"
-            android:textColor="@color/colorAccent" />
+            <Button
+                android:id="@+id/bt_gotoMap"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/bt_gotoEmail"
+                android:background="@drawable/ic_location"
+                android:clickable="true"
+                android:padding="10dp" />
 
-        <QuickContactBadge
-            android:id="@+id/cb_saveEmail"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignEnd="@+id/tv_emailAddress"
-            android:layout_alignRight="@+id/tv_emailAddress"
-            android:layout_below="@+id/cb_SavePhone"
-            android:background="@drawable/ic_save_email" />
+            <TextView
+                android:id="@+id/tv_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/bt_gotoMap"
+                android:layout_toEndOf="@+id/bt_gotoEmail"
+                android:layout_toRightOf="@+id/bt_gotoEmail"
+                android:background="@drawable/tv_back_border"
+                android:padding="10dp"
+                android:hint="@string/Location"
+                android:textColor="@color/colorAccent" />
 
-        <Button
-            android:id="@+id/bt_gotoMap"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_below="@+id/bt_gotoEmail"
-            android:background="@drawable/ic_location"
-            android:clickable="true"
-            android:padding="10dp" />
+            <TextView
+                android:id="@+id/tv_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bt_gotoMap"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/tv_back_border"
+                android:isScrollContainer="true"
+                android:padding="20dp"
+                android:hint="Intro"
+                android:textColor="@color/colorAccent" />
+        </RelativeLayout>
 
-        <TextView
-            android:id="@+id/tv_location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/bt_gotoMap"
-            android:layout_toEndOf="@+id/bt_gotoEmail"
-            android:layout_toRightOf="@+id/bt_gotoEmail"
-            android:background="@color/cardview_dark_background"
-            android:padding="10dp"
-            android:textColor="@color/colorAccent" />
-
-        <TextView
-            android:id="@+id/tv_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/bt_gotoMap"
-            android:layout_marginTop="10dp"
-            android:background="@color/cardview_dark_background"
-            android:isScrollContainer="true"
-            android:padding="20dp"
-            android:textColor="@color/colorAccent" />
     </RelativeLayout>
 </ScrollView>
