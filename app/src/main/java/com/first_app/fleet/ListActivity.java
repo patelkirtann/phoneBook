@@ -1,19 +1,23 @@
 package com.first_app.fleet;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,13 +29,13 @@ import java.util.List;
 
 import static com.first_app.fleet.MainActivity.INTENT_VALUE;
 
-public class ListActivity extends AppCompatActivity {
+public class ListActivity extends AppCompatActivity implements DataListener {
 
     ListView mListNames;
-    ArrayList<String> mNames;
+//    ArrayList<String> mNames;
     DBForm dbForm = new DBForm(this);
     EditText mSearch;
-    TextView mInfomationText;
+    TextView mInformationText;
     FloatingActionButton mAddFloatingButton;
     ArrayAdapter<String> mAdapter;
     ProgressBar mProgressbar;
@@ -41,24 +45,16 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         mListNames = (ListView) findViewById(android.R.id.list);
-        mListNames.setSelector(R.color.colorAccent);
 
         mSearch = (EditText) findViewById(R.id.search_names);
         mSearch.setSingleLine(true);
 
-        mInfomationText = (TextView) findViewById(R.id.tv_information);
-
+        mInformationText = (TextView) findViewById(R.id.tv_information);
         mAddFloatingButton = (FloatingActionButton) findViewById(R.id.fab_addContact);
-
         mProgressbar = (ProgressBar) findViewById(R.id.pb_progress);
-        mNames = new ArrayList<>();
-        new LoadData().execute("");
 
-        mAdapter = new ArrayAdapter<>(this, R.layout.list_view, R.id.list_names, mNames);
-
-        if (mNames == null){
-            mInfomationText.setText("No Contacts");
-        }
+        mInformationText.setText("No Contacts");
+        mListNames.setEmptyView(mInformationText);
 
         mSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -81,7 +77,7 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 position = mListNames.getPositionForView(view);
-                for (int i = 0; i < mNames.size(); i++) {
+                for (int i = 0; i < mAdapter.getCount(); i++) {
                     if (position == i) {
 
                         Toast.makeText(ListActivity.this, mAdapter.getItem(i),
@@ -96,12 +92,12 @@ public class ListActivity extends AppCompatActivity {
                             intent.putExtra("PHONE_NUMBER_INTENT", dbForm.getPhone().get(dbPosition));
                             intent.putExtra("EMAIL_ADDRESS_INTENT", dbForm.getEmail().get(dbPosition));
                             intent.putExtra("MAP_LOCATION_INTENT", dbForm.getStreet().get(dbPosition)
-                                    + " , "
+                                    + "  "
                                     + dbForm.getCity().get(dbPosition));
                             intent.putExtra("INTRO_INTENT", dbForm.getIntro().get(dbPosition));
                             startActivity(intent);
                         } catch (Exception e) {
-                            Toast.makeText(ListActivity.this, "No data found",
+                            Toast.makeText(ListActivity.this, "No Contact found",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -113,36 +109,9 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ListActivity.this, AddActivity.class);
-                intent.putExtra("Add Record", INTENT_VALUE);
                 startActivity(intent);
             }
         });
-    }
-
-    private class LoadData extends AsyncTask<Object, Object, List<String>> {
-
-        @Override
-        protected void onPreExecute() {
-            mProgressbar.setVisibility(View.VISIBLE);
-            super.onPreExecute();
-        }
-
-        @Override
-        protected List<String> doInBackground(Object... strings) {
-
-            for (int i = 0; i < dbForm.getName().size(); i++) {
-                mNames.add(i, dbForm.getName().get(i));
-            }
-            Collections.sort(mNames);
-            return mNames;
-        }
-
-        @Override
-        protected void onPostExecute(List<String> aVoid) {
-            mProgressbar.setVisibility(View.INVISIBLE);
-            mListNames.setAdapter(mAdapter);
-            super.onPostExecute(aVoid);
-        }
     }
 
     @Override
@@ -153,7 +122,7 @@ public class ListActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.link_share:
                 String mimetype = "text/plain";
                 String title = "Share with";
@@ -167,4 +136,91 @@ public class ListActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("Debug", "OnStop");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("Debug", "OnPause");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("Debug", "onResume");
+        new LoadData(dbForm, this).execute("");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d("Debug", "onRestart");
+    }
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        Log.d("Debug", "OnPostResume");
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        onRestart();
+    }
+
+    @Override
+    public void onPreExecute() {
+        mProgressbar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onProgress(int progress) {
+
+    }
+
+    @Override
+    public void onCompletion(List<String> data) {
+        mProgressbar.setVisibility(View.INVISIBLE);
+        mAdapter = new ArrayAdapter<>(this, R.layout.list_view, R.id.list_names, data);
+        mListNames.setAdapter(mAdapter);
+    }
+
+//    private class LoadData extends AsyncTask<Object, Object, List<String>> {
+//
+//        public LoadData(DBForm dataprovider, Task onCompletion) {
+//
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            mProgressbar.setVisibility(View.VISIBLE);
+//            super.onPreExecute();
+//        }
+//
+//        @Override
+//        protected List<String> doInBackground(Object... strings) {
+//            Log.d("Debug", "doInBackground");
+//            List<String> names = new ArrayList<>(dbForm.getName().size());
+//            for (int i = 0; i < dbForm.getName().size(); i++) {
+//                names.add(i, dbForm.getName().get(i));
+//            }
+//            Collections.sort(names);
+//            return names;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(List<String> names) {
+//            mProgressbar.setVisibility(View.INVISIBLE);
+//
+//            mAdapter = new ArrayAdapter<>(ListActivity.this, R.layout.list_view, R.id.list_names, names);
+//            mListNames.setAdapter(mAdapter);
+//
+//            super.onPostExecute(names);
+//        }
+//    }
 }

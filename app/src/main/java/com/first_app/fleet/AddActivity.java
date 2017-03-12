@@ -32,6 +32,7 @@ public class AddActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+//            getSupportActionBar().
         }
 
         mSave = (Button) findViewById(R.id.save);
@@ -162,6 +163,9 @@ public class AddActivity extends AppCompatActivity {
                         .setText(text)
                         .startChooser();
                 break;
+            case android.R.id.home:
+                onBackPressed();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -175,10 +179,13 @@ public class AddActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            finish();
-        }
+
         return super.onKeyDown(keyCode, event);
     }
 }
