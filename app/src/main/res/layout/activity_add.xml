@@ -1,119 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_add"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.first_app.fleet.AddActivity">
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/ll_new_contact"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/cardview_light_background">
 
-        <EditText
-            android:id="@+id/name_field"
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
+            android:text="@string/create_new"
+            android:textAlignment="center"
+            android:textSize="16sp" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_line"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:orientation="horizontal"
+        android:layout_below="@id/ll_new_contact"
+        android:background="@color/cardview_light_background"/>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_line">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
-            android:ems="10"
-            android:hint="@string/name"
-            android:inputType="textPersonName" />
+            android:layout_margin="24dp">
 
-        <EditText
-            android:id="@+id/email_field"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/name_field"
-            android:layout_alignRight="@+id/name_field"
-            android:layout_below="@+id/name_field"
-            android:layout_marginTop="10dp"
-            android:ems="10"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress" />
+            <EditText
+                android:id="@+id/name_field"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:ems="10"
+                android:hint="@string/name"
+                android:inputType="textPersonName"
+                android:padding="8dp"
+                android:drawableLeft="@drawable/ic_person"/>
 
-        <EditText
-            android:id="@+id/phone_field"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/email_field"
-            android:layout_alignStart="@+id/email_field"
-            android:layout_below="@+id/email_field"
-            android:layout_marginTop="12dp"
-            android:ems="10"
-            android:hint="@string/phone"
-            android:inputType="phone" />
+            <EditText
+                android:id="@+id/email_field"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/name_field"
+                android:layout_alignRight="@+id/name_field"
+                android:layout_below="@+id/name_field"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:padding="8dp"
+                android:drawableLeft="@drawable/ic_email"/>
 
-        <EditText
-            android:id="@+id/street_field"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/phone_field"
-            android:layout_alignStart="@+id/phone_field"
-            android:layout_below="@+id/phone_field"
-            android:layout_marginTop="13dp"
-            android:ems="10"
-            android:hint="@string/street"
-            android:inputType="textPostalAddress" />
+            <EditText
+                android:id="@+id/phone_field"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/email_field"
+                android:layout_alignStart="@+id/email_field"
+                android:layout_below="@+id/email_field"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:hint="@string/phone"
+                android:inputType="phone"
+                android:padding="8dp"
+                android:drawableLeft="@drawable/ic_phone"/>
 
-        <EditText
-            android:id="@+id/city_field"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/street_field"
-            android:layout_alignStart="@+id/street_field"
-            android:layout_below="@+id/street_field"
-            android:layout_marginTop="13dp"
-            android:ems="10"
-            android:hint="@string/city"
-            android:inputType="textPersonName" />
+            <EditText
+                android:id="@+id/street_field"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/phone_field"
+                android:layout_alignStart="@+id/phone_field"
+                android:layout_below="@+id/phone_field"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:hint="@string/street"
+                android:inputType="textPostalAddress"
+                android:padding="8dp"
+                android:drawableLeft="@drawable/ic_add_location"/>
 
-        <EditText
-            android:id="@+id/tv_auto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/city_field"
-            android:layout_alignLeft="@+id/city_field"
-            android:layout_alignRight="@+id/city_field"
-            android:layout_alignStart="@+id/city_field"
-            android:layout_below="@+id/city_field"
-            android:gravity="left"
-            android:hint="@string/info_max_300"
-            android:lines="3"
-            android:maxLength="300"
-            android:scrollbars="vertical" />
+            <EditText
+                android:id="@+id/city_field"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/street_field"
+                android:layout_alignStart="@+id/street_field"
+                android:layout_below="@+id/street_field"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:hint="@string/city"
+                android:inputType="textPersonName"
+                android:padding="8dp"
+                android:drawableLeft="@drawable/ic_location_city"/>
 
-        <!--<Button-->
-        <!--android:id="@+id/cancel"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignEnd="@+id/tv_auto"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_alignRight="@+id/tv_auto"-->
-        <!--android:layout_below="@+id/tv_auto"-->
-        <!--android:background="@color/colorPrimaryDark"-->
-        <!--android:textSize="14sp"-->
-        <!--android:text="@string/cancel"-->
-        <!--android:textColor="@color/cardview_dark_background" />-->
+            <EditText
+                android:id="@+id/tv_auto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/city_field"
+                android:layout_alignLeft="@+id/city_field"
+                android:layout_alignRight="@+id/city_field"
+                android:layout_alignStart="@+id/city_field"
+                android:layout_below="@+id/city_field"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/tv_back_border"
+                android:hint="@string/info_max_300"
+                android:inputType="textMultiLine"
+                android:lines="2"
+                android:scrollY="@dimen/activity_vertical_margin"
+                android:maxLength="300"
+                android:scrollbars="vertical"
+                android:drawableLeft="@drawable/ic_info"/>
 
-        <Button
-            android:id="@+id/save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_auto"
-            android:background="@drawable/buttons"
-            android:layout_centerInParent="true"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="@string/save"
-            android:textColor="@color/cardview_dark_background"
-            android:textSize="14sp" />
-    </RelativeLayout>
+            <Button
+                android:id="@+id/save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_auto"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/save"
+                android:textSize="14sp" />
+        </RelativeLayout>
 
-</ScrollView>
+    </ScrollView>
+
+</RelativeLayout>

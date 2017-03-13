@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:actionLayout="@android:layout/simple_list_item_1"
-        android:id="@+id/link_share"
-        android:title="@string/share"
-        android:icon="@drawable/ic_menu_share"
+    <item
+        android:id="@+id/delete_contact"
+        android:actionLayout="@android:layout/simple_dropdown_item_1line"
+        android:icon="@drawable/ic_person"
+        android:title="@string/delete"
         app:showAsAction="collapseActionView" />
 </menu>

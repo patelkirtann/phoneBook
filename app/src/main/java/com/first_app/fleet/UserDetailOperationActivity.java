@@ -1,6 +1,8 @@
 package com.first_app.fleet;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -9,7 +11,10 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.QuickContactBadge;
@@ -20,13 +25,20 @@ public class UserDetailOperationActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_CALL_CONTACTS = 0;
     Button mPhone, mEmail, mMap;
     TextView mName, mID, mPhoneNumber, mEmailAddress, mMapLocation, mIntro;
-    String name , id, number, address, location, intro;
+    String name, id, number, address, location, intro;
     QuickContactBadge mSavePhone, mSaveEmail;
+    Context context = UserDetailOperationActivity.this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail_operation);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
         mPhone = (Button) findViewById(R.id.bt_gotoCall);
         mEmail = (Button) findViewById(R.id.bt_gotoEmail);
         mMap = (Button) findViewById(R.id.bt_gotoMap);
@@ -43,30 +55,30 @@ public class UserDetailOperationActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
-            if(extras == null) {
+            if (extras == null) {
                 name = "n/a";
                 id = "n/a";
-                number= "n/a";
+                number = "n/a";
                 address = "n/a";
                 location = "n/a";
-                intro= "n/a";
+                intro = "n/a";
 
             } else {
                 name = extras.getString("NAME_INTENT");
                 id = extras.getString("ID_INTENT");
-                number= extras.getString("PHONE_NUMBER_INTENT");
+                number = extras.getString("PHONE_NUMBER_INTENT");
                 address = extras.getString("EMAIL_ADDRESS_INTENT");
                 location = extras.getString("MAP_LOCATION_INTENT");
                 intro = extras.getString("INTRO_INTENT");
 
             }
         } else {
-            name= (String) savedInstanceState.getSerializable("NAME_INTENT");
-            id= (String) savedInstanceState.getSerializable("ID_INTENT");
-            number= (String) savedInstanceState.getSerializable("PHONE_NUMBER_INTENT");
-            address= (String) savedInstanceState.getSerializable("EMAIL_ADDRESS_INTENT");
-            location= (String) savedInstanceState.getSerializable("MAP_LOCATION_INTENT");
-            intro= (String) savedInstanceState.getSerializable("INTRO_INTENT");
+            name = (String) savedInstanceState.getSerializable("NAME_INTENT");
+            id = (String) savedInstanceState.getSerializable("ID_INTENT");
+            number = (String) savedInstanceState.getSerializable("PHONE_NUMBER_INTENT");
+            address = (String) savedInstanceState.getSerializable("EMAIL_ADDRESS_INTENT");
+            location = (String) savedInstanceState.getSerializable("MAP_LOCATION_INTENT");
+            intro = (String) savedInstanceState.getSerializable("INTRO_INTENT");
         }
 
         mName.setText(name);
@@ -76,29 +88,29 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         mMapLocation.setText(location);
         mIntro.setText(intro);
 
-        mSavePhone.assignContactFromPhone(number , true);
+        mSavePhone.assignContactFromPhone(number, true);
         mSavePhone.setMode(ContactsContract.QuickContact.MODE_SMALL);
 
-        mSaveEmail.assignContactFromEmail(address , true);
+        mSaveEmail.assignContactFromEmail(address, true);
         mSavePhone.setMode(ContactsContract.QuickContact.MODE_SMALL);
 
 
         mPhone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(UserDetailOperationActivity.this, "Calling...",
+                Toast.makeText(context, "Calling...",
                         Toast.LENGTH_SHORT).show();
 
                 Intent mCallIntent = new Intent(Intent.ACTION_CALL);
                 mCallIntent.setData(Uri.parse("tel:" + number));
-                try{
-                    if (isCallPermissionGranted()){
+                try {
+                    if (isCallPermissionGranted()) {
                         startActivity(mCallIntent);
-                    }else {
-                        Toast.makeText(UserDetailOperationActivity.this, "Grant Permission to call ",
+                    } else {
+                        Toast.makeText(context, "Grant Permission to call ",
                                 Toast.LENGTH_SHORT).show();
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -107,23 +119,20 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         mEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Toast.makeText(UserDetailOperationActivity.this, "Email Clicked",
-//                        Toast.LENGTH_SHORT).show();
 
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
 
-                emailIntent.putExtra(Intent.EXTRA_EMAIL ,new String[]{address});
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{address});
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Sending from Fleet");
                 emailIntent.setType("message/rfc822");
 
-                startActivity(Intent.createChooser(emailIntent , " Sending... "));
+                startActivity(Intent.createChooser(emailIntent, " Sending... "));
             }
         });
 
         mMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                String addressString = "10705 Rose Ave, LA";
 
                 Uri uri = Uri.parse("geo:0,0?q=" + location);
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, uri);
@@ -173,12 +182,61 @@ public class UserDetailOperationActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putString("NAME_INTENT" , name);
-        outState.putString("ID_INTENT" , id);
-        outState.putString("PHONE_NUMBER_INTENT" , number);
-        outState.putString("EMAIL_ADDRESS_INTENT" , address);
-        outState.putString("MAP_LOCATION_INTENT" , location);
-        outState.putString("INTRO_INTENT" , intro);
+        outState.putString("NAME_INTENT", name);
+        outState.putString("ID_INTENT", id);
+        outState.putString("PHONE_NUMBER_INTENT", number);
+        outState.putString("EMAIL_ADDRESS_INTENT", address);
+        outState.putString("MAP_LOCATION_INTENT", location);
+        outState.putString("INTRO_INTENT", intro);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.delete_contact, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.delete_contact:
+                onContactDeleted();
+                break;
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void onContactDeleted() {
+
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setTitle("Confirmation");
+        dialog.setMessage("Delete Contact?");
+        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(context, " Canceled ",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                DBForm dbForm = new DBForm(context);
+                dbForm.deleteContactByID(id);
+                dbForm.close();
+                Toast.makeText(context, " Contact Deleted ",
+                        Toast.LENGTH_SHORT).show();
+                onBackPressed();
+            }
+        });
+
+        AlertDialog alert = dialog.create();
+        alert.show();
 
     }
 }

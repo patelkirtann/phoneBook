@@ -4,7 +4,6 @@
     android:id="@+id/sv_scroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_gray_background"
     android:orientation="vertical">
 
     <android.support.design.widget.CoordinatorLayout
@@ -25,14 +24,6 @@
                 android:background="@color/colorPrimary"
                 android:orientation="vertical">
 
-                <!--<TextView-->
-                    <!--android:id="@+id/tv_id"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginTop="10dp"-->
-                    <!--android:gravity="center"-->
-                    <!--android:textColor="@color/whiteText" />-->
-
                 <ImageView
                     android:id="@+id/iv_photo"
                     android:layout_width="wrap_content"
@@ -50,6 +41,7 @@
                     android:gravity="center"
                     android:textAllCaps="true"
                     android:textColor="@color/whiteText"
+                    android:textIsSelectable="true"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -59,8 +51,8 @@
                 android:id="@+id/rl_information_holder"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="50dp"
-                android:layout_marginRight="20dp">
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="50dp">
 
                 <Button
                     android:id="@+id/bt_gotoCall"
@@ -81,7 +73,8 @@
                     android:background="@drawable/tv_back_border"
                     android:hint="Number"
                     android:padding="10dp"
-                    android:textColor="@color/colorAccent" />
+                    android:textColor="@color/colorAccent"
+                    android:textIsSelectable="true" />
 
                 <QuickContactBadge
                     android:id="@+id/cb_SavePhone"
@@ -111,7 +104,8 @@
                     android:background="@drawable/tv_back_border"
                     android:hint="@string/Email"
                     android:padding="10dp"
-                    android:textColor="@color/colorAccent" />
+                    android:textColor="@color/colorAccent"
+                    android:textIsSelectable="true" />
 
                 <QuickContactBadge
                     android:id="@+id/cb_saveEmail"
@@ -141,20 +135,22 @@
                     android:background="@drawable/tv_back_border"
                     android:hint="@string/Location"
                     android:padding="10dp"
-                    android:textColor="@color/colorAccent" />
+                    android:textColor="@color/colorAccent"
+                    android:textIsSelectable="true" />
 
                 <TextView
                     android:id="@+id/tv_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/bt_gotoMap"
-                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="16dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/tv_back_border"
                     android:hint="Intro"
                     android:isScrollContainer="true"
                     android:padding="14dp"
-                    android:textColor="@color/colorAccent" />
+                    android:textColor="@color/colorAccent"
+                    android:textIsSelectable="true" />
 
             </RelativeLayout>
         </LinearLayout>

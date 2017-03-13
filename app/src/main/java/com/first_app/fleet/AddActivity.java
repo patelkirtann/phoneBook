@@ -1,13 +1,10 @@
 package com.first_app.fleet;
 
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,9 +13,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class AddActivity extends AppCompatActivity {
-    final static int INTENT_VALUE = 2;
 
-    Button mSave, mCancel;
+    Button mSave;
 
     EditText name, email, phone, street, city, intro;
 
@@ -32,12 +28,9 @@ public class AddActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-//            getSupportActionBar().
         }
 
         mSave = (Button) findViewById(R.id.save);
-//        mCancel = (Button) findViewById(R.id.cancel);
-
         name = (EditText) findViewById(R.id.name_field);
         email = (EditText) findViewById(R.id.email_field);
         phone = (EditText) findViewById(R.id.phone_field);
@@ -45,69 +38,47 @@ public class AddActivity extends AppCompatActivity {
         city = (EditText) findViewById(R.id.city_field);
         intro = (EditText) findViewById(R.id.tv_auto);
 
-        final Context context = AddActivity.this;
-
         mSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (!isEmpty(name) && !isEmpty(email) && contains(email, "@")
-                        && contains(email, ".")) {
-                    final AlertDialog.Builder dialog = new AlertDialog.Builder(AddActivity.this);
-                    dialog.setTitle("Confirmation");
-                    dialog.setMessage("Do you wanna Save?");
-                    dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            if (addedToRecords()) {
-                                Toast.makeText(AddActivity.this, " Contact Saved ", Toast.LENGTH_SHORT).show();
-                                Intent intent = getIntent();
-                                finish();
-                                startActivity(intent);
-                            }else {
-                                Toast.makeText(context, "Canceled", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                    dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Toast.makeText(AddActivity.this, " Canceled ", Toast.LENGTH_SHORT).show();
+                onSaveButtonClicked();
 
-                        }
-                    });
-                    AlertDialog alert = dialog.create();
-                    alert.show();
-                } else {
-                    Toast.makeText(context, " Fill the details ", Toast.LENGTH_SHORT).show();
-                }
             }
         });
 
+    }
 
-//        mCancel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-//                dialog.setTitle("Confirmation");
-//                dialog.setMessage("Do you wanna Cancel ?");
-//                dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        Toast.makeText(AddActivity.this, " Canceled ", Toast.LENGTH_SHORT).show();
-//                        AddActivity.this.finish();
-//                    }
-//                });
-//                dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                    }
-//                });
-//                AlertDialog alert = dialog.create();
-//                alert.show();
-//            }
-//        });
+    private void onSaveButtonClicked() {
+        if (!isEmpty(name) && !isEmpty(email) && contains(email, "@")
+                && contains(email, ".")) {
+            final AlertDialog.Builder dialog = new AlertDialog.Builder(AddActivity.this);
+            dialog.setTitle("Confirmation");
+            dialog.setMessage("Save Contact?");
+            dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    if (addedToRecords()) {
+                        Toast.makeText(AddActivity.this, " Contact Saved ",
+                                Toast.LENGTH_SHORT).show();
+                        onBackPressed();
+                    }else {
+                        Toast.makeText(AddActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            dialog.setNegativeButton("Discard", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Toast.makeText(AddActivity.this, " Canceled ", Toast.LENGTH_SHORT).show();
+                    onBackPressed();
+                }
+            });
+            AlertDialog alert = dialog.create();
+            alert.show();
+        } else {
+            Toast.makeText(AddActivity.this, " Fill Required Filed(*) ", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private boolean isEmpty(EditText edit) {
@@ -146,7 +117,7 @@ public class AddActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.share_link, menu);
+        getMenuInflater().inflate(R.menu.share_details, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -169,23 +140,5 @@ public class AddActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Intent intent = new Intent(AddActivity.this, AddActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        return super.onKeyDown(keyCode, event);
     }
 }

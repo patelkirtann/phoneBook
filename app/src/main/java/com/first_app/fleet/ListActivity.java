@@ -1,10 +1,7 @@
 package com.first_app.fleet;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -17,17 +14,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import static com.first_app.fleet.MainActivity.INTENT_VALUE;
 
 public class ListActivity extends AppCompatActivity implements DataListener {
 
@@ -116,7 +108,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.share_link, menu);
+        getMenuInflater().inflate(R.menu.share_details, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
