@@ -103,8 +103,9 @@
                     android:drawableLeft="@drawable/ic_location"
                     android:gravity="center|start"
                     android:focusable="false"
+                    android:maxLines="2"
+                    android:ellipsize="end"
                     android:hint="@string/Location"
-                    android:lines="2"
                     android:textIsSelectable="true" />
 
                 <TextView

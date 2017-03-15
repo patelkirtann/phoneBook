@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -77,8 +78,6 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                 for (int i = 0; i < mAdapter.getCount(); i++) {
                     if (position == i) {
 
-                        Toast.makeText(ListActivity.this, mAdapter.getItem(i),
-                                Toast.LENGTH_SHORT).show();
                         try {
                             Intent intent = new Intent(ListActivity.this,
                                     UserDetailOperationActivity.class);
@@ -98,8 +97,9 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                                     dbForm.getCity().get(dbPosition));
                             intent.putExtra("INTRO_INTENT",
                                     dbForm.getIntro().get(dbPosition));
-                            startActivityForResult(intent, RESULT_OK);
+                            startActivityForResult(intent, 1);
                         } catch (Exception e) {
+                            e.printStackTrace();
                             Toast.makeText(ListActivity.this, "No Contact Found",
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -170,5 +170,17 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         mProgressbar.setVisibility(View.INVISIBLE);
         mAdapter = new ArrayAdapter<>(this, R.layout.list_view, R.id.list_names, data);
         mListNames.setAdapter(mAdapter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1){
+            if (resultCode == RESULT_OK){
+                Snackbar.make(findViewById(R.id.activity_list), "1 Contact Deleted",
+                        Snackbar.LENGTH_SHORT)
+                        .show();
+            }
+        }
     }
 }

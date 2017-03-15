@@ -15,6 +15,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -116,7 +117,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
             address = extras.getString("EMAIL_ADDRESS_INTENT");
             street = extras.getString("STREET_INTENT");
             city = extras.getString("CITY_INTENT");
-            location = street.concat(" ") + city;
+            location = street + " " + city;
 
             intro = extras.getString("INTRO_INTENT");
         } else {
@@ -128,13 +129,12 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         mName.setText(name.toUpperCase().trim());
         mEmailAddress.setText(address.toLowerCase());
         mPhoneNumber.setText(number);
-
-        if (location.equals(" "))
-            mMapLocation.setHint("Location");
-        else
-            mMapLocation.setText(location);
-
         mIntro.setText(intro);
+        if (!location.equals(" ")) {
+            mMapLocation.setText(location);
+        } else {
+            mMapLocation.setText("");
+        }
 
     }
 
@@ -143,7 +143,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         AlertDialog.Builder dialog = new AlertDialog
                 .Builder(UserDetailOperationActivity.this);
         dialog.setTitle("Confirmation");
-        dialog.setMessage("Move contact to your phone contacts?");
+        dialog.setMessage("Move to your phone contacts?");
         dialog.setPositiveButton("Move to Phone", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -190,9 +190,8 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                 dbForm.close();
                 Toast.makeText(context, " Contact Deleted ",
                         Toast.LENGTH_SHORT).show();
-//                Snackbar.make(findViewById(R.id.activity_list), "Contact Deleted",
-//                        Snackbar.LENGTH_SHORT)
-//                        .show();
+
+                setResult(RESULT_OK);
                 onBackPressed();
             }
         });
@@ -220,15 +219,11 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                     if (isCallPermissionGranted()) {
                         startActivity(mCallIntent);
                     } else {
-//                        Toast.makeText(context, "Grant Permission to call ",
-//                                Toast.LENGTH_SHORT).show();
                         Snackbar.make(findViewById(R.id.sv_scroll), "Grant Permission to call",
                                 Snackbar.LENGTH_SHORT)
                                 .show();
                     }
                 } catch (Exception e) {
-//                    Toast.makeText(UserDetailOperationActivity.this,
-//                            "Try Again", Toast.LENGTH_SHORT).show();
                     Snackbar.make(findViewById(R.id.sv_scroll), "Try Again",
                             Snackbar.LENGTH_SHORT)
                             .show();
@@ -240,12 +235,14 @@ public class UserDetailOperationActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                android.content.ClipboardManager clipboard =
-                        (android.content.ClipboardManager)
-                                getSystemService(Context.CLIPBOARD_SERVICE);
-                android.content.ClipData clip =
-                        android.content.ClipData.newPlainText("Copied Text", number);
-                clipboard.setPrimaryClip(clip);
+                copyText();
+
+            }
+        });
+
+        dialog.setNeutralButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
             }
         });
@@ -254,29 +251,101 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         alert.show();
     }
 
+
     private void setEmailOnClick() {
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
 
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, address);
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Sending from Fleet");
-        emailIntent.setType("message/rfc822");
+        final AlertDialog.Builder dialog = new AlertDialog
+                .Builder(UserDetailOperationActivity.this);
+        dialog.setTitle("Confirmation");
+        dialog.setMessage("Send Email to " + address + "?");
 
-        startActivity(Intent.createChooser(emailIntent, " Send to, "));
+        dialog.setPositiveButton("Send Email", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{address});
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Sending from Fleet");
+                emailIntent.setType("plain/text");
+
+                startActivity(Intent.createChooser(emailIntent, " Send... "));
+            }
+        });
+
+        dialog.setNegativeButton("Copy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                copyText();
+            }
+        });
+
+        dialog.setNeutralButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        AlertDialog alert = dialog.create();
+        alert.show();
+
     }
 
     private void setLocationOnClick() {
-        Uri uri;
+
+        final Uri[] uri = new Uri[1];
         if (!location.equals(" ")) {
-            uri = Uri.parse("geo:0,0?q=" + location);
-            Intent mapIntent = new Intent(Intent.ACTION_VIEW, uri);
-            mapIntent.setPackage("com.google.android.apps.maps");
-            startActivity(mapIntent);
+
+            final AlertDialog.Builder dialog = new AlertDialog
+                    .Builder(UserDetailOperationActivity.this);
+            dialog.setTitle("Confirmation");
+            dialog.setMessage("Send Email to " + address + "?");
+
+            dialog.setPositiveButton("GOTO Map", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    uri[0] = Uri.parse("geo:0,0?q=" + location);
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, uri[0]);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    startActivity(mapIntent);
+
+                }
+            });
+
+            dialog.setNegativeButton("Copy", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    copyText();
+                }
+            });
+
+            dialog.setNeutralButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+
+            AlertDialog alert = dialog.create();
+            alert.show();
         } else {
-//            Toast.makeText(context, "Location not found", Toast.LENGTH_SHORT).show();
             Snackbar.make(findViewById(R.id.sv_scroll), "Location not found",
                     Snackbar.LENGTH_SHORT)
                     .show();
         }
+    }
+
+    private void copyText() {
+        android.content.ClipboardManager clipboard =
+                (android.content.ClipboardManager)
+                        getSystemService(Context.CLIPBOARD_SERVICE);
+        android.content.ClipData clip =
+                android.content.ClipData.newPlainText("", number);
+        clipboard.setPrimaryClip(clip);
+        Snackbar.make(findViewById(R.id.sv_scroll), "Text Copied",
+                Snackbar.LENGTH_SHORT)
+                .show();
     }
 
     public boolean isCallPermissionGranted() {

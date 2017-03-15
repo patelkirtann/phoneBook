@@ -1,9 +1,11 @@
 package com.first_app.fleet;
 
 import android.content.DialogInterface;
+import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,7 +13,7 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
-public class AddActivity extends AppCompatActivity{
+public class AddActivity extends AppCompatActivity {
 
     public EditText name, email, phone, street, city, intro;
 
@@ -73,17 +75,17 @@ public class AddActivity extends AppCompatActivity{
         } else {
             if (isEmpty(name))
                 name.setError("Invalid Name");
-            if (phone.length() < 10)
+            if (phone.length() < 10 || phone.length() > 14)
                 phone.setError("Invalid Number");
             if (dbForm.checkName(name.getText().toString().toLowerCase()))
                 name.setError("Duplicate Name");
-            Toast.makeText(AddActivity.this, " *Enter valid 2 or More character Name\n " +
+            Toast.makeText(AddActivity.this, " *Enter at least 2 character\n " +
                     "*Enter valid 10 Digit number ", Toast.LENGTH_LONG).show();
         }
     }
 
     private boolean isEmpty(EditText edit) {
-        String text = edit.getText().toString().replaceAll(" ","");
+        String text = edit.getText().toString().replaceAll(" ", "");
 
         return !(!text.trim().isEmpty() &&
                 text.length() >= 2);

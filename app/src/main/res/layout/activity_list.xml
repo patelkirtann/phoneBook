@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:background="@drawable/tv_back_border"
         android:drawableLeft="@drawable/ic_search"
-        android:focusableInTouchMode="true"
         android:hint="@string/search" />
     <TextView
         android:id="@+id/tv_my_contacts"

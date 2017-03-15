@@ -28,7 +28,7 @@
     <string name="create_new">Create New</string>
     <string name="my_contacts">My Contacts</string>
     <string name="number">Number</string>
-    <string name="intro">Edit to Add some more Information about the Person.</string>
+    <string name="intro">Add some more Information about the Person.</string>
     <string name="update_contact">Update Contact</string>
     <string name="update">Update</string>
     <string name="move_to_phone">Move To Phone</string>
