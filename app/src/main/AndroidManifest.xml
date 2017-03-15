@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.first_app.fleet">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
 
     <application
         android:allowBackup="true"
@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.first_app.fleet.ListActivity"
+            android:name=".ListActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
@@ -24,14 +24,12 @@
         </activity>
         <activity
             android:name=".AddActivity"
-            android:windowSoftInputMode="stateHidden"
-            tools:targetApi="jelly_bean" />
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".AllRecord" />
+        <activity android:name=".UserDetailOperationActivity" />
         <activity
-            android:name=".AllRecord"
-            tools:targetApi="jelly_bean" />
-        <activity
-            android:name=".UserDetailOperationActivity"
-            tools:targetApi="jelly_bean" />
+            android:name=".UpdateActivity"
+            android:windowSoftInputMode="stateHidden" />
     </application>
 
 </manifest>

@@ -64,7 +64,7 @@ class DBForm extends SQLiteOpenHelper {
         return true;
     }
 
-    public ArrayList<String> getID() {
+    ArrayList<String> getID() {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -113,7 +113,7 @@ class DBForm extends SQLiteOpenHelper {
         return array_list;
     }
 
-    public ArrayList<String> getPhone() {
+    ArrayList<String> getPhone() {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -129,7 +129,7 @@ class DBForm extends SQLiteOpenHelper {
         return array_list;
     }
 
-    public ArrayList<String> getStreet() {
+    ArrayList<String> getStreet() {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -145,7 +145,7 @@ class DBForm extends SQLiteOpenHelper {
         return array_list;
     }
 
-    public ArrayList<String> getCity() {
+    ArrayList<String> getCity() {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -161,7 +161,7 @@ class DBForm extends SQLiteOpenHelper {
         return array_list;
     }
 
-    public ArrayList<String> getIntro() {
+    ArrayList<String> getIntro() {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -177,34 +177,35 @@ class DBForm extends SQLiteOpenHelper {
         return array_list;
     }
 
-    public ArrayList<String> deleteContactByID(String id) {
-        ArrayList<String> array_list = new ArrayList<>();
+    void deleteContactByID(String id) {
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("delete from contacts where id=" + id, null);
         res.moveToFirst();
-
-        while (!res.isAfterLast()) {
-            array_list.add(res.getString(res.getColumnIndex(CONTACTS_COLUMN_ID)));
-            res.moveToNext();
-        }
         res.close();
-        return array_list;
     }
 
-    ArrayList<String> deleteAll() {
-        ArrayList<String> array_list = new ArrayList<>();
+    void updateContact(String id, String name, String email, String phone, String street,
+                       String city, String intro) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("name" , name);
+        cv.put("email" , email);
+        cv.put("phone" , phone);
+        cv.put("street" , street);
+        cv.put("city" , city);
+        cv.put("intro" , intro);
+
+        db.update(CONTACTS_TABLE_NAME , cv , "id=" +id, null);
+    }
+
+
+    void deleteAll() {
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("delete from contacts", null);
         res.moveToFirst();
-
-        while (!res.isAfterLast()) {
-            array_list.add(res.getString(res.getColumnIndex(CONTACTS_COLUMN_ID)));
-            res.moveToNext();
-        }
         res.close();
-        return array_list;
     }
 
     boolean checkName(String name) {

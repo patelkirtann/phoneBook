@@ -16,18 +16,28 @@
         android:drawableLeft="@drawable/ic_search"
         android:focusableInTouchMode="true"
         android:hint="@string/search" />
+    <TextView
+        android:id="@+id/tv_my_contacts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/search_names"
+        android:text="@string/my_contacts"
+        android:layout_margin="8dp"/>
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/search_names"
-        android:layout_marginTop="10dp">
+        android:layout_below="@id/tv_my_contacts"
+        android:layout_marginTop="8dp">
+
 
         <ListView
             android:id="@android:id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/search_names" />
+            android:layout_below="@+id/search_names"
+            android:paddingBottom="72dp"
+            android:clipToPadding="false"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_addContact"

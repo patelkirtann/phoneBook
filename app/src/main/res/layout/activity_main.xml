@@ -30,7 +30,6 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/iv_icon"
                 android:textSize="16sp"
-                android:text="@string/quote"
                 android:textColor="@color/whiteText"
                 android:textStyle="italic|bold"
                 android:fontFamily="casual"

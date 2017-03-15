@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/update_contact"
+        android:actionLayout="@android:layout/simple_dropdown_item_1line"
+        android:title="@string/update"
+        app:showAsAction="always" />
+</menu>

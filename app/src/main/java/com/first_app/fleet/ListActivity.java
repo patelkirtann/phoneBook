@@ -1,6 +1,7 @@
 package com.first_app.fleet;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ShareCompat;
@@ -14,17 +15,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 
 import java.util.List;
 
 public class ListActivity extends AppCompatActivity implements DataListener {
 
     ListView mListNames;
-//    ArrayList<String> mNames;
     DBForm dbForm = new DBForm(this);
     EditText mSearch;
     TextView mInformationText;
@@ -49,6 +53,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         mListNames.setEmptyView(mInformationText);
 
         mSearch.addTextChangedListener(new TextWatcher() {
+
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 ListActivity.this.mAdapter.getFilter().filter(charSequence);
@@ -79,17 +84,23 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                                     UserDetailOperationActivity.class);
                             int dbPosition = dbForm.getName().indexOf(mAdapter.getItem(i));
 
-                            intent.putExtra("NAME_INTENT", dbForm.getName().get(dbPosition));
-                            intent.putExtra("ID_INTENT", dbForm.getID().get(dbPosition));
-                            intent.putExtra("PHONE_NUMBER_INTENT", dbForm.getPhone().get(dbPosition));
-                            intent.putExtra("EMAIL_ADDRESS_INTENT", dbForm.getEmail().get(dbPosition));
-                            intent.putExtra("MAP_LOCATION_INTENT", dbForm.getStreet().get(dbPosition)
-                                    + "  "
-                                    + dbForm.getCity().get(dbPosition));
-                            intent.putExtra("INTRO_INTENT", dbForm.getIntro().get(dbPosition));
-                            startActivity(intent);
+                            intent.putExtra("NAME_INTENT",
+                                    dbForm.getName().get(dbPosition).toUpperCase());
+                            intent.putExtra("ID_INTENT",
+                                    dbForm.getID().get(dbPosition));
+                            intent.putExtra("PHONE_NUMBER_INTENT",
+                                    dbForm.getPhone().get(dbPosition));
+                            intent.putExtra("EMAIL_ADDRESS_INTENT",
+                                    dbForm.getEmail().get(dbPosition));
+                            intent.putExtra("STREET_INTENT",
+                                    dbForm.getStreet().get(dbPosition));
+                            intent.putExtra("CITY_INTENT",
+                                    dbForm.getCity().get(dbPosition));
+                            intent.putExtra("INTRO_INTENT",
+                                    dbForm.getIntro().get(dbPosition));
+                            startActivityForResult(intent, RESULT_OK);
                         } catch (Exception e) {
-                            Toast.makeText(ListActivity.this, "No Contact found",
+                            Toast.makeText(ListActivity.this, "No Contact Found",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -116,29 +127,19 @@ public class ListActivity extends AppCompatActivity implements DataListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.link_share:
-                String mimetype = "text/plain";
+                String mimeType = "text/plain";
                 String title = "Share with";
                 String text = "Link Here";
                 ShareCompat.IntentBuilder.from(this)
                         .setChooserTitle(title)
-                        .setType(mimetype)
+                        .setType(mimeType)
                         .setText(text)
                         .startChooser();
                 break;
+            case R.id.about:
+                break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d("Debug", "OnStop");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d("Debug", "OnPause");
     }
 
     @Override
@@ -146,17 +147,6 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         super.onResume();
         Log.d("Debug", "onResume");
         new LoadData(dbForm, this).execute("");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.d("Debug", "onRestart");
-    }
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        Log.d("Debug", "OnPostResume");
     }
 
     @Override
@@ -181,38 +171,4 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         mAdapter = new ArrayAdapter<>(this, R.layout.list_view, R.id.list_names, data);
         mListNames.setAdapter(mAdapter);
     }
-
-//    private class LoadData extends AsyncTask<Object, Object, List<String>> {
-//
-//        public LoadData(DBForm dataprovider, Task onCompletion) {
-//
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//            mProgressbar.setVisibility(View.VISIBLE);
-//            super.onPreExecute();
-//        }
-//
-//        @Override
-//        protected List<String> doInBackground(Object... strings) {
-//            Log.d("Debug", "doInBackground");
-//            List<String> names = new ArrayList<>(dbForm.getName().size());
-//            for (int i = 0; i < dbForm.getName().size(); i++) {
-//                names.add(i, dbForm.getName().get(i));
-//            }
-//            Collections.sort(names);
-//            return names;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(List<String> names) {
-//            mProgressbar.setVisibility(View.INVISIBLE);
-//
-//            mAdapter = new ArrayAdapter<>(ListActivity.this, R.layout.list_view, R.id.list_names, names);
-//            mListNames.setAdapter(mAdapter);
-//
-//            super.onPostExecute(names);
-//        }
-//    }
 }

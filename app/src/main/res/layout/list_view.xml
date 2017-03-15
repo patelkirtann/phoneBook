@@ -6,9 +6,9 @@
 
     <ImageView
         android:id="@+id/iv_img"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/ic_person"/>
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/ic_person"/>
 
     <TextView
         android:id="@+id/list_names"

@@ -1,24 +1,21 @@
 package com.first_app.fleet;
 
 import android.content.DialogInterface;
-import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
-public class AddActivity extends AppCompatActivity {
+public class AddActivity extends AppCompatActivity{
 
-    Button mSave;
+    public EditText name, email, phone, street, city, intro;
 
-    EditText name, email, phone, street, city, intro;
-
-    DBForm dbForm = new DBForm(this);
+    public DBForm dbForm = new DBForm(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +27,6 @@ public class AddActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        mSave = (Button) findViewById(R.id.save);
         name = (EditText) findViewById(R.id.name_field);
         email = (EditText) findViewById(R.id.email_field);
         phone = (EditText) findViewById(R.id.phone_field);
@@ -38,20 +34,11 @@ public class AddActivity extends AppCompatActivity {
         city = (EditText) findViewById(R.id.city_field);
         intro = (EditText) findViewById(R.id.tv_auto);
 
-        mSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                onSaveButtonClicked();
-
-            }
-        });
-
     }
 
-    private void onSaveButtonClicked() {
-        if (!isEmpty(name) && !isEmpty(email) && contains(email, "@")
-                && contains(email, ".")) {
+    private void onSaveClicked() {
+        if (!isEmpty(name) && phone.length() >= 10 &&
+                !dbForm.checkName(name.getText().toString().toLowerCase())) {
             final AlertDialog.Builder dialog = new AlertDialog.Builder(AddActivity.this);
             dialog.setTitle("Confirmation");
             dialog.setMessage("Save Contact?");
@@ -62,7 +49,7 @@ public class AddActivity extends AppCompatActivity {
                         Toast.makeText(AddActivity.this, " Contact Saved ",
                                 Toast.LENGTH_SHORT).show();
                         onBackPressed();
-                    }else {
+                    } else {
                         Toast.makeText(AddActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -70,29 +57,36 @@ public class AddActivity extends AppCompatActivity {
             dialog.setNegativeButton("Discard", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Toast.makeText(AddActivity.this, " Canceled ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddActivity.this, " Discarded ", Toast.LENGTH_SHORT).show();
                     onBackPressed();
+                }
+            });
+
+            dialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(AddActivity.this, "Nothing changed", Toast.LENGTH_SHORT).show();
                 }
             });
             AlertDialog alert = dialog.create();
             alert.show();
         } else {
-            Toast.makeText(AddActivity.this, " Fill Required Filed(*) ", Toast.LENGTH_SHORT).show();
+            if (isEmpty(name))
+                name.setError("Invalid Name");
+            if (phone.length() < 10)
+                phone.setError("Invalid Number");
+            if (dbForm.checkName(name.getText().toString().toLowerCase()))
+                name.setError("Duplicate Name");
+            Toast.makeText(AddActivity.this, " *Enter valid 2 or More character Name\n " +
+                    "*Enter valid 10 Digit number ", Toast.LENGTH_LONG).show();
         }
     }
 
     private boolean isEmpty(EditText edit) {
-        if (edit.getText().toString().trim().length() > 0)
-            return false;
+        String text = edit.getText().toString().replaceAll(" ","");
 
-        return true;
-    }
-
-    private boolean contains(EditText edit, String str) {
-        if (edit.getText().toString().contains(str)) {
-            return true;
-        }
-        return false;
+        return !(!text.trim().isEmpty() &&
+                text.length() >= 2);
     }
 
     private boolean addedToRecords() {
@@ -109,6 +103,7 @@ public class AddActivity extends AppCompatActivity {
             dbForm.insertValue(nameText, emailText, phoneText, streetText, cityText, introText);
             return true;
         } else {
+            name.setError("Duplicate Name");
             Toast.makeText(this, "Same Name found.\n Try to give unique Name.",
                     Toast.LENGTH_LONG).show();
             return false;
@@ -117,28 +112,21 @@ public class AddActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.share_details, menu);
+        getMenuInflater().inflate(R.menu.save_contact, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.link_share:
-                String mimetype = "text/plain";
-                String title = "Share with";
-                String text = "Link Here";
-                ShareCompat.IntentBuilder.from(this)
-                        .setChooserTitle(title)
-                        .setType(mimetype)
-                        .setText(text)
-                        .startChooser();
-                break;
             case android.R.id.home:
                 onBackPressed();
                 break;
+            case R.id.save:
+                onSaveClicked();
+                break;
         }
-
         return super.onOptionsItemSelected(item);
     }
+
 }

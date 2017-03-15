@@ -14,7 +14,8 @@
             android:id="@+id/ll_all_data_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:weightSum="1">
 
 
             <LinearLayout
@@ -50,112 +51,84 @@
             <RelativeLayout
                 android:id="@+id/rl_information_holder"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="50dp">
-
-                <Button
-                    android:id="@+id/bt_gotoCall"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/ic_phone"
-                    android:clickable="true"
-                    android:padding="10dp" />
+                android:layout_height="0dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="48dp"
+                android:layout_weight="1">
 
                 <TextView
                     android:id="@+id/tv_phoneNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/bt_gotoCall"
-                    android:layout_alignBottom="@+id/bt_gotoCall"
-                    android:layout_toEndOf="@+id/bt_gotoEmail"
-                    android:layout_toRightOf="@+id/bt_gotoEmail"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginTop="24dp"
+
                     android:background="@drawable/tv_back_border"
-                    android:hint="Number"
-                    android:padding="10dp"
-                    android:textColor="@color/colorAccent"
+                    android:drawableLeft="@drawable/ic_phone"
+                    android:gravity="center|start"
+                    android:focusable="false"
+                    android:hint="@string/number"
                     android:textIsSelectable="true" />
-
-                <QuickContactBadge
-                    android:id="@+id/cb_SavePhone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignEnd="@+id/tv_phoneNumber"
-                    android:layout_alignRight="@+id/tv_phoneNumber"
-                    android:background="@drawable/ic_save_phone" />
-
-                <Button
-                    android:id="@+id/bt_gotoEmail"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_below="@+id/bt_gotoCall"
-                    android:background="@drawable/ic_email"
-                    android:clickable="true"
-                    android:padding="10dp" />
 
                 <TextView
                     android:id="@+id/tv_emailAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/bt_gotoEmail"
-                    android:layout_alignBottom="@+id/bt_gotoCall"
-                    android:layout_toEndOf="@+id/bt_gotoMap"
-                    android:layout_toRightOf="@+id/bt_gotoMap"
+                    android:layout_below="@id/tv_phoneNumber"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginTop="10dp"
+
                     android:background="@drawable/tv_back_border"
+                    android:drawableLeft="@drawable/ic_email"
+                    android:gravity="center|start"
+                    android:focusable="false"
                     android:hint="@string/Email"
-                    android:padding="10dp"
-                    android:textColor="@color/colorAccent"
                     android:textIsSelectable="true" />
-
-                <QuickContactBadge
-                    android:id="@+id/cb_saveEmail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignEnd="@+id/tv_emailAddress"
-                    android:layout_alignRight="@+id/tv_emailAddress"
-                    android:layout_below="@+id/cb_SavePhone"
-                    android:background="@drawable/ic_save_email" />
-
-                <Button
-                    android:id="@+id/bt_gotoMap"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_below="@+id/bt_gotoEmail"
-                    android:background="@drawable/ic_location"
-                    android:clickable="true"
-                    android:padding="10dp" />
 
                 <TextView
                     android:id="@+id/tv_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/bt_gotoMap"
-                    android:layout_toEndOf="@+id/bt_gotoEmail"
-                    android:layout_toRightOf="@+id/bt_gotoEmail"
+                    android:layout_below="@id/tv_emailAddress"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginTop="10dp"
+
                     android:background="@drawable/tv_back_border"
+                    android:drawableLeft="@drawable/ic_location"
+                    android:gravity="center|start"
+                    android:focusable="false"
                     android:hint="@string/Location"
-                    android:padding="10dp"
-                    android:textColor="@color/colorAccent"
+                    android:lines="2"
                     android:textIsSelectable="true" />
 
                 <TextView
                     android:id="@+id/tv_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/bt_gotoMap"
-                    android:layout_marginLeft="16dp"
+                    android:layout_below="@id/tv_location"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
                     android:layout_marginTop="10dp"
+
                     android:background="@drawable/tv_back_border"
-                    android:hint="Intro"
+                    android:gravity="center|start"
+                    android:hint="@string/intro"
                     android:isScrollContainer="true"
-                    android:padding="14dp"
-                    android:textColor="@color/colorAccent"
+                    android:padding="16dp"
                     android:textIsSelectable="true" />
 
             </RelativeLayout>
         </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"

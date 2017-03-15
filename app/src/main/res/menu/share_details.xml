@@ -3,14 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/link_share"
-        android:actionLayout="@android:layout/simple_list_item_1"
         android:icon="@drawable/ic_menu_share"
         android:title="@string/share"
-        app:showAsAction="collapseActionView" />
+        app:showAsAction="collapseActionView"/>
     <item
         android:id="@+id/about"
-        android:actionLayout="@android:layout/simple_dropdown_item_1line"
-        android:icon="@drawable/ic_person"
+        android:icon="@drawable/ic_info"
         android:title="@string/about"
-        app:showAsAction="collapseActionView" />
+        app:showAsAction="never" />
 </menu>
