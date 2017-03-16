@@ -15,18 +15,16 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.QuickContactBadge;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class UserDetailOperationActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_CALL_CONTACTS = 0;
+    private static int UPDATE_TOKEN = -1;
 
     public String name, id, number, address, street, city, location, intro;
     public Context context = UserDetailOperationActivity.this;
@@ -87,6 +85,23 @@ public class UserDetailOperationActivity extends AppCompatActivity {
             }
         });
 
+        mIntro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (intro.isEmpty()) {
+                    Snackbar.make(findViewById(R.id.sv_scroll), "Intro not found",
+                            Snackbar.LENGTH_LONG)
+                            .setAction("Add", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    sendDataToUpdate();
+                                }
+                            })
+                            .show();
+                }
+            }
+        });
+
         mEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,7 +150,6 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         } else {
             mMapLocation.setText("");
         }
-
     }
 
 
@@ -175,8 +189,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-//                Toast.makeText(context, " Canceled ",
-//                        Toast.LENGTH_SHORT).show();
+
                 Snackbar.make(findViewById(R.id.sv_scroll), "Canceled",
                         Snackbar.LENGTH_SHORT)
                         .show();
@@ -254,40 +267,52 @@ public class UserDetailOperationActivity extends AppCompatActivity {
 
     private void setEmailOnClick() {
 
-        final AlertDialog.Builder dialog = new AlertDialog
-                .Builder(UserDetailOperationActivity.this);
-        dialog.setTitle("Confirmation");
-        dialog.setMessage("Send Email to " + address + "?");
+        if (!address.isEmpty()) {
+            final AlertDialog.Builder dialog = new AlertDialog
+                    .Builder(UserDetailOperationActivity.this);
+            dialog.setTitle("Confirmation");
+            dialog.setMessage("Send Email to " + address + "?");
 
-        dialog.setPositiveButton("Send Email", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+            dialog.setPositiveButton("Send Email", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
 
-                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{address});
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Sending from Fleet");
-                emailIntent.setType("plain/text");
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{address});
+                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Sending from Fleet");
+                    emailIntent.setType("plain/text");
 
-                startActivity(Intent.createChooser(emailIntent, " Send... "));
-            }
-        });
+                    startActivity(Intent.createChooser(emailIntent, " Send... "));
+                }
+            });
 
-        dialog.setNegativeButton("Copy", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                copyText();
-            }
-        });
+            dialog.setNegativeButton("Copy", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    copyText();
+                }
+            });
 
-        dialog.setNeutralButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+            dialog.setNeutralButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
-            }
-        });
+                }
+            });
 
-        AlertDialog alert = dialog.create();
-        alert.show();
+            AlertDialog alert = dialog.create();
+            alert.show();
+        } else {
+            Snackbar.make(findViewById(R.id.sv_scroll), "Email not found",
+                    Snackbar.LENGTH_LONG)
+                    .setAction("Add", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            sendDataToUpdate();
+                        }
+                    })
+                    .show();
+        }
 
     }
 
@@ -299,7 +324,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
             final AlertDialog.Builder dialog = new AlertDialog
                     .Builder(UserDetailOperationActivity.this);
             dialog.setTitle("Confirmation");
-            dialog.setMessage("Send Email to " + address + "?");
+            dialog.setMessage("Find Location in Map?");
 
             dialog.setPositiveButton("GOTO Map", new DialogInterface.OnClickListener() {
                 @Override
@@ -331,7 +356,13 @@ public class UserDetailOperationActivity extends AppCompatActivity {
             alert.show();
         } else {
             Snackbar.make(findViewById(R.id.sv_scroll), "Location not found",
-                    Snackbar.LENGTH_SHORT)
+                    Snackbar.LENGTH_LONG)
+                    .setAction("Add", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            sendDataToUpdate();
+                        }
+                    })
                     .show();
         }
     }
@@ -375,10 +406,16 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Permission is granted", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, "Permission is granted", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.sv_scroll), "Permission is granted",
+                            Snackbar.LENGTH_SHORT)
+                            .show();
 
                 } else {
-                    Toast.makeText(this, "Permission is Denied", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, "Permission is Denied", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.sv_scroll), "Permission is Denied",
+                            Snackbar.LENGTH_SHORT)
+                            .show();
                 }
             }
         }
@@ -440,9 +477,18 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                 city = data.getStringExtra("CITY_INTENT");
                 location = street + " " + city;
                 intro = data.getStringExtra("INTRO_INTENT");
-
+                UPDATE_TOKEN = 2;
                 setData();
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (UPDATE_TOKEN == 2){
+            setResult(UPDATE_TOKEN);
+            UPDATE_TOKEN = -1;
+        }
+        super.onBackPressed();
     }
 }

@@ -93,23 +93,16 @@ public class AddActivity extends AppCompatActivity {
 
     private boolean addedToRecords() {
 
-        if (!dbForm.checkName(name.getText().toString().toLowerCase())) {
+        String nameText = name.getText().toString().toLowerCase().trim();
+        String emailText = email.getText().toString().toLowerCase();
+        String phoneText = phone.getText().toString();
+        String streetText = street.getText().toString();
+        String cityText = city.getText().toString();
+        String introText = intro.getText().toString();
 
-            String nameText = name.getText().toString().toLowerCase().trim();
-            String emailText = email.getText().toString().toLowerCase();
-            String phoneText = phone.getText().toString();
-            String streetText = street.getText().toString();
-            String cityText = city.getText().toString();
-            String introText = intro.getText().toString();
+        dbForm.insertValue(nameText, emailText, phoneText, streetText, cityText, introText);
 
-            dbForm.insertValue(nameText, emailText, phoneText, streetText, cityText, introText);
-            return true;
-        } else {
-            name.setError("Duplicate Name");
-            Toast.makeText(this, "Same Name found.\n Try to give unique Name.",
-                    Toast.LENGTH_LONG).show();
-            return false;
-        }
+        return true;
     }
 
     @Override

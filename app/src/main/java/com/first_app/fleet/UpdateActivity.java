@@ -134,4 +134,10 @@ public class UpdateActivity extends AppCompatActivity {
         AlertDialog alert = dialog.create();
         alert.show();
     }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        super.onBackPressed();
+    }
 }
