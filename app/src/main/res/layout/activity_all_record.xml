@@ -4,7 +4,7 @@
     android:id="@+id/activity_all_record"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.first_app.fleet.AllRecord">
+    tools:context="com.contact_app.fleet.AllRecord">
 
 
     <ExpandableListView

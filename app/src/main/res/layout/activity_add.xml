@@ -5,7 +5,7 @@
     android:id="@+id/activity_add"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.first_app.fleet.AddActivity">
+    tools:context="com.contact_app.fleet.AddActivity">
 
     <LinearLayout
         android:id="@+id/ll_new_contact"
@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:orientation="horizontal"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorAccent"
         android:layout_below="@id/ll_new_contact" />
 
 

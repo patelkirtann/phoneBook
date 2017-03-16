@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_gray_background"
-    tools:context="com.first_app.fleet.MainActivity">
+    tools:context="com.contact_app.fleet.MainActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

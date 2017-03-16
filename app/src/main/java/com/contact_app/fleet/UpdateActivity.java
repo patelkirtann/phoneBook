@@ -1,6 +1,5 @@
-package com.first_app.fleet;
+package com.contact_app.fleet;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;

@@ -1,8 +1,7 @@
-package com.first_app.fleet;
+package com.contact_app.fleet;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,15 +17,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.amulyakhare.textdrawable.TextDrawable;
-import com.amulyakhare.textdrawable.util.ColorGenerator;
-
 import java.util.List;
 
 public class ListActivity extends AppCompatActivity implements DataListener {
@@ -130,8 +124,11 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         switch (item.getItemId()) {
             case R.id.link_share:
                 String mimeType = "text/plain";
-                String title = "Share with";
-                String text = "Link Here";
+                String title = "Share";
+                String text = "Greetings, Use this application to save your temporary contacts and" +
+                        " use it as you fit." +
+                        "Download with the given link and share application with friends and family.\n" +
+                        "http://play.google.com/store/apps/details?id=com.contact_app.fleet";
                 ShareCompat.IntentBuilder.from(this)
                         .setChooserTitle(title)
                         .setType(mimeType)
@@ -145,7 +142,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                 dialog.setMessage("\n" +
                         "\n" +
                         "\"" +
-                        "-Why do I have this many unwanted contacts in my phone?\n" +
+                        "Why do I have this many unwanted contacts in my phone?\n" +
                         "-Who is this John, Doe? Why is he in my contact list? Where did I meet him? \n" +
                         "-Do I really need his/her contact? Am I ever gonna need his/her Help? \" \n\n" +
                         "You usually get this kind of questions while scrolling your contact list or " +
@@ -170,9 +167,6 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                         "-Editing or Deleting contact with preference\n" +
                         "-Call, Email or Search location with a single click\n" +
                         "-Search contact by their name\n" +
-                        "\n" +
-                        "Version: \n" +
-                        "-Beta v1.0\n" +
                         "\n" +
                         "\n");
                 dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {

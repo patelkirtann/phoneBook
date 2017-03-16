@@ -1,16 +1,12 @@
-package com.first_app.fleet;
+package com.contact_app.fleet;
 
 import android.content.DialogInterface;
-import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.Toast;
 
 public class AddActivity extends AppCompatActivity {
