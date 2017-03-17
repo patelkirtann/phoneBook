@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -38,9 +39,8 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
         }
-
-        FloatingActionButton mEdit = (FloatingActionButton) findViewById(R.id.fab_edit);
 
         mName = (TextView) findViewById(R.id.tv_name);
         mPhoneNumber = (TextView) findViewById(R.id.tv_phoneNumber);
@@ -99,13 +99,6 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                             })
                             .show();
                 }
-            }
-        });
-
-        mEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendDataToUpdate();
             }
         });
     }
@@ -218,7 +211,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         final AlertDialog.Builder dialog = new AlertDialog
                 .Builder(UserDetailOperationActivity.this);
         dialog.setTitle("Confirmation");
-        dialog.setMessage("Call or Copy?");
+        dialog.setMessage("Call " + name + "?");
 
         dialog.setPositiveButton("Call", new DialogInterface.OnClickListener() {
             @Override
@@ -244,16 +237,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
             }
         });
 
-        dialog.setNegativeButton("Copy", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                copyText();
-
-            }
-        });
-
-        dialog.setNeutralButton("No", new DialogInterface.OnClickListener() {
+        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -287,13 +271,6 @@ public class UserDetailOperationActivity extends AppCompatActivity {
             });
 
             dialog.setNegativeButton("Copy", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    copyText();
-                }
-            });
-
-            dialog.setNeutralButton("No", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
@@ -342,12 +319,6 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     copyText();
-                }
-            });
-
-            dialog.setNeutralButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
 
                 }
             });
@@ -377,6 +348,18 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         Snackbar.make(findViewById(R.id.sv_scroll), "Text Copied",
                 Snackbar.LENGTH_SHORT)
                 .show();
+
+    }
+
+    private void shareDetails() {
+        String mimeType = "text/plain";
+        String title = "Share with,";
+        String text = name + "\nPhn:" + number + "\nEmail:" + address;
+        ShareCompat.IntentBuilder.from(this)
+                .setChooserTitle(title)
+                .setType(mimeType)
+                .setText(text)
+                .startChooser();
     }
 
     public boolean isCallPermissionGranted() {
@@ -459,6 +442,16 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                 onBackPressed();
 
                 break;
+            case R.id.share_contact:
+
+                shareDetails();
+
+                break;
+            case R.id.edit_contact:
+
+                sendDataToUpdate();
+
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -485,7 +478,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (UPDATE_TOKEN == 2){
+        if (UPDATE_TOKEN == 2) {
             setResult(UPDATE_TOKEN);
             UPDATE_TOKEN = -1;
         }

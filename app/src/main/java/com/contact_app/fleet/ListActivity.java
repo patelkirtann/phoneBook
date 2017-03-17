@@ -125,8 +125,8 @@ public class ListActivity extends AppCompatActivity implements DataListener {
             case R.id.link_share:
                 String mimeType = "text/plain";
                 String title = "Share";
-                String text = "Greetings, Use this application to save your temporary contacts and" +
-                        " use it as you fit." +
+                String text = "Greetings, This application will save all of your temporary contacts and" +
+                        " gives the functionality to use those contacts as per the convenience." +
                         "Download with the given link and share application with friends and family.\n" +
                         "http://play.google.com/store/apps/details?id=com.contact_app.fleet";
                 ShareCompat.IntentBuilder.from(this)
@@ -166,6 +166,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                         "-Accepts only Unique names for better understanding of person \n" +
                         "-Editing or Deleting contact with preference\n" +
                         "-Call, Email or Search location with a single click\n" +
+                        "-Share information" +
                         "-Search contact by their name\n" +
                         "\n" +
                         "\n");

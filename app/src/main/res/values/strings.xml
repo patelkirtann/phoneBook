@@ -32,4 +32,6 @@
     <string name="update_contact">Update Contact</string>
     <string name="update">Update</string>
     <string name="move_to_phone">Move To Phone</string>
+    <string name="share_contact">Share Contact</string>
+    <string name="edit">Edit</string>
 </resources>
