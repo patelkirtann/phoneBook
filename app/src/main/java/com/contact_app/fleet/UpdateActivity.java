@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class UpdateActivity extends AppCompatActivity {
@@ -20,12 +21,15 @@ public class UpdateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update);
+        setContentView(R.layout.activity_add);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+
+        TextView heading = (TextView) findViewById(R.id.tv_heading);
+        heading.setText("Edit Contact");
 
         mName = (EditText) findViewById(R.id.name_field);
         mEmail = (EditText) findViewById(R.id.email_field);

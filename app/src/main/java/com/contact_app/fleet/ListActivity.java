@@ -21,7 +21,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ListActivity extends AppCompatActivity implements DataListener {
 
@@ -31,7 +34,9 @@ public class ListActivity extends AppCompatActivity implements DataListener {
     TextView mInformationText;
     FloatingActionButton mAddFloatingButton;
     ArrayAdapter<String> mAdapter;
+    CustomList mCustomListAdapter;
     ProgressBar mProgressbar;
+    CircleImageView mProfileImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,16 +54,20 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         mInformationText.setText("No Contacts");
         mListNames.setEmptyView(mInformationText);
 
+        mProfileImage = (CircleImageView) findViewById(R.id.profile_image);
+
         mSearch.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                ListActivity.this.mAdapter.getFilter().filter(charSequence);
+//                ListActivity.this.mAdapter.getFilter().filter(charSequence);
+//                ListActivity.this.mCustomListAdapter.getFilter().filter(charSequence);
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                ListActivity.this.mAdapter.getFilter().filter(charSequence);
+//                ListActivity.this.mAdapter.getFilter().filter(charSequence);
+//                ListActivity.this.mCustomListAdapter.getFilter().filter(charSequence);
             }
 
             @Override
@@ -93,6 +102,8 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                                     dbForm.getCity().get(dbPosition));
                             intent.putExtra("INTRO_INTENT",
                                     dbForm.getIntro().get(dbPosition));
+                            intent.putExtra("IMAGE_INTENT",
+                                    dbForm.getImage().get(dbPosition));
                             startActivityForResult(intent, 1);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -136,8 +147,10 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                         .startChooser();
                 break;
             case R.id.about:
+                String versionName = BuildConfig.VERSION_NAME;
                 final AlertDialog.Builder dialog = new AlertDialog
                         .Builder(ListActivity.this);
+                dialog.setIcon(R.mipmap.ic_launcher);
                 dialog.setTitle("Fleet");
                 dialog.setMessage("\n" +
                         "\n" +
@@ -169,6 +182,8 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                         "-Share information" +
                         "-Search contact by their name\n" +
                         "\n" +
+                        "\n" +
+                        "Version: " + versionName +
                         "\n");
                 dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -194,7 +209,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        onRestart();
+//        onRestart();
     }
 
     @Override
@@ -210,24 +225,27 @@ public class ListActivity extends AppCompatActivity implements DataListener {
     @Override
     public void onCompletion(List<String> data) {
         mProgressbar.setVisibility(View.INVISIBLE);
+//        mCustomListAdapter = new CustomList(this , data , images);
         mAdapter = new ArrayAdapter<>(this, R.layout.list_view, R.id.list_names, data);
         mListNames.setAdapter(mAdapter);
+
+//        mListNames.setAdapter(mCustomListAdapter);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1){
-            if (resultCode == RESULT_OK){
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
                 Snackbar.make(findViewById(R.id.activity_list), "1 Contact Deleted",
                         Snackbar.LENGTH_SHORT)
                         .show();
             }
         }
-            if (resultCode == 2){
-                Snackbar.make(findViewById(R.id.activity_list), "1 Contact Updated",
-                        Snackbar.LENGTH_SHORT)
-                        .show();
+        if (resultCode == 2) {
+            Snackbar.make(findViewById(R.id.activity_list), "1 Contact Updated",
+                    Snackbar.LENGTH_SHORT)
+                    .show();
         }
     }
 }

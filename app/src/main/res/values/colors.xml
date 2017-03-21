@@ -14,5 +14,10 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
 
+    <color name="first_screen">#4897d8</color>
+    <color name="second_screen">#ffdb5c</color>
+    <color name="third_screen">#fa6e59</color>
+    <color name="fourth_screen">#f8a055</color>
+
     <!--#f48942 #f47d42-->
 </resources>

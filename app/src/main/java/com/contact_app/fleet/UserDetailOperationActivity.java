@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,11 +18,15 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.ByteArrayOutputStream;
 
 public class UserDetailOperationActivity extends AppCompatActivity {
 
@@ -30,6 +36,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
     public String name, id, number, address, street, city, location, intro;
     public Context context = UserDetailOperationActivity.this;
     private TextView mName, mPhoneNumber, mEmailAddress, mMapLocation, mIntro;
+    private ImageView mDisplayPic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +49,28 @@ public class UserDetailOperationActivity extends AppCompatActivity {
             getSupportActionBar().setElevation(0);
         }
 
+        mDisplayPic = (ImageView) findViewById(R.id.iv_photo);
         mName = (TextView) findViewById(R.id.tv_name);
         mPhoneNumber = (TextView) findViewById(R.id.tv_phoneNumber);
         mEmailAddress = (TextView) findViewById(R.id.tv_emailAddress);
         mMapLocation = (TextView) findViewById(R.id.tv_location);
         mIntro = (TextView) findViewById(R.id.tv_info);
+
+        mDisplayPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(
+                        Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                in.putExtra("crop", "true");
+                in.putExtra("outputX", 100);
+                in.putExtra("outputY", 100);
+                in.putExtra("scale", true);
+                in.putExtra("return-data", true);
+
+                startActivityForResult(in, 5);
+            }
+        });
 
         if (savedInstanceState == null) {
 
@@ -473,6 +497,26 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                 UPDATE_TOKEN = 2;
                 setData();
             }
+        }
+
+        if (requestCode == 5 && resultCode == RESULT_OK && data != null) {
+
+            Bitmap bmp = (Bitmap) data.getExtras().get("data");
+
+//            mDisplayPic.setImageBitmap(bmp);
+//            btnadd.requestFocus();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            if (bmp != null) {
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            }
+            byte[] b = baos.toByteArray();
+            String encodedImageString = Base64.encodeToString(b, Base64.DEFAULT);
+
+            byte[] bytarray = Base64.decode(encodedImageString, Base64.DEFAULT);
+            Bitmap bmimage = BitmapFactory.decodeByteArray(bytarray, 0,
+                    bytarray.length);
+            mDisplayPic.setImageBitmap(bmimage);
+
         }
     }
 

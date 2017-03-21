@@ -32,6 +32,9 @@
         <activity
             android:name="com.contact_app.fleet.UpdateActivity"
             android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".IntroActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

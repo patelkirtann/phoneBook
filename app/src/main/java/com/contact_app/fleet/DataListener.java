@@ -1,5 +1,7 @@
 package com.contact_app.fleet;
 
+import android.graphics.Bitmap;
+
 import java.util.List;
 
 /**

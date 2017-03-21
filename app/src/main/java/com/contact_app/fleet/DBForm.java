@@ -5,8 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by kt_ki on 11/16/2016.
@@ -23,9 +26,10 @@ class DBForm extends SQLiteOpenHelper {
     private static final String CONTACTS_COLUMN_STREET = "street";
     private static final String CONTACTS_COLUMN_CITY = "city";
     private static final String CONTACTS_COLUMN_INTRO = "intro";
+    private static final String CONTACTS_COLUMN_PICTURE = "picture";
 
     DBForm(Context context) {
-        super(context, DATABASE_NAME, null, 1);
+        super(context, DATABASE_NAME, null, 2);
     }
 
     @Override
@@ -38,14 +42,20 @@ class DBForm extends SQLiteOpenHelper {
                         CONTACTS_COLUMN_EMAIL + " text, " +
                         CONTACTS_COLUMN_STREET + " text," +
                         CONTACTS_COLUMN_CITY + " text," +
-                        CONTACTS_COLUMN_INTRO + " text)"
+                        CONTACTS_COLUMN_INTRO + " text" +
+                        CONTACTS_COLUMN_PICTURE + "blob)"
         );
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + CONTACTS_TABLE_NAME);
-        onCreate(db);
+
+            if (newVersion > oldVersion) {
+                db.execSQL("ALTER TABLE " + CONTACTS_TABLE_NAME + " ADD COLUMN " +
+                        CONTACTS_COLUMN_PICTURE + " BLOB");
+            }
+//        db.execSQL("DROP TABLE IF EXISTS " + CONTACTS_TABLE_NAME);
+//        onCreate(db);
     }
 
     boolean insertValue(String name, String email, String phone,
@@ -59,6 +69,7 @@ class DBForm extends SQLiteOpenHelper {
         contentValues.put(CONTACTS_COLUMN_STREET, street);
         contentValues.put(CONTACTS_COLUMN_CITY, city);
         contentValues.put(CONTACTS_COLUMN_INTRO, intro);
+//        contentValues.put(CONTACTS_COLUMN_PICTURE, picture);
 
         sqLiteDatabase.insert(CONTACTS_TABLE_NAME, null, contentValues);
         return true;
@@ -97,7 +108,7 @@ class DBForm extends SQLiteOpenHelper {
         return array_list;
     }
 
-    public ArrayList<String> getEmail() {
+    ArrayList<String> getEmail() {
         ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -177,6 +188,34 @@ class DBForm extends SQLiteOpenHelper {
         return array_list;
     }
 
+    ArrayList<Bitmap> getImage() {
+        ArrayList<Bitmap> array_list = new ArrayList<>();
+
+        String qu = "select " + CONTACTS_COLUMN_PICTURE + " from " + CONTACTS_TABLE_NAME;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cur = db.rawQuery(qu, null);
+
+        if (cur.moveToFirst()) {
+            byte[] imgByte = cur.getBlob(0);
+            array_list.add(BitmapFactory.decodeByteArray(imgByte, 100, imgByte.length));
+            cur.close();
+            return array_list;
+        }
+        if (!cur.isClosed()) {
+            cur.close();
+        }
+        return null;
+    }
+
+    void updateImage(String name, byte[] image) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(name, image);
+        sqLiteDatabase.insert(CONTACTS_TABLE_NAME, null, contentValues);
+
+    }
+
     void deleteContactByID(String id) {
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -189,14 +228,14 @@ class DBForm extends SQLiteOpenHelper {
                        String city, String intro) {
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put("name" , name);
-        cv.put("email" , email);
-        cv.put("phone" , phone);
-        cv.put("street" , street);
-        cv.put("city" , city);
-        cv.put("intro" , intro);
+        cv.put("name", name);
+        cv.put("email", email);
+        cv.put("phone", phone);
+        cv.put("street", street);
+        cv.put("city", city);
+        cv.put("intro", intro);
 
-        db.update(CONTACTS_TABLE_NAME , cv , "id=" +id, null);
+        db.update(CONTACTS_TABLE_NAME, cv, "id=" + id, null);
     }
 
 
@@ -211,5 +250,6 @@ class DBForm extends SQLiteOpenHelper {
     boolean checkName(String name) {
         return getName().contains(name);
     }
+
 
 }

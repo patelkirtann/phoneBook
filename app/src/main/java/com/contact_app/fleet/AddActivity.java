@@ -1,19 +1,29 @@
 package com.contact_app.fleet;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.io.ByteArrayOutputStream;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AddActivity extends AppCompatActivity {
 
     public EditText name, email, phone, street, city, intro;
-
     public DBForm dbForm = new DBForm(this);
+    byte[] byteArray;
+    private CircleImageView mPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,12 +35,20 @@ public class AddActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
+        mPicture = (CircleImageView) findViewById(R.id.profile_image);
         name = (EditText) findViewById(R.id.name_field);
         email = (EditText) findViewById(R.id.email_field);
         phone = (EditText) findViewById(R.id.phone_field);
         street = (EditText) findViewById(R.id.street_field);
         city = (EditText) findViewById(R.id.city_field);
         intro = (EditText) findViewById(R.id.tv_auto);
+
+        mPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getImageFromSdCard();
+            }
+        });
 
     }
 
@@ -97,6 +115,9 @@ public class AddActivity extends AppCompatActivity {
         String introText = intro.getText().toString();
 
         dbForm.insertValue(nameText, emailText, phoneText, streetText, cityText, introText);
+        if (mPicture != null){
+            dbForm.updateImage(nameText , byteArray);
+        }
 
         return true;
     }
@@ -119,5 +140,47 @@ public class AddActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void getImageFromSdCard() {
+        Intent in = new Intent(
+                Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        in.putExtra("crop", "true");
+//        in.putExtra("outputX", 100);
+//        in.putExtra("outputY", 100);
+        in.putExtra("scale", true);
+        in.putExtra("return-data", true);
+
+        startActivityForResult(in, 5);
+    }
+
+    private void setImageFromSdCard(Bitmap bmp) {
+//            mDisplayPic.setImageBitmap(bmp);
+//            btnadd.requestFocus();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        if (bmp != null) {
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        }
+        byte[] b = baos.toByteArray();
+        String encodedImageString = Base64.encodeToString(b, Base64.DEFAULT);
+
+        byteArray = Base64.decode(encodedImageString, Base64.DEFAULT);
+        Bitmap bmImage = BitmapFactory.decodeByteArray(byteArray, 0,
+                byteArray.length);
+        mPicture.setImageBitmap(bmImage);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 5 && resultCode == RESULT_OK && data != null) {
+            Bitmap bmp = (Bitmap) data.getExtras().get("data");
+            setImageFromSdCard(bmp);
+
+        }
+    }
+
 
 }
