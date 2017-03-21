@@ -2,6 +2,7 @@ package com.contact_app.fleet;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -34,7 +35,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
     TextView mInformationText;
     FloatingActionButton mAddFloatingButton;
     ArrayAdapter<String> mAdapter;
-    CustomList mCustomListAdapter;
+    CustomListAdapter mCustomListAdapter;
     ProgressBar mProgressbar;
     CircleImageView mProfileImage;
 
@@ -80,13 +81,13 @@ public class ListActivity extends AppCompatActivity implements DataListener {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 position = mListNames.getPositionForView(view);
-                for (int i = 0; i < mAdapter.getCount(); i++) {
+                for (int i = 0; i < mCustomListAdapter.getCount(); i++) {
                     if (position == i) {
 
                         try {
                             Intent intent = new Intent(ListActivity.this,
                                     UserDetailOperationActivity.class);
-                            int dbPosition = dbForm.getName().indexOf(mAdapter.getItem(i));
+                            int dbPosition = dbForm.getName().indexOf(mCustomListAdapter.getItem(i));
 
                             intent.putExtra("NAME_INTENT",
                                     dbForm.getName().get(dbPosition).toUpperCase());
@@ -102,8 +103,8 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                                     dbForm.getCity().get(dbPosition));
                             intent.putExtra("INTRO_INTENT",
                                     dbForm.getIntro().get(dbPosition));
-                            intent.putExtra("IMAGE_INTENT",
-                                    dbForm.getImage().get(dbPosition));
+//                            intent.putExtra("IMAGE_INTENT",
+//                                    dbForm.getImage().get(dbPosition));
                             startActivityForResult(intent, 1);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -223,13 +224,13 @@ public class ListActivity extends AppCompatActivity implements DataListener {
     }
 
     @Override
-    public void onCompletion(List<String> data) {
+    public void onCompletion(List<String> data, List<Bitmap> images) {
         mProgressbar.setVisibility(View.INVISIBLE);
-//        mCustomListAdapter = new CustomList(this , data , images);
-        mAdapter = new ArrayAdapter<>(this, R.layout.list_view, R.id.list_names, data);
-        mListNames.setAdapter(mAdapter);
+        mCustomListAdapter = new CustomListAdapter(this , data , images);
+//        mAdapter = new ArrayAdapter<>(this, R.layout.list_view, R.id.list_names, data);
+//        mListNames.setAdapter(mAdapter);
 
-//        mListNames.setAdapter(mCustomListAdapter);
+        mListNames.setAdapter(mCustomListAdapter);
     }
 
     @Override

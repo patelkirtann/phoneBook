@@ -3,6 +3,7 @@ package com.contact_app.fleet;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,42 +19,26 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by kt_ki on 3/21/2017.
  */
 
-class CustomList extends BaseAdapter {
-    private final Activity context;
+class CustomListAdapter extends ArrayAdapter<String> {
+
     private final List<Bitmap> images;
     private List<String> names;
 
-    CustomList(Activity context,
-               List<String> names, List<Bitmap> imageId) {
-        super();
-        this.context = context;
+    CustomListAdapter(Activity context,
+                      List<String> names, List<Bitmap> imageId) {
+        super(context, 0, names);
         this.names = names;
         this.images = imageId;
 
     }
 
-    @Override
-    public int getCount() {
-        return names.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return names.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return Long.parseLong(names.get(position));
-    }
-
     @NonNull
     @Override
-    public View getView(int position, View view, @NonNull ViewGroup parent) {
-        LayoutInflater inflater = context.getLayoutInflater();
+    public View getView(int position, @Nullable View view, @NonNull ViewGroup parent) {
+        //LayoutInflater inflater = context.getLayoutInflater();
         View viewConverter = view;
         if (view == null)
-            viewConverter = inflater.inflate(R.layout.list_view, null);
+            viewConverter = LayoutInflater.from(getContext()).inflate(R.layout.list_view,parent, false);
 
         TextView txtName = (TextView) viewConverter.findViewById(R.id.list_names);
 

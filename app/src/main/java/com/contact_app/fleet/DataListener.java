@@ -11,5 +11,5 @@ import java.util.List;
 interface DataListener {
     void onPreExecute();
     void onProgress(int progress);
-    void onCompletion(List<String> data);
+    void onCompletion(List<String> data, List<Bitmap> images);
 }

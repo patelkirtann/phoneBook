@@ -50,10 +50,10 @@ class DBForm extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-            if (newVersion > oldVersion) {
-                db.execSQL("ALTER TABLE " + CONTACTS_TABLE_NAME + " ADD COLUMN " +
-                        CONTACTS_COLUMN_PICTURE + " BLOB");
-            }
+        if (newVersion > oldVersion) {
+            db.execSQL("ALTER TABLE " + CONTACTS_TABLE_NAME + " ADD COLUMN " +
+                    CONTACTS_COLUMN_PICTURE + " BLOB");
+        }
 //        db.execSQL("DROP TABLE IF EXISTS " + CONTACTS_TABLE_NAME);
 //        onCreate(db);
     }
@@ -194,17 +194,20 @@ class DBForm extends SQLiteOpenHelper {
         String qu = "select " + CONTACTS_COLUMN_PICTURE + " from " + CONTACTS_TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cur = db.rawQuery(qu, null);
-
-        if (cur.moveToFirst()) {
-            byte[] imgByte = cur.getBlob(0);
+        cur.moveToFirst();
+        if (!cur.isAfterLast()) {
+            byte[] imgByte = cur.getBlob(cur.getColumnIndex(CONTACTS_COLUMN_PICTURE));
             array_list.add(BitmapFactory.decodeByteArray(imgByte, 100, imgByte.length));
-            cur.close();
-            return array_list;
+
         }
-        if (!cur.isClosed()) {
-            cur.close();
-        }
-        return null;
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        cur.close();
+//        if (!cur.isClosed()) {
+//            cur.close();
+//        }
+//        return null;
+        return array_list;
     }
 
     void updateImage(String name, byte[] image) {
