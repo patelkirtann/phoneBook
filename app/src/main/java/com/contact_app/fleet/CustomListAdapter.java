@@ -2,13 +2,14 @@ package com.contact_app.fleet;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -38,14 +39,16 @@ class CustomListAdapter extends ArrayAdapter<String> {
         //LayoutInflater inflater = context.getLayoutInflater();
         View viewConverter = view;
         if (view == null)
-            viewConverter = LayoutInflater.from(getContext()).inflate(R.layout.list_view,parent, false);
+            viewConverter = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
 
         TextView txtName = (TextView) viewConverter.findViewById(R.id.list_names);
-
-        CircleImageView profileImage = (CircleImageView) viewConverter.findViewById(R.id.profile_image);
         txtName.setText(names.get(position));
 
+        CircleImageView profileImage = (CircleImageView) viewConverter.findViewById(R.id.profile_image);
         profileImage.setImageBitmap(images.get(position));
+
+
+
         return viewConverter;
     }
 }

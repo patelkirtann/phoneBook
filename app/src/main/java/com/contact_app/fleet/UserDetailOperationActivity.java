@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -84,6 +85,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
             location = savedInstanceState.getSerializable("STREET_INTENT") +
                     " " + savedInstanceState.getSerializable("CITY_INTENT");
             intro = (String) savedInstanceState.getSerializable("INTRO_INTENT");
+            mDisplayPic = (ImageView) savedInstanceState.getSerializable("IMAGE_INTENT");
         }
 
         setData();
@@ -150,6 +152,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
             street = extras.getString("STREET_INTENT");
             city = extras.getString("CITY_INTENT");
             location = street + " " + city;
+            mDisplayPic = (ImageView) extras.getSerializable("IMAGE_INTENT");
 
             intro = extras.getString("INTRO_INTENT");
         } else {
@@ -172,26 +175,26 @@ public class UserDetailOperationActivity extends AppCompatActivity {
 
     private void moveToPhone() {
         AlertDialog.Builder dialog = new AlertDialog
-                .Builder(UserDetailOperationActivity.this);
-        dialog.setTitle("Confirmation");
-        dialog.setMessage("Move to your phone contacts?");
-        dialog.setPositiveButton("Move to Phone", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent addContactIntent = new Intent(Intent.ACTION_INSERT);
-                addContactIntent.setType(ContactsContract.Contacts.CONTENT_TYPE);
-                addContactIntent.putExtra(ContactsContract.Intents.Insert.NAME, name);
-                addContactIntent.putExtra(ContactsContract.Intents.Insert.PHONE, number);
-                addContactIntent.putExtra(ContactsContract.Intents.Insert.EMAIL, address);
-                startActivity(addContactIntent);
-            }
-        });
-        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+                .Builder(UserDetailOperationActivity.this)
+                .setTitle("Confirmation")
+                .setMessage("Move to your phone contacts?")
+                .setPositiveButton("Move to Phone", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent addContactIntent = new Intent(Intent.ACTION_INSERT);
+                        addContactIntent.setType(ContactsContract.Contacts.CONTENT_TYPE);
+                        addContactIntent.putExtra(ContactsContract.Intents.Insert.NAME, name);
+                        addContactIntent.putExtra(ContactsContract.Intents.Insert.PHONE, number);
+                        addContactIntent.putExtra(ContactsContract.Intents.Insert.EMAIL, address);
+                        startActivity(addContactIntent);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-            }
-        });
+                    }
+                });
 
         AlertDialog alert = dialog.create();
         alert.show();
@@ -199,32 +202,32 @@ public class UserDetailOperationActivity extends AppCompatActivity {
 
     private void onContactDeleted() {
 
-        final AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-        dialog.setTitle("Confirmation");
-        dialog.setIcon(R.drawable.ic_warning);
-        dialog.setMessage("Delete Contact?");
-        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(context)
+                .setTitle("Confirmation")
+                .setIcon(R.drawable.ic_warning)
+                .setMessage("Delete Contact?")
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                Snackbar.make(findViewById(R.id.sv_scroll), "Canceled",
-                        Snackbar.LENGTH_SHORT)
-                        .show();
-            }
-        });
-        dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                DBForm dbForm = new DBForm(context);
-                dbForm.deleteContactByID(id);
-                dbForm.close();
-                Toast.makeText(context, " Contact Deleted ",
-                        Toast.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(R.id.sv_scroll), "Canceled",
+                                Snackbar.LENGTH_SHORT)
+                                .show();
+                    }
+                })
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        DBForm dbForm = new DBForm(context);
+                        dbForm.deleteContactByID(id);
+                        dbForm.close();
+                        Toast.makeText(context, " Contact Deleted ",
+                                Toast.LENGTH_SHORT).show();
 
-                setResult(RESULT_OK);
-                onBackPressed();
-            }
-        });
+                        setResult(RESULT_OK);
+                        onBackPressed();
+                    }
+                });
 
         AlertDialog alert = dialog.create();
         alert.show();
@@ -233,40 +236,38 @@ public class UserDetailOperationActivity extends AppCompatActivity {
     private void setPhoneOnClick() {
 
         final AlertDialog.Builder dialog = new AlertDialog
-                .Builder(UserDetailOperationActivity.this);
-        dialog.setTitle("Confirmation");
-        dialog.setMessage("Call " + name + "?");
+                .Builder(UserDetailOperationActivity.this)
+                .setTitle("Confirmation")
+                .setMessage("Call " + name + "?")
+                .setPositiveButton("Call", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(context, "Calling...",
+                                Toast.LENGTH_SHORT).show();
 
-        dialog.setPositiveButton("Call", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(context, "Calling...",
-                        Toast.LENGTH_SHORT).show();
-
-                Intent mCallIntent = new Intent(Intent.ACTION_CALL);
-                mCallIntent.setData(Uri.parse("tel:" + number));
-                try {
-                    if (isCallPermissionGranted()) {
-                        startActivity(mCallIntent);
-                    } else {
-                        Snackbar.make(findViewById(R.id.sv_scroll), "Grant Permission to call",
-                                Snackbar.LENGTH_SHORT)
-                                .show();
+                        Intent mCallIntent = new Intent(Intent.ACTION_CALL);
+                        mCallIntent.setData(Uri.parse("tel:" + number));
+                        try {
+                            if (isCallPermissionGranted()) {
+                                startActivity(mCallIntent);
+                            } else {
+                                Snackbar.make(findViewById(R.id.sv_scroll), "Grant Permission to call",
+                                        Snackbar.LENGTH_SHORT)
+                                        .show();
+                            }
+                        } catch (Exception e) {
+                            Snackbar.make(findViewById(R.id.sv_scroll), "Try Again",
+                                    Snackbar.LENGTH_SHORT)
+                                    .show();
+                        }
                     }
-                } catch (Exception e) {
-                    Snackbar.make(findViewById(R.id.sv_scroll), "Try Again",
-                            Snackbar.LENGTH_SHORT)
-                            .show();
-                }
-            }
-        });
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
+                    }
+                });
 
         AlertDialog alert = dialog.create();
         alert.show();
@@ -277,29 +278,27 @@ public class UserDetailOperationActivity extends AppCompatActivity {
 
         if (!address.isEmpty()) {
             final AlertDialog.Builder dialog = new AlertDialog
-                    .Builder(UserDetailOperationActivity.this);
-            dialog.setTitle("Confirmation");
-            dialog.setMessage("Send Email to " + address + "?");
+                    .Builder(UserDetailOperationActivity.this)
+                    .setTitle("Confirmation")
+                    .setMessage("Send Email to " + address + "?")
+                    .setPositiveButton("Send Email", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent emailIntent = new Intent(Intent.ACTION_SEND);
 
-            dialog.setPositiveButton("Send Email", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{address});
+                            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Sending from Fleet");
+                            emailIntent.setType("plain/text");
 
-                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{address});
-                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Sending from Fleet");
-                    emailIntent.setType("plain/text");
+                            startActivity(Intent.createChooser(emailIntent, " Send... "));
+                        }
+                    })
+                    .setNegativeButton("Copy", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-                    startActivity(Intent.createChooser(emailIntent, " Send... "));
-                }
-            });
-
-            dialog.setNegativeButton("Copy", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            });
+                        }
+                    });
 
             AlertDialog alert = dialog.create();
             alert.show();
@@ -323,29 +322,27 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         if (!location.equals(" ")) {
 
             final AlertDialog.Builder dialog = new AlertDialog
-                    .Builder(UserDetailOperationActivity.this);
-            dialog.setTitle("Confirmation");
-            dialog.setMessage("Find Location in Map?");
+                    .Builder(UserDetailOperationActivity.this)
+                    .setTitle("Confirmation")
+                    .setMessage("Find Location in Map?")
+                    .setPositiveButton("GOTO Map", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-            dialog.setPositiveButton("GOTO Map", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+                            uri[0] = Uri.parse("geo:0,0?q=" + location);
+                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, uri[0]);
+                            mapIntent.setPackage("com.google.android.apps.maps");
+                            startActivity(mapIntent);
 
-                    uri[0] = Uri.parse("geo:0,0?q=" + location);
-                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, uri[0]);
-                    mapIntent.setPackage("com.google.android.apps.maps");
-                    startActivity(mapIntent);
+                        }
+                    })
+                    .setNegativeButton("Copy", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            copyText();
 
-                }
-            });
-
-            dialog.setNegativeButton("Copy", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    copyText();
-
-                }
-            });
+                        }
+                    });
 
             AlertDialog alert = dialog.create();
             alert.show();
@@ -439,6 +436,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         outState.putString("STREET_INTENT", street);
         outState.putString("CITY_INTENT", city);
         outState.putString("INTRO_INTENT", intro);
+        outState.putParcelable("IMAGE_INTENT", (Parcelable) mDisplayPic);
 
     }
 
@@ -499,23 +497,20 @@ public class UserDetailOperationActivity extends AppCompatActivity {
             }
         }
 
-        if (requestCode == 5 && resultCode == RESULT_OK && data != null) {
+        if (requestCode == 1 && resultCode == RESULT_OK) {
 
-            Bitmap bmp = (Bitmap) data.getExtras().get("data");
+            Bitmap bmp = (Bitmap) data.getExtras().get("IMAGE_INTENT");
 
-//            mDisplayPic.setImageBitmap(bmp);
-//            btnadd.requestFocus();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             if (bmp != null) {
                 bmp.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                byte[] bytarray = baos.toByteArray();
+                Bitmap bmimage = BitmapFactory.decodeByteArray(bytarray, 0,
+                        bytarray.length);
+                mDisplayPic.setImageBitmap(bmimage);
+            }else {
+                mDisplayPic.setImageResource(R.drawable.ic_person_pin);
             }
-            byte[] b = baos.toByteArray();
-            String encodedImageString = Base64.encodeToString(b, Base64.DEFAULT);
-
-            byte[] bytarray = Base64.decode(encodedImageString, Base64.DEFAULT);
-            Bitmap bmimage = BitmapFactory.decodeByteArray(bytarray, 0,
-                    bytarray.length);
-            mDisplayPic.setImageBitmap(bmimage);
 
         }
     }

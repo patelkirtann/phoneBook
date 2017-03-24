@@ -2,6 +2,7 @@ package com.contact_app.fleet;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -55,20 +56,18 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         mInformationText.setText("No Contacts");
         mListNames.setEmptyView(mInformationText);
 
-        mProfileImage = (CircleImageView) findViewById(R.id.profile_image);
-
         mSearch.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 //                ListActivity.this.mAdapter.getFilter().filter(charSequence);
-//                ListActivity.this.mCustomListAdapter.getFilter().filter(charSequence);
+                ListActivity.this.mCustomListAdapter.getFilter().filter(charSequence);
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 //                ListActivity.this.mAdapter.getFilter().filter(charSequence);
-//                ListActivity.this.mCustomListAdapter.getFilter().filter(charSequence);
+                ListActivity.this.mCustomListAdapter.getFilter().filter(charSequence);
             }
 
             @Override
@@ -103,6 +102,8 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                                     dbForm.getCity().get(dbPosition));
                             intent.putExtra("INTRO_INTENT",
                                     dbForm.getIntro().get(dbPosition));
+//                            intent.putExtra("IMAGE_INTENT",
+//                                    dbForm.getImage().get(dbPosition));
 //                            intent.putExtra("IMAGE_INTENT",
 //                                    dbForm.getImage().get(dbPosition));
                             startActivityForResult(intent, 1);
@@ -226,8 +227,8 @@ public class ListActivity extends AppCompatActivity implements DataListener {
     @Override
     public void onCompletion(List<String> data, List<Bitmap> images) {
         mProgressbar.setVisibility(View.INVISIBLE);
-        mCustomListAdapter = new CustomListAdapter(this , data , images);
-//        mAdapter = new ArrayAdapter<>(this, R.layout.list_view, R.id.list_names, data);
+        mCustomListAdapter = new CustomListAdapter(this, data, images);
+//        mAdapter = new ArrayAdapter<>(this, R.layout.list_item, R.id.list_names, data);
 //        mListNames.setAdapter(mAdapter);
 
         mListNames.setAdapter(mCustomListAdapter);

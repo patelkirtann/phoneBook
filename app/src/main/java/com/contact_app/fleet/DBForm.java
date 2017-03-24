@@ -2,12 +2,16 @@ package com.contact_app.fleet;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
+import java.io.ByteArrayInputStream;
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -27,9 +31,10 @@ class DBForm extends SQLiteOpenHelper {
     private static final String CONTACTS_COLUMN_CITY = "city";
     private static final String CONTACTS_COLUMN_INTRO = "intro";
     private static final String CONTACTS_COLUMN_PICTURE = "picture";
+    private static Blob MY_BLOB = null;
 
     DBForm(Context context) {
-        super(context, DATABASE_NAME, null, 2);
+        super(context, DATABASE_NAME, null, 3);
     }
 
     @Override
@@ -42,24 +47,24 @@ class DBForm extends SQLiteOpenHelper {
                         CONTACTS_COLUMN_EMAIL + " text, " +
                         CONTACTS_COLUMN_STREET + " text," +
                         CONTACTS_COLUMN_CITY + " text," +
-                        CONTACTS_COLUMN_INTRO + " text" +
-                        CONTACTS_COLUMN_PICTURE + "blob)"
+                        CONTACTS_COLUMN_INTRO + " text," +
+                        CONTACTS_COLUMN_PICTURE + " blob default " + MY_BLOB + ")"
         );
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        if (newVersion > oldVersion) {
+        if (newVersion == 3) {
             db.execSQL("ALTER TABLE " + CONTACTS_TABLE_NAME + " ADD COLUMN " +
-                    CONTACTS_COLUMN_PICTURE + " BLOB");
+                    CONTACTS_COLUMN_PICTURE + " BLOB default " + MY_BLOB + ")");
         }
 //        db.execSQL("DROP TABLE IF EXISTS " + CONTACTS_TABLE_NAME);
 //        onCreate(db);
     }
 
     boolean insertValue(String name, String email, String phone,
-                        String street, String city, String intro) {
+                        String street, String city, String intro, byte[] picture) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
@@ -69,7 +74,7 @@ class DBForm extends SQLiteOpenHelper {
         contentValues.put(CONTACTS_COLUMN_STREET, street);
         contentValues.put(CONTACTS_COLUMN_CITY, city);
         contentValues.put(CONTACTS_COLUMN_INTRO, intro);
-//        contentValues.put(CONTACTS_COLUMN_PICTURE, picture);
+        contentValues.put(CONTACTS_COLUMN_PICTURE, picture);
 
         sqLiteDatabase.insert(CONTACTS_TABLE_NAME, null, contentValues);
         return true;
@@ -188,35 +193,28 @@ class DBForm extends SQLiteOpenHelper {
         return array_list;
     }
 
-    ArrayList<Bitmap> getImage() {
+    ArrayList<Bitmap> getImage() throws NullPointerException {
         ArrayList<Bitmap> array_list = new ArrayList<>();
 
         String qu = "select " + CONTACTS_COLUMN_PICTURE + " from " + CONTACTS_TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cur = db.rawQuery(qu, null);
-        cur.moveToFirst();
-        if (!cur.isAfterLast()) {
-            byte[] imgByte = cur.getBlob(cur.getColumnIndex(CONTACTS_COLUMN_PICTURE));
-            array_list.add(BitmapFactory.decodeByteArray(imgByte, 100, imgByte.length));
 
+        if (cur.moveToFirst()) {
+            while (!cur.isAfterLast()) {
+                byte[] imgByte = cur.getBlob(cur.getColumnIndex(CONTACTS_COLUMN_PICTURE));
+                if (imgByte != null) {
+                    ByteArrayInputStream imageStream = new ByteArrayInputStream(imgByte);
+                    array_list.add(BitmapFactory.decodeStream(imageStream));
+                } else {
+                    array_list.add(BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.ic_person));
+                }
+                cur.moveToNext();
+            }
         }
-        db.setTransactionSuccessful();
-        db.endTransaction();
+
         cur.close();
-//        if (!cur.isClosed()) {
-//            cur.close();
-//        }
-//        return null;
         return array_list;
-    }
-
-    void updateImage(String name, byte[] image) {
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(name, image);
-        sqLiteDatabase.insert(CONTACTS_TABLE_NAME, null, contentValues);
-
     }
 
     void deleteContactByID(String id) {
@@ -228,7 +226,7 @@ class DBForm extends SQLiteOpenHelper {
     }
 
     void updateContact(String id, String name, String email, String phone, String street,
-                       String city, String intro) {
+                       String city, String intro, byte[] picture) {
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("name", name);
@@ -237,6 +235,7 @@ class DBForm extends SQLiteOpenHelper {
         cv.put("street", street);
         cv.put("city", city);
         cv.put("intro", intro);
+        cv.put("picture", picture);
 
         db.update(CONTACTS_TABLE_NAME, cv, "id=" + id, null);
     }

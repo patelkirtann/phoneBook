@@ -15,6 +15,7 @@ public class UpdateActivity extends AppCompatActivity {
 
     EditText mName, mEmail, mPhone, mStreet, mCity, mIntro;
     String name, id, phone, email, street, city, intro;
+    byte[] picture;
 
     DBForm dbForm = new DBForm(this);
 
@@ -91,48 +92,47 @@ public class UpdateActivity extends AppCompatActivity {
 
     public void updatePermission() {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(UpdateActivity.this);
-        dialog.setTitle("Confirmation");
-        dialog.setIcon(R.drawable.ic_warning);
-        dialog.setMessage("Update Contact?");
-        dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dbForm.updateContact(id, name, email, phone, street, city, intro);
-                Intent intent = new Intent();
-                intent.putExtra("NAME_INTENT",
-                        name);
-                intent.putExtra("ID_INTENT",
-                        id);
-                intent.putExtra("PHONE_NUMBER_INTENT",
-                        phone);
-                intent.putExtra("EMAIL_ADDRESS_INTENT",
-                        email);
-                intent.putExtra("STREET_INTENT",
-                        street);
-                intent.putExtra("CITY_INTENT",
-                        city);
-                intent.putExtra("INTRO_INTENT",
-                        intro);
-                setResult(RESULT_OK, intent);
-                finish();
-                Toast.makeText(UpdateActivity.this, "Updated", Toast.LENGTH_SHORT).show();
+        dialog.setTitle("Confirmation")
+                .setIcon(R.drawable.ic_warning)
+                .setMessage("Update Contact?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dbForm.updateContact(id, name, email, phone, street, city, intro, picture);
+                        Intent intent = new Intent();
+                        intent.putExtra("NAME_INTENT",
+                                name);
+                        intent.putExtra("ID_INTENT",
+                                id);
+                        intent.putExtra("PHONE_NUMBER_INTENT",
+                                phone);
+                        intent.putExtra("EMAIL_ADDRESS_INTENT",
+                                email);
+                        intent.putExtra("STREET_INTENT",
+                                street);
+                        intent.putExtra("CITY_INTENT",
+                                city);
+                        intent.putExtra("INTRO_INTENT",
+                                intro);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                        Toast.makeText(UpdateActivity.this, "Updated", Toast.LENGTH_SHORT).show();
 
-            }
-        });
-        dialog.setNegativeButton("Discard", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(UpdateActivity.this, " Canceled ", Toast.LENGTH_SHORT).show();
-                onBackPressed();
-            }
-        });
+                    }
+                })
+                .setNegativeButton("Discard", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(UpdateActivity.this, " Canceled ", Toast.LENGTH_SHORT).show();
+                        onBackPressed();
+                    }
+                })
+                .setNeutralButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-        dialog.setNeutralButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
+                    }
+                });
 
         AlertDialog alert = dialog.create();
         alert.show();
