@@ -8,13 +8,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -22,7 +19,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 
 public class ListActivity extends AppCompatActivity implements DataListener {
@@ -54,24 +50,25 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         mInformationText.setText("No Contacts");
         mListNames.setEmptyView(mInformationText);
 
-        mSearch.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                ListActivity.this.mCustomListAdapter.getFilter().filter(charSequence);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                Log.d("OnText", charSequence.toString());
-                ListActivity.this.mCustomListAdapter.getFilter().filter(charSequence);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
+//        mSearch.addTextChangedListener(new TextWatcher() {
+//
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+////                mCustomListAdapter.getFilter().filter(charSequence);
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+////                Log.d("OnText", charSequence.toString());
+////                mCustomListAdapter.getFilter().filter(charSequence);
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//
+//            }
+//        });
 
         mListNames.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -82,7 +79,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                     Intent intent = new Intent(ListActivity.this,
                             UserDetailOperationActivity.class);
                     String sendName = mCustomListAdapter.getItem(position).getName();
-                    Log.d("Name Value", mCustomListAdapter.getItem(position).getName());
+//                    Log.d("Name Value", mCustomListAdapter.getItem(position).getName());
                     intent.putExtra("NAME_INTENT", sendName);
 
                     startActivityForResult(intent, 1);
@@ -96,25 +93,25 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         });
 
 //         get the first visible position for the Alphabets on list scroll.
-        mListNames.setOnScrollListener(new AbsListView.OnScrollListener() {
-
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                switcher.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem,
-                                 int visibleItemCount, int totalItemCount) {
-
-                String firstChar;
-//                    firstChar = (mCustomListAdapter.getItem(firstVisibleItem)).getName();
-                firstChar = String.valueOf(mListNames.getChildAt(firstVisibleItem));
-                switcher.setText(firstChar.subSequence(0, 1));
-                
-                switcher.setVisibility(View.VISIBLE);
-            }
-        });
+//        mListNames.setOnScrollListener(new AbsListView.OnScrollListener() {
+//
+//            @Override
+//            public void onScrollStateChanged(AbsListView view, int scrollState) {
+//                switcher.setVisibility(View.INVISIBLE);
+//            }
+//
+//            @Override
+//            public void onScroll(AbsListView view, int firstVisibleItem,
+//                                 int visibleItemCount, int totalItemCount) {
+//
+//                String firstChar;
+////                    firstChar = (mCustomListAdapter.getItem(firstVisibleItem)).getName();
+//                firstChar = String.valueOf(mListNames.getChildAt(firstVisibleItem));
+//                switcher.setText(firstChar.subSequence(0, 1));
+//
+//                switcher.setVisibility(View.VISIBLE);
+//            }
+//        });
 
 
         mAddFloatingButton.setOnClickListener(new View.OnClickListener() {

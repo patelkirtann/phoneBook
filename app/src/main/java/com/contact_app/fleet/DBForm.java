@@ -221,7 +221,7 @@ class DBForm extends SQLiteOpenHelper {
         db.close();
     }
 
-    void updateContact(String id, String name, String email, String phone, String street,
+    void updateContact(String name, String email, String phone, String street,
                        String city, String intro, byte[] picture) {
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues cv = new ContentValues();
@@ -233,7 +233,7 @@ class DBForm extends SQLiteOpenHelper {
         cv.put("intro", intro);
         cv.put("picture", picture);
 
-        db.update(CONTACTS_TABLE_NAME, cv, "id=" + id, null);
+        db.update(CONTACTS_TABLE_NAME, cv, CONTACTS_COLUMN_NAME + "= '" + name + "'", null);
         db.close();
 
     }

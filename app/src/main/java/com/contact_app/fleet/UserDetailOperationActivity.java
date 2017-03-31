@@ -133,10 +133,17 @@ public class UserDetailOperationActivity extends AppCompatActivity {
     }
 
     private void setData(UserRecord record) {
-        mName.setText(record.getName());
-        mEmailAddress.setText(record.getEmail());
-        mPhoneNumber.setText(record.getPhone());
-        mIntro.setText(record.getIntro());
+        name = record.getName();
+        mName.setText(name);
+
+        address = record.getEmail();
+        mEmailAddress.setText(address);
+
+        number = record.getPhone();
+        mPhoneNumber.setText(number);
+
+        intro = record.getIntro();
+        mIntro.setText(intro);
 
         street = record.getStreet();
         city = record.getCity();

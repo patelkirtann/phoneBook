@@ -9,10 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.TextView;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -21,10 +24,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 class CustomListAdapter extends ArrayAdapter<UserRecord> {
-
-//    private final List<Bitmap> images;
+    //    private final List<Bitmap> images;
 //    private List<String> names;
-      private List<UserRecord> mUserRecords;
+    private List<UserRecord> mUserRecords;
 
     CustomListAdapter(Activity context,
                       List<UserRecord> userRecords) {
@@ -49,6 +51,10 @@ class CustomListAdapter extends ArrayAdapter<UserRecord> {
         CircleImageView profileImage =
                 (CircleImageView) viewConverter.findViewById(R.id.profile_image);
 
+        TextView txtIntro =
+                (TextView) viewConverter.findViewById(R.id.list_intro);
+        txtIntro.setText(currentUser.getIntro());
+
         byte[] imgByte = currentUser.getPicture();
         if (imgByte != null) {
             ByteArrayInputStream imageStream = new ByteArrayInputStream(imgByte);
@@ -57,8 +63,22 @@ class CustomListAdapter extends ArrayAdapter<UserRecord> {
             profileImage.setImageResource(R.drawable.ic_person);
         }
 
-
         return viewConverter;
     }
 
+    @NonNull
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                return null;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+
+            }
+        };
+    }
 }
