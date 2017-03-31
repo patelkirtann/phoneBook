@@ -1,11 +1,7 @@
 package com.contact_app.fleet;
 
-import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +16,7 @@ class Wrapper {
 }
 
 
-class LoadData extends AsyncTask<Object, Object, Wrapper> {
+class LoadData extends AsyncTask<Object, Object, ArrayList<UserRecord>> {
     private DataListener mListener;
     private DBForm dbForm;
 
@@ -36,20 +32,20 @@ class LoadData extends AsyncTask<Object, Object, Wrapper> {
     }
 
     @Override
-    protected Wrapper doInBackground(Object... params) {
+    protected ArrayList<UserRecord> doInBackground(Object... params) {
 
-        Wrapper wrapper = new Wrapper();
 
-        wrapper.names = dbForm.getName();
-        wrapper.images = dbForm.getImage();
+        ArrayList<UserRecord> userRecords = dbForm.getListData();
 
-        return wrapper;
+        dbForm.close();
+
+        return userRecords;
     }
 
     @Override
-    protected void onPostExecute(Wrapper wrapper) {
-        mListener.onCompletion(wrapper.names, wrapper.images);
-        super.onPostExecute(wrapper);
+    protected void onPostExecute(ArrayList<UserRecord> userRecords) {
+        mListener.onCompletion(userRecords);
+        super.onPostExecute(userRecords);
     }
 }
 

@@ -1,6 +1,7 @@
 package com.contact_app.fleet;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -33,9 +34,6 @@ public class AddActivity extends AppCompatActivity {
     public EditText name, email, phone, street, city, intro;
     public DBForm dbForm = new DBForm(this);
     byte[] byteArray;
-    String fileManagerString, imagePath;
-    String selectedImagePath = "";
-    int columnIndex;
     private CircleImageView mPicture;
 
     @Override
@@ -127,7 +125,8 @@ public class AddActivity extends AppCompatActivity {
         String cityText = city.getText().toString();
         String introText = intro.getText().toString();
 
-        dbForm.insertValue(nameText, emailText, phoneText, streetText, cityText, introText, byteArray);
+        dbForm.insertValue(nameText, emailText, phoneText,
+                streetText, cityText, introText, byteArray);
 
         return true;
     }
@@ -151,16 +150,26 @@ public class AddActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setImageFromSdCard(Bitmap bmp) {
+    public void setImageFromSdCard(Uri selectedImage) {
 
-        mPicture.setImageBitmap(bmp);
+        InputStream imageStream = null;
+        try {
+            imageStream = getContentResolver().openInputStream(selectedImage);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Bitmap yourSelectedImage = BitmapFactory.decodeStream(imageStream);
+
+        mPicture.setImageURI(selectedImage);
+
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        if (yourSelectedImage != null) {
+            yourSelectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        }
         byteArray = stream.toByteArray();
-
     }
 
-    private void getImageFromSdCard() {
+    public void getImageFromSdCard() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Select Photo Source")
                 .setMessage("Select Pictures From Media Library")
@@ -172,10 +181,11 @@ public class AddActivity extends AppCompatActivity {
                 })
                 .setPositiveButton("Select Picture", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id1) {
-                        if (isExternalStoragePermissionGranted()){
-                        Intent intent = new Intent(Intent.ACTION_PICK);
-                        intent.setType("image/*");
-                        startActivityForResult(intent, GALLERY_IMAGE);}else {
+                        if (isExternalStoragePermissionGranted()) {
+                            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                            intent.setType("image/*");
+                            startActivityForResult(intent, GALLERY_IMAGE);
+                        } else {
 
                         }
 
@@ -235,26 +245,8 @@ public class AddActivity extends AppCompatActivity {
             if (requestCode == GALLERY_IMAGE) {
 
                 Uri selectedImage = data.getData();
-                InputStream imageStream = null;
-                try {
-                    imageStream = getContentResolver().openInputStream(selectedImage);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                Bitmap yourSelectedImage = BitmapFactory.decodeStream(imageStream);
+                setImageFromSdCard(selectedImage);
 
-                mPicture.setImageURI(selectedImage);
-
-
-
-//                Bitmap bmp = (Bitmap) data.getExtras().get("data");
-////                setImageFromSdCard(bmp);
-//                mPicture.setImageBitmap(bmp);
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                if (yourSelectedImage != null) {
-                    yourSelectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                }
-                byteArray = stream.toByteArray();
             }
         }
     }

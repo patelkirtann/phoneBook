@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
@@ -13,13 +12,11 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
 
 public class UserDetailOperationActivity extends AppCompatActivity {
 
@@ -36,6 +33,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
 
     public String name, id, number, address, street, city, location, intro;
     public Context context = UserDetailOperationActivity.this;
+    DBForm db = new DBForm(this);
     private TextView mName, mPhoneNumber, mEmailAddress, mMapLocation, mIntro;
     private ImageView mDisplayPic;
 
@@ -57,43 +55,23 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         mMapLocation = (TextView) findViewById(R.id.tv_location);
         mIntro = (TextView) findViewById(R.id.tv_info);
 
-        mDisplayPic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent in = new Intent(
-                        Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                in.putExtra("crop", "true");
-                in.putExtra("outputX", 100);
-                in.putExtra("outputY", 100);
-                in.putExtra("scale", true);
-                in.putExtra("return-data", true);
-
-                startActivityForResult(in, 5);
-            }
-        });
-
         if (savedInstanceState == null) {
 
             getData();
 
         } else {
-            name = (String) savedInstanceState.getSerializable("NAME_INTENT");
-            id = (String) savedInstanceState.getSerializable("ID_INTENT");
-            number = (String) savedInstanceState.getSerializable("PHONE_NUMBER_INTENT");
-            address = (String) savedInstanceState.getSerializable("EMAIL_ADDRESS_INTENT");
-            location = savedInstanceState.getSerializable("STREET_INTENT") +
-                    " " + savedInstanceState.getSerializable("CITY_INTENT");
-            intro = (String) savedInstanceState.getSerializable("INTRO_INTENT");
-            mDisplayPic = (ImageView) savedInstanceState.getSerializable("IMAGE_INTENT");
+            name = savedInstanceState.getString("NAME_INTENT");
+
+            UserRecord record = db.getContactRow(name);
+            setData(record);
         }
 
-        setData();
+
 
         mPhoneNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setPhoneOnClick();
+                setCallOnClick();
             }
         });
 
@@ -146,30 +124,38 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             name = extras.getString("NAME_INTENT");
-            id = extras.getString("ID_INTENT");
-            number = extras.getString("PHONE_NUMBER_INTENT");
-            address = extras.getString("EMAIL_ADDRESS_INTENT");
-            street = extras.getString("STREET_INTENT");
-            city = extras.getString("CITY_INTENT");
-            location = street + " " + city;
-            mDisplayPic = (ImageView) extras.getSerializable("IMAGE_INTENT");
+            UserRecord record = db.getContactRow(name);
+            setData(record);
 
-            intro = extras.getString("INTRO_INTENT");
         } else {
             Toast.makeText(context, "No Contact to Fetch", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void setData() {
-        mName.setText(name.toUpperCase().trim());
-        mEmailAddress.setText(address.toLowerCase());
-        mPhoneNumber.setText(number);
-        mIntro.setText(intro);
-        if (!location.equals(" ")) {
+    private void setData(UserRecord record) {
+        mName.setText(record.getName());
+        mEmailAddress.setText(record.getEmail());
+        mPhoneNumber.setText(record.getPhone());
+        mIntro.setText(record.getIntro());
+
+        street = record.getStreet();
+        city = record.getCity();
+
+        location = street + ", " + city;
+        if (!location.equals(", ")) {
             mMapLocation.setText(location);
         } else {
             mMapLocation.setText("");
         }
+
+        byte[] imgByte = record.getPicture();
+        if (imgByte != null) {
+            ByteArrayInputStream imageStream = new ByteArrayInputStream(imgByte);
+            mDisplayPic.setImageBitmap(BitmapFactory.decodeStream(imageStream));
+        } else {
+            mDisplayPic.setImageResource(R.drawable.ic_person_pin);
+        }
+        db.close();
     }
 
 
@@ -233,7 +219,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         alert.show();
     }
 
-    private void setPhoneOnClick() {
+    private void setCallOnClick() {
 
         final AlertDialog.Builder dialog = new AlertDialog
                 .Builder(UserDetailOperationActivity.this)
@@ -395,7 +381,8 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                         new String[]{Manifest.permission.CALL_PHONE}, 1);
                 return false;
             }
-        } else { //permission is automatically granted on sdk<23 upon installation
+        } else {
+            //permission is automatically granted on sdk<23 upon installation
 
             return true;
         }
@@ -407,16 +394,16 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                                            @NonNull int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_CALL_CONTACTS: {
+
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    Toast.makeText(this, "Permission is granted", Toast.LENGTH_SHORT).show();
                     Snackbar.make(findViewById(R.id.sv_scroll), "Permission is granted",
                             Snackbar.LENGTH_SHORT)
                             .show();
 
                 } else {
-//                    Toast.makeText(this, "Permission is Denied", Toast.LENGTH_SHORT).show();
+
                     Snackbar.make(findViewById(R.id.sv_scroll), "Permission is Denied",
                             Snackbar.LENGTH_SHORT)
                             .show();
@@ -430,13 +417,6 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
 
         outState.putString("NAME_INTENT", name);
-        outState.putString("ID_INTENT", id);
-        outState.putString("PHONE_NUMBER_INTENT", number);
-        outState.putString("EMAIL_ADDRESS_INTENT", address);
-        outState.putString("STREET_INTENT", street);
-        outState.putString("CITY_INTENT", city);
-        outState.putString("INTRO_INTENT", intro);
-        outState.putParcelable("IMAGE_INTENT", (Parcelable) mDisplayPic);
 
     }
 
@@ -485,33 +465,11 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 name = data.getStringExtra("NAME_INTENT");
-                id = data.getStringExtra("ID_INTENT");
-                number = data.getStringExtra("PHONE_NUMBER_INTENT");
-                address = data.getStringExtra("EMAIL_ADDRESS_INTENT");
-                street = data.getStringExtra("STREET_INTENT");
-                city = data.getStringExtra("CITY_INTENT");
-                location = street + " " + city;
-                intro = data.getStringExtra("INTRO_INTENT");
+                UserRecord record = db.getContactRow(name);
+
                 UPDATE_TOKEN = 2;
-                setData();
+                setData(record);
             }
-        }
-
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-
-            Bitmap bmp = (Bitmap) data.getExtras().get("IMAGE_INTENT");
-
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            if (bmp != null) {
-                bmp.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                byte[] bytarray = baos.toByteArray();
-                Bitmap bmimage = BitmapFactory.decodeByteArray(bytarray, 0,
-                        bytarray.length);
-                mDisplayPic.setImageBitmap(bmimage);
-            }else {
-                mDisplayPic.setImageResource(R.drawable.ic_person_pin);
-            }
-
         }
     }
 

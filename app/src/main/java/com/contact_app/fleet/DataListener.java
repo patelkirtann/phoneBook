@@ -2,6 +2,7 @@ package com.contact_app.fleet;
 
 import android.graphics.Bitmap;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,5 +12,5 @@ import java.util.List;
 interface DataListener {
     void onPreExecute();
     void onProgress(int progress);
-    void onCompletion(List<String> data, List<Bitmap> images);
+    void onCompletion(ArrayList<UserRecord> userRecords);
 }

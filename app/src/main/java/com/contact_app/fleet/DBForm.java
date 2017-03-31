@@ -2,18 +2,15 @@ package com.contact_app.fleet;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.sql.Blob;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by kt_ki on 11/16/2016.
@@ -57,7 +54,7 @@ class DBForm extends SQLiteOpenHelper {
 
         if (newVersion == 3) {
             db.execSQL("ALTER TABLE " + CONTACTS_TABLE_NAME + " ADD COLUMN " +
-                    CONTACTS_COLUMN_PICTURE + " BLOB default " + MY_BLOB + ")");
+                    CONTACTS_COLUMN_PICTURE + " BLOB default " + MY_BLOB);
         }
 //        db.execSQL("DROP TABLE IF EXISTS " + CONTACTS_TABLE_NAME);
 //        onCreate(db);
@@ -65,8 +62,8 @@ class DBForm extends SQLiteOpenHelper {
 
     boolean insertValue(String name, String email, String phone,
                         String street, String city, String intro, byte[] picture) {
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        SQLiteDatabase db = this.getReadableDatabase();
 
         contentValues.put(CONTACTS_COLUMN_NAME, name);
         contentValues.put(CONTACTS_COLUMN_EMAIL, email);
@@ -76,13 +73,12 @@ class DBForm extends SQLiteOpenHelper {
         contentValues.put(CONTACTS_COLUMN_INTRO, intro);
         contentValues.put(CONTACTS_COLUMN_PICTURE, picture);
 
-        sqLiteDatabase.insert(CONTACTS_TABLE_NAME, null, contentValues);
+        db.insert(CONTACTS_TABLE_NAME, null, contentValues);
         return true;
     }
 
     ArrayList<String> getID() {
         ArrayList<String> array_list = new ArrayList<>();
-
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select " + CONTACTS_COLUMN_ID + " from " +
                 CONTACTS_TABLE_NAME, null);
@@ -93,12 +89,12 @@ class DBForm extends SQLiteOpenHelper {
             res.moveToNext();
         }
         res.close();
+        db.close();
         return array_list;
     }
 
     public ArrayList<String> getName() {
         ArrayList<String> array_list = new ArrayList<>();
-
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select " + CONTACTS_COLUMN_NAME + " from " +
                 CONTACTS_TABLE_NAME, null);
@@ -110,12 +106,12 @@ class DBForm extends SQLiteOpenHelper {
             }
         }
         res.close();
+        db.close();
         return array_list;
     }
 
     ArrayList<String> getEmail() {
         ArrayList<String> array_list = new ArrayList<>();
-
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select " + CONTACTS_COLUMN_EMAIL + " from " +
                 CONTACTS_TABLE_NAME, null);
@@ -126,12 +122,12 @@ class DBForm extends SQLiteOpenHelper {
             res.moveToNext();
         }
         res.close();
+        db.close();
         return array_list;
     }
 
     ArrayList<String> getPhone() {
         ArrayList<String> array_list = new ArrayList<>();
-
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select " + CONTACTS_COLUMN_PHONE + " from " +
                 CONTACTS_TABLE_NAME, null);
@@ -142,12 +138,12 @@ class DBForm extends SQLiteOpenHelper {
             res.moveToNext();
         }
         res.close();
+        db.close();
         return array_list;
     }
 
     ArrayList<String> getStreet() {
         ArrayList<String> array_list = new ArrayList<>();
-
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select " + CONTACTS_COLUMN_STREET + " from " +
                 CONTACTS_TABLE_NAME, null);
@@ -158,12 +154,12 @@ class DBForm extends SQLiteOpenHelper {
             res.moveToNext();
         }
         res.close();
+        db.close();
         return array_list;
     }
 
     ArrayList<String> getCity() {
         ArrayList<String> array_list = new ArrayList<>();
-
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select " + CONTACTS_COLUMN_CITY + " from " +
                 CONTACTS_TABLE_NAME, null);
@@ -174,12 +170,12 @@ class DBForm extends SQLiteOpenHelper {
             res.moveToNext();
         }
         res.close();
+        db.close();
         return array_list;
     }
 
     ArrayList<String> getIntro() {
         ArrayList<String> array_list = new ArrayList<>();
-
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select " + CONTACTS_COLUMN_INTRO + " from " +
                 CONTACTS_TABLE_NAME, null);
@@ -190,16 +186,15 @@ class DBForm extends SQLiteOpenHelper {
             res.moveToNext();
         }
         res.close();
+        db.close();
         return array_list;
     }
 
     ArrayList<Bitmap> getImage() throws NullPointerException {
         ArrayList<Bitmap> array_list = new ArrayList<>();
-
-        String qu = "select " + CONTACTS_COLUMN_PICTURE + " from " + CONTACTS_TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
+        String qu = "select " + CONTACTS_COLUMN_PICTURE + " from " + CONTACTS_TABLE_NAME;
         Cursor cur = db.rawQuery(qu, null);
-
         if (cur.moveToFirst()) {
             while (!cur.isAfterLast()) {
                 byte[] imgByte = cur.getBlob(cur.getColumnIndex(CONTACTS_COLUMN_PICTURE));
@@ -207,22 +202,23 @@ class DBForm extends SQLiteOpenHelper {
                     ByteArrayInputStream imageStream = new ByteArrayInputStream(imgByte);
                     array_list.add(BitmapFactory.decodeStream(imageStream));
                 } else {
-                    array_list.add(BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.ic_person));
+                    array_list.add(null);
                 }
                 cur.moveToNext();
             }
         }
 
         cur.close();
+        db.close();
         return array_list;
     }
 
     void deleteContactByID(String id) {
-
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("delete from contacts where id=" + id, null);
         res.moveToFirst();
         res.close();
+        db.close();
     }
 
     void updateContact(String id, String name, String email, String phone, String street,
@@ -238,15 +234,63 @@ class DBForm extends SQLiteOpenHelper {
         cv.put("picture", picture);
 
         db.update(CONTACTS_TABLE_NAME, cv, "id=" + id, null);
+        db.close();
+
+    }
+
+    UserRecord getContactRow(String name) {
+
+        UserRecord userRecord = new UserRecord();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String qu = "select * from " + CONTACTS_TABLE_NAME + " where " + CONTACTS_COLUMN_NAME
+                + " = '" + name + "'";
+        Cursor cur = db.rawQuery(qu, null);
+        cur.moveToFirst();
+        userRecord.setName(cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_NAME)));
+        userRecord.setEmail(cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_EMAIL)));
+        userRecord.setPhone(cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_PHONE)));
+        userRecord.setStreet(cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_STREET)));
+        userRecord.setCity(cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_CITY)));
+        userRecord.setIntro(cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_INTRO)));
+        userRecord.setPicture(cur.getBlob(cur.getColumnIndex(CONTACTS_COLUMN_PICTURE)));
+
+        cur.close();
+        db.close();
+        return userRecord;
+    }
+
+    ArrayList<UserRecord> getListData() {
+
+        ArrayList<UserRecord> userList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String qu = "select " + CONTACTS_COLUMN_NAME + ","
+                + CONTACTS_COLUMN_INTRO + ","
+                + CONTACTS_COLUMN_PICTURE
+                + " from " + CONTACTS_TABLE_NAME
+                + " order by " + CONTACTS_COLUMN_NAME + " ASC ";
+        Cursor cur = db.rawQuery(qu, null);
+        cur.moveToFirst();
+        while (!cur.isAfterLast()) {
+            UserRecord userRecord = new UserRecord();
+            userRecord.setName(cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_NAME)));
+            userRecord.setIntro(cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_INTRO)));
+            userRecord.setPicture(cur.getBlob(cur.getColumnIndex(CONTACTS_COLUMN_PICTURE)));
+            cur.moveToNext();
+            userList.add(userRecord);
+        }
+
+        cur.close();
+        db.close();
+        return userList;
     }
 
 
     void deleteAll() {
-
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("delete from contacts", null);
         res.moveToFirst();
         res.close();
+        db.close();
     }
 
     boolean checkName(String name) {
