@@ -16,7 +16,7 @@ class Wrapper {
 }
 
 
-class LoadData extends AsyncTask<Object, Object, ArrayList<UserRecord>> {
+class LoadData extends AsyncTask<Object, Object, ArrayList<RetrieveContactRecord>> {
     private DataListener mListener;
     private DBForm dbForm;
 
@@ -32,10 +32,10 @@ class LoadData extends AsyncTask<Object, Object, ArrayList<UserRecord>> {
     }
 
     @Override
-    protected ArrayList<UserRecord> doInBackground(Object... params) {
+    protected ArrayList<RetrieveContactRecord> doInBackground(Object... params) {
 
 
-        ArrayList<UserRecord> userRecords = dbForm.getListData();
+        ArrayList<RetrieveContactRecord> userRecords = dbForm.getListData();
 
         dbForm.close();
 
@@ -43,7 +43,7 @@ class LoadData extends AsyncTask<Object, Object, ArrayList<UserRecord>> {
     }
 
     @Override
-    protected void onPostExecute(ArrayList<UserRecord> userRecords) {
+    protected void onPostExecute(ArrayList<RetrieveContactRecord> userRecords) {
         mListener.onCompletion(userRecords);
         super.onPostExecute(userRecords);
     }

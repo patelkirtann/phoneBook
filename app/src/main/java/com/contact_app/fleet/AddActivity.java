@@ -164,7 +164,7 @@ public class AddActivity extends AppCompatActivity {
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         if (yourSelectedImage != null) {
-            yourSelectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            yourSelectedImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         }
         byteArray = stream.toByteArray();
     }
@@ -185,8 +185,6 @@ public class AddActivity extends AppCompatActivity {
                             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                             intent.setType("image/*");
                             startActivityForResult(intent, GALLERY_IMAGE);
-                        } else {
-
                         }
 
                     }

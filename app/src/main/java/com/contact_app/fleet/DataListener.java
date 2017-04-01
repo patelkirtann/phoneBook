@@ -1,9 +1,6 @@
 package com.contact_app.fleet;
 
-import android.graphics.Bitmap;
-
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by kt_ki on 3/12/2017.
@@ -12,5 +9,5 @@ import java.util.List;
 interface DataListener {
     void onPreExecute();
     void onProgress(int progress);
-    void onCompletion(ArrayList<UserRecord> userRecords);
+    void onCompletion(ArrayList<RetrieveContactRecord> userRecords);
 }

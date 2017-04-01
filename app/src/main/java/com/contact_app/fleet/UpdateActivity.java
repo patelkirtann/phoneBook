@@ -71,7 +71,7 @@ public class UpdateActivity extends AppCompatActivity {
 
     public void getDataToAutoFill() {
         Bundle extras = getIntent().getExtras();
-        UserRecord record = dbForm.getContactRow(extras.getString("NAME_INTENT"));
+        RetrieveContactRecord record = dbForm.getContactRow(extras.getString("NAME_INTENT"));
 
         mName.setText(record.getName());
         mPhone.setText(record.getPhone());
@@ -85,9 +85,6 @@ public class UpdateActivity extends AppCompatActivity {
             ByteArrayInputStream imageStream = new ByteArrayInputStream(picture);
             imageView.setImageBitmap(BitmapFactory.decodeStream(imageStream));
         }
-//        else {
-//            imageView.setImageResource(R.drawable.ic_person);
-//        }
     }
 
     @Override
@@ -196,8 +193,6 @@ public class UpdateActivity extends AppCompatActivity {
                             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                             intent.setType("image/*");
                             startActivityForResult(intent, GALLERY_IMAGE);
-                        } else {
-
                         }
 
                     }
@@ -234,15 +229,11 @@ public class UpdateActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, "Permission is granted", Toast.LENGTH_SHORT).show();
-//                    Snackbar.make(findViewById(R.id.sv_scroll), "Permission is granted",
-//                            Snackbar.LENGTH_SHORT)
-//                            .show();
+
 
                 } else {
                     Toast.makeText(this, "Permission is Denied", Toast.LENGTH_SHORT).show();
-//                    Snackbar.make(findViewById(R.id.sv_scroll), "Permission is Denied",
-//                            Snackbar.LENGTH_SHORT)
-//                            .show();
+
                 }
             }
         }

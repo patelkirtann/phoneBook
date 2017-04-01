@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.sql.Blob;
@@ -213,9 +214,9 @@ class DBForm extends SQLiteOpenHelper {
         return array_list;
     }
 
-    void deleteContactByID(String id) {
+    void deleteContactByName(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("delete from contacts where id=" + id, null);
+        Cursor res = db.rawQuery("delete from contacts where name='" + name + "'", null);
         res.moveToFirst();
         res.close();
         db.close();
@@ -238,14 +239,15 @@ class DBForm extends SQLiteOpenHelper {
 
     }
 
-    UserRecord getContactRow(String name) {
-
-        UserRecord userRecord = new UserRecord();
+    RetrieveContactRecord getContactRow(String name) {
+        Log.d("DbForm", "Value of Name: " + name);
+        RetrieveContactRecord userRecord = new RetrieveContactRecord();
         SQLiteDatabase db = this.getReadableDatabase();
         String qu = "select * from " + CONTACTS_TABLE_NAME + " where " + CONTACTS_COLUMN_NAME
                 + " = '" + name + "'";
         Cursor cur = db.rawQuery(qu, null);
         cur.moveToFirst();
+
         userRecord.setName(cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_NAME)));
         userRecord.setEmail(cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_EMAIL)));
         userRecord.setPhone(cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_PHONE)));
@@ -259,9 +261,9 @@ class DBForm extends SQLiteOpenHelper {
         return userRecord;
     }
 
-    ArrayList<UserRecord> getListData() {
+    ArrayList<RetrieveContactRecord> getListData() {
 
-        ArrayList<UserRecord> userList = new ArrayList<>();
+        ArrayList<RetrieveContactRecord> userList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         String qu = "select " + CONTACTS_COLUMN_NAME + ","
                 + CONTACTS_COLUMN_INTRO + ","
@@ -271,12 +273,12 @@ class DBForm extends SQLiteOpenHelper {
         Cursor cur = db.rawQuery(qu, null);
         cur.moveToFirst();
         while (!cur.isAfterLast()) {
-            UserRecord userRecord = new UserRecord();
+            RetrieveContactRecord userRecord = new RetrieveContactRecord();
             userRecord.setName(cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_NAME)));
             userRecord.setIntro(cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_INTRO)));
             userRecord.setPicture(cur.getBlob(cur.getColumnIndex(CONTACTS_COLUMN_PICTURE)));
-            cur.moveToNext();
             userList.add(userRecord);
+            cur.moveToNext();
         }
 
         cur.close();

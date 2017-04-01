@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -32,10 +31,13 @@ public class UserDetailOperationActivity extends AppCompatActivity {
     private static int UPDATE_TOKEN = -1;
 
     public String name, id, number, address, street, city, location, intro;
-    public Context context = UserDetailOperationActivity.this;
-    DBForm db = new DBForm(this);
+    public byte[] imgByte;
     private TextView mName, mPhoneNumber, mEmailAddress, mMapLocation, mIntro;
     private ImageView mDisplayPic;
+
+    public Context context = UserDetailOperationActivity.this;
+    DBForm db = new DBForm(this);
+    RetrieveContactRecord record;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,16 +58,18 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         mIntro = (TextView) findViewById(R.id.tv_info);
 
         if (savedInstanceState == null) {
-
             getData();
 
         } else {
             name = savedInstanceState.getString("NAME_INTENT");
-
-            UserRecord record = db.getContactRow(name);
-            setData(record);
+            address = savedInstanceState.getString("EMAIL_SAVED");
+            number = savedInstanceState.getString("PHONE_SAVED");
+            street = savedInstanceState.getString("STREET_SAVED");
+            city = savedInstanceState.getString("CITY_SAVED");
+            intro = savedInstanceState.getString("INTRO_SAVED");
+            imgByte = savedInstanceState.getByteArray("PICTURE_SAVED");
+            setData();
         }
-
 
 
         mPhoneNumber.setOnClickListener(new View.OnClickListener() {
@@ -121,32 +125,28 @@ public class UserDetailOperationActivity extends AppCompatActivity {
     }
 
     private void getData() {
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            name = extras.getString("NAME_INTENT");
-            UserRecord record = db.getContactRow(name);
-            setData(record);
-
-        } else {
-            Toast.makeText(context, "No Contact to Fetch", Toast.LENGTH_SHORT).show();
+        Bundle extra = getIntent().getExtras();
+        if (extra != null) {
+            name = extra.getString("NAME_INTENT");
+            record = db.getContactRow(name);
+            address = record.getEmail();
+            number = record.getPhone();
+            intro = record.getIntro();
+            street = record.getStreet();
+            city = record.getCity();
+            imgByte = record.getPicture();
         }
+
+        setData();
+
     }
 
-    private void setData(UserRecord record) {
-        name = record.getName();
+    private void setData() {
+
         mName.setText(name);
-
-        address = record.getEmail();
         mEmailAddress.setText(address);
-
-        number = record.getPhone();
         mPhoneNumber.setText(number);
-
-        intro = record.getIntro();
         mIntro.setText(intro);
-
-        street = record.getStreet();
-        city = record.getCity();
 
         location = street + ", " + city;
         if (!location.equals(", ")) {
@@ -155,7 +155,6 @@ public class UserDetailOperationActivity extends AppCompatActivity {
             mMapLocation.setText("");
         }
 
-        byte[] imgByte = record.getPicture();
         if (imgByte != null) {
             ByteArrayInputStream imageStream = new ByteArrayInputStream(imgByte);
             mDisplayPic.setImageBitmap(BitmapFactory.decodeStream(imageStream));
@@ -212,7 +211,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         DBForm dbForm = new DBForm(context);
-                        dbForm.deleteContactByID(id);
+                        dbForm.deleteContactByName(name);
                         dbForm.close();
                         Toast.makeText(context, " Contact Deleted ",
                                 Toast.LENGTH_SHORT).show();
@@ -423,7 +422,13 @@ public class UserDetailOperationActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putString("NAME_INTENT", name);
+        outState.putString("NAME_SAVED", name);
+        outState.putString("EMAIL_SAVED", address);
+        outState.putString("PHONE_SAVED", number);
+        outState.putString("STREET_SAVED", street);
+        outState.putString("CITY_SAVED", city);
+        outState.putString("INTRO_SAVED", intro);
+        outState.putByteArray("PICTURE_SAVED", imgByte);
 
     }
 
@@ -471,11 +476,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
 
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                name = data.getStringExtra("NAME_INTENT");
-                UserRecord record = db.getContactRow(name);
-
                 UPDATE_TOKEN = 2;
-                setData(record);
             }
         }
     }

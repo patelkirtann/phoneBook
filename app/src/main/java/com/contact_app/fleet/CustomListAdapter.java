@@ -1,7 +1,6 @@
 package com.contact_app.fleet;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,13 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Filter;
 import android.widget.TextView;
 
 import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -23,13 +19,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by kt_ki on 3/21/2017.
  */
 
-class CustomListAdapter extends ArrayAdapter<UserRecord> {
-    //    private final List<Bitmap> images;
-//    private List<String> names;
-    private List<UserRecord> mUserRecords;
+class CustomListAdapter extends ArrayAdapter<RetrieveContactRecord> {
+
+    private List<RetrieveContactRecord> mUserRecords;
 
     CustomListAdapter(Activity context,
-                      List<UserRecord> userRecords) {
+                      List<RetrieveContactRecord> userRecords) {
         super(context, 0, userRecords);
         mUserRecords = userRecords;
     }
@@ -42,7 +37,7 @@ class CustomListAdapter extends ArrayAdapter<UserRecord> {
         if (view == null)
             viewConverter =
                     LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
-        UserRecord currentUser = mUserRecords.get(position);
+        RetrieveContactRecord currentUser = mUserRecords.get(position);
 
         TextView txtName =
                 (TextView) viewConverter.findViewById(R.id.list_names);
@@ -64,21 +59,5 @@ class CustomListAdapter extends ArrayAdapter<UserRecord> {
         }
 
         return viewConverter;
-    }
-
-    @NonNull
-    @Override
-    public Filter getFilter() {
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                return null;
-            }
-
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-
-            }
-        };
     }
 }
