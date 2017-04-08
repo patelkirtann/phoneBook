@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -31,7 +32,7 @@ public class UpdateActivity extends AppCompatActivity {
     private static final int GALLERY_IMAGE = 5;
     private static final int MY_PERMISSIONS_REQUEST_PICTURE_CONTACTS = 1;
     EditText mName, mEmail, mPhone, mStreet, mCity, mIntro;
-    String name, phone, email, street, city, intro;
+    String id,name, phone, email, street, city, intro;
     byte[] picture;
     CircleImageView imageView;
 
@@ -71,7 +72,8 @@ public class UpdateActivity extends AppCompatActivity {
 
     public void getDataToAutoFill() {
         Bundle extras = getIntent().getExtras();
-        RetrieveContactRecord record = dbForm.getContactRow(extras.getString("NAME_INTENT"));
+        id = extras.getString("ID_INTENT");
+        RetrieveContactRecord record = dbForm.getSingleContactById(id);
 
         mName.setText(record.getName());
         mPhone.setText(record.getPhone());
@@ -130,10 +132,10 @@ public class UpdateActivity extends AppCompatActivity {
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        dbForm.updateContact( name, email, phone, street, city, intro, picture);
+                        dbForm.updateContact(id, name, email, phone, street, city, intro, picture);
                         Intent intent = new Intent();
-                        intent.putExtra("NAME_INTENT",
-                                name);
+                        intent.putExtra("ID_INTENT",
+                                id);
                         setResult(RESULT_OK, intent);
                         finish();
                         Toast.makeText(UpdateActivity.this, "Updated", Toast.LENGTH_SHORT).show();
@@ -167,12 +169,15 @@ public class UpdateActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         Bitmap yourSelectedImage = BitmapFactory.decodeStream(imageStream);
-
-        imageView.setImageURI(selectedImage);
+        Matrix matrix = new Matrix();
+//        matrix.postRotate(-90);
+        yourSelectedImage = Bitmap.createBitmap(yourSelectedImage, 0, 0, yourSelectedImage.getWidth(),
+                yourSelectedImage.getHeight(), matrix, true);
+        imageView.setImageBitmap(yourSelectedImage);
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         if (yourSelectedImage != null) {
-            yourSelectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            yourSelectedImage.compress(Bitmap.CompressFormat.PNG, 0, stream);
         }
         picture = stream.toByteArray();
     }
@@ -190,7 +195,7 @@ public class UpdateActivity extends AppCompatActivity {
                 .setPositiveButton("Select Picture", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id1) {
                         if (isExternalStoragePermissionGranted()) {
-                            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                            Intent intent = new Intent(Intent.ACTION_PICK);
                             intent.setType("image/*");
                             startActivityForResult(intent, GALLERY_IMAGE);
                         }

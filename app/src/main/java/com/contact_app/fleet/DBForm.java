@@ -222,10 +222,11 @@ class DBForm extends SQLiteOpenHelper {
         db.close();
     }
 
-    void updateContact(String name, String email, String phone, String street,
+    void updateContact(String id, String name, String email, String phone, String street,
                        String city, String intro, byte[] picture) {
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues cv = new ContentValues();
+
         cv.put("name", name);
         cv.put("email", email);
         cv.put("phone", phone);
@@ -234,20 +235,21 @@ class DBForm extends SQLiteOpenHelper {
         cv.put("intro", intro);
         cv.put("picture", picture);
 
-        db.update(CONTACTS_TABLE_NAME, cv, CONTACTS_COLUMN_NAME + "= '" + name + "'", null);
+        db.update(CONTACTS_TABLE_NAME, cv, CONTACTS_COLUMN_ID + "= " + id, null);
         db.close();
 
     }
 
-    RetrieveContactRecord getContactRow(String name) {
-        Log.d("DbForm", "Value of Name: " + name);
+    RetrieveContactRecord getSingleContactById(String id) {
+        Log.d("DbForm", "Value of Name: " + id);
         RetrieveContactRecord userRecord = new RetrieveContactRecord();
         SQLiteDatabase db = this.getReadableDatabase();
-        String qu = "select * from " + CONTACTS_TABLE_NAME + " where " + CONTACTS_COLUMN_NAME
-                + " = '" + name + "'";
+        String qu = "select * from " + CONTACTS_TABLE_NAME + " where " + CONTACTS_COLUMN_ID
+                + " = " + id ;
         Cursor cur = db.rawQuery(qu, null);
         cur.moveToFirst();
 
+//        userRecord.setId(cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_ID)));
         userRecord.setName(cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_NAME)));
         userRecord.setEmail(cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_EMAIL)));
         userRecord.setPhone(cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_PHONE)));
@@ -271,21 +273,20 @@ class DBForm extends SQLiteOpenHelper {
                 + " from " + CONTACTS_TABLE_NAME
                 + " order by " + CONTACTS_COLUMN_NAME + " ASC ";
         Cursor cur = db.rawQuery(qu, null);
-        cur.moveToFirst();
-        while (!cur.isAfterLast()) {
-            RetrieveContactRecord userRecord = new RetrieveContactRecord();
-            userRecord.setName(cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_NAME)));
-            userRecord.setIntro(cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_INTRO)));
-            userRecord.setPicture(cur.getBlob(cur.getColumnIndex(CONTACTS_COLUMN_PICTURE)));
-            userList.add(userRecord);
-            cur.moveToNext();
+        if (cur.moveToFirst()) {
+            while (!cur.isAfterLast()) {
+                RetrieveContactRecord userRecord = new RetrieveContactRecord();
+                userRecord.setName(cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_NAME)));
+                userRecord.setIntro(cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_INTRO)));
+                userRecord.setPicture(cur.getBlob(cur.getColumnIndex(CONTACTS_COLUMN_PICTURE)));
+                userList.add(userRecord);
+                cur.moveToNext();
+            }
         }
-
         cur.close();
         db.close();
         return userList;
     }
-
 
     void deleteAll() {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -299,5 +300,19 @@ class DBForm extends SQLiteOpenHelper {
         return getName().contains(name);
     }
 
+    String getIdByName(String name) {
+        String id;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String qu = "select " + CONTACTS_COLUMN_ID + " from " + CONTACTS_TABLE_NAME
+                + " where " + CONTACTS_COLUMN_NAME
+                + " = '" + name + "'";
+        Cursor res = db.rawQuery(qu, null);
+        res.moveToFirst();
+        id = res.getString(res.getColumnIndex(CONTACTS_COLUMN_ID));
+
+        res.close();
+        db.close();
+        return id;
+    }
 
 }

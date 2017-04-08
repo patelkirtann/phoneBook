@@ -5,8 +5,17 @@ package com.contact_app.fleet;
  */
 
 class RetrieveContactRecord {
-    private String mName, mEmail, mPhone, mStreet, mCity, mIntro;
+
+    private String mId, mName, mEmail, mPhone, mStreet, mCity, mIntro;
     private byte[] mPicture;
+
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String mId) {
+        this.mId = mId;
+    }
 
     public String getName() {
         return mName;

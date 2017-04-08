@@ -38,7 +38,6 @@ class LoadData extends AsyncTask<Object, Object, ArrayList<RetrieveContactRecord
         ArrayList<RetrieveContactRecord> userRecords = dbForm.getListData();
 
         dbForm.close();
-
         return userRecords;
     }
 

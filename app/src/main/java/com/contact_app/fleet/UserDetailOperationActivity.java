@@ -61,6 +61,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
             getData();
 
         } else {
+            id = savedInstanceState.getString("ID_INTENT");
             name = savedInstanceState.getString("NAME_INTENT");
             address = savedInstanceState.getString("EMAIL_SAVED");
             number = savedInstanceState.getString("PHONE_SAVED");
@@ -127,8 +128,9 @@ public class UserDetailOperationActivity extends AppCompatActivity {
     private void getData() {
         Bundle extra = getIntent().getExtras();
         if (extra != null) {
-            name = extra.getString("NAME_INTENT");
-            record = db.getContactRow(name);
+            id = extra.getString("ID_INTENT");
+            record = db.getSingleContactById(id);
+            name = record.getName();
             address = record.getEmail();
             number = record.getPhone();
             intro = record.getIntro();
@@ -422,6 +424,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
+        outState.putString("ID_INTENT",id);
         outState.putString("NAME_SAVED", name);
         outState.putString("EMAIL_SAVED", address);
         outState.putString("PHONE_SAVED", number);
@@ -477,6 +480,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 UPDATE_TOKEN = 2;
+                getData();
             }
         }
     }

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -159,12 +160,18 @@ public class AddActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         Bitmap yourSelectedImage = BitmapFactory.decodeStream(imageStream);
+        Matrix matrix = new Matrix();
 
-        mPicture.setImageURI(selectedImage);
+        yourSelectedImage = Bitmap.createBitmap(yourSelectedImage, 0, 0,
+                yourSelectedImage.getWidth(),
+                yourSelectedImage.getHeight(), matrix, true);
+
+//        mPicture.setImageURI(selectedImage);
+        mPicture.setImageBitmap(yourSelectedImage);
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         if (yourSelectedImage != null) {
-            yourSelectedImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            yourSelectedImage.compress(Bitmap.CompressFormat.PNG, 0, stream);
         }
         byteArray = stream.toByteArray();
     }
@@ -182,7 +189,7 @@ public class AddActivity extends AppCompatActivity {
                 .setPositiveButton("Select Picture", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id1) {
                         if (isExternalStoragePermissionGranted()) {
-                            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                            Intent intent = new Intent(Intent.ACTION_PICK);
                             intent.setType("image/*");
                             startActivityForResult(intent, GALLERY_IMAGE);
                         }

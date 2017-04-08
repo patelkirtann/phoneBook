@@ -78,9 +78,10 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                 try {
                     Intent intent = new Intent(ListActivity.this,
                             UserDetailOperationActivity.class);
-                    String sendName = mCustomListAdapter.getItem(position).getName();
-                    Log.d("Name Value", sendName);
-                    intent.putExtra("NAME_INTENT", sendName);
+                    String findName = mCustomListAdapter.getItem(position).getName();
+                    String sendId = dbForm.getIdByName(findName);
+                    Log.d("Name Value", sendId);
+                    intent.putExtra("ID_INTENT", sendId);
 
                     startActivityForResult(intent, 1);
                 } catch (Exception e) {
@@ -93,25 +94,25 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         });
 
 //         get the first visible position for the Alphabets on list scroll.
-        mListNames.setOnScrollListener(new AbsListView.OnScrollListener() {
-
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                switcher.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem,
-                                 int visibleItemCount, int totalItemCount) {
-
-                String firstChar;
-                firstChar = String.valueOf(mListNames.getChildAt(firstVisibleItem));
-
-                switcher.setText(firstChar.subSequence(0, 1));
-
-                switcher.setVisibility(View.VISIBLE);
-            }
-        });
+//        mListNames.setOnScrollListener(new AbsListView.OnScrollListener() {
+//
+//            @Override
+//            public void onScrollStateChanged(AbsListView view, int scrollState) {
+//                switcher.setVisibility(View.INVISIBLE);
+//            }
+//
+//            @Override
+//            public void onScroll(AbsListView view, int firstVisibleItem,
+//                                 int visibleItemCount, int totalItemCount) {
+//
+//                String firstChar;
+//                firstChar = String.valueOf(mListNames.getChildAt(firstVisibleItem));
+//
+//                switcher.setText(firstChar.subSequence(0, 1));
+//
+//                switcher.setVisibility(View.VISIBLE);
+//            }
+//        });
 
 
         mAddFloatingButton.setOnClickListener(new View.OnClickListener() {
@@ -232,8 +233,8 @@ public class ListActivity extends AppCompatActivity implements DataListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 1) {
                 Snackbar.make(findViewById(R.id.activity_list), "1 Contact Deleted",
                         Snackbar.LENGTH_SHORT)
                         .show();

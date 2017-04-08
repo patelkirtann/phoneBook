@@ -41,7 +41,6 @@
                     android:gravity="center"
                     android:textAllCaps="true"
                     android:textColor="@color/whiteText"
-                    android:textIsSelectable="true"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -66,8 +65,8 @@
 
                     android:background="@drawable/tv_back_border"
                     android:drawableLeft="@drawable/ic_phone"
-                    android:gravity="center|start"
                     android:focusable="false"
+                    android:gravity="center|start"
                     android:hint="@string/number"
                     android:textIsSelectable="true" />
 
@@ -83,8 +82,8 @@
 
                     android:background="@drawable/tv_back_border"
                     android:drawableLeft="@drawable/ic_email"
-                    android:gravity="center|start"
                     android:focusable="false"
+                    android:gravity="center|start"
                     android:hint="@string/Email"
                     android:textIsSelectable="true" />
 
@@ -100,11 +99,11 @@
 
                     android:background="@drawable/tv_back_border"
                     android:drawableLeft="@drawable/ic_location"
-                    android:gravity="center|start"
-                    android:focusable="false"
-                    android:maxLines="2"
                     android:ellipsize="end"
+                    android:focusable="false"
+                    android:gravity="center|start"
                     android:hint="@string/Location"
+                    android:maxLines="2"
                     android:textIsSelectable="true" />
 
                 <TextView
