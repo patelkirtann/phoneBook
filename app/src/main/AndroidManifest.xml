@@ -25,14 +25,14 @@
         <activity
             android:name="com.contact_app.fleet.ListActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name="com.contact_app.fleet.AddActivity"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name="com.contact_app.fleet.UserDetailOperationActivity" />
         <activity
             android:name="com.contact_app.fleet.UpdateActivity"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".IntroActivity"
             android:theme="@style/AppTheme.NoActionBar" />

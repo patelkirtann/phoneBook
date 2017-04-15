@@ -1,20 +1,7 @@
 package com.contact_app.fleet;
 
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
-
 import java.util.ArrayList;
-import java.util.List;
-
-/**
- * Created by kt_ki on 3/12/2017.
- */
-
-class Wrapper {
-    List<String> names;
-    List<Bitmap> images;
-}
-
 
 class LoadData extends AsyncTask<Object, Object, ArrayList<RetrieveContactRecord>> {
     private DataListener mListener;
@@ -33,7 +20,6 @@ class LoadData extends AsyncTask<Object, Object, ArrayList<RetrieveContactRecord
 
     @Override
     protected ArrayList<RetrieveContactRecord> doInBackground(Object... params) {
-
 
         ArrayList<RetrieveContactRecord> userRecords = dbForm.getListData();
 

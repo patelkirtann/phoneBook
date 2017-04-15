@@ -1,9 +1,5 @@
 package com.contact_app.fleet;
 
-/**
- * Created by kt_ki on 3/30/2017.
- */
-
 class RetrieveContactRecord {
 
     private String mId, mName, mEmail, mPhone, mStreet, mCity, mIntro;

@@ -17,11 +17,14 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class ListActivity extends AppCompatActivity implements DataListener {
 
@@ -47,6 +50,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         mAddFloatingButton = (FloatingActionButton) findViewById(R.id.fab_addContact);
         mProgressbar = (ProgressBar) findViewById(R.id.pb_progress);
         switcher = (TextView) findViewById(R.id.ts_alphabets);
+        switcher.setVisibility(View.INVISIBLE);
 
         mInformationText.setText("No Contacts");
         mListNames.setEmptyView(mInformationText);
@@ -56,17 +60,19 @@ public class ListActivity extends AppCompatActivity implements DataListener {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 //                mCustomListAdapter.getFilter().filter(charSequence);
+
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                Log.d("OnText", charSequence.toString());
-//                mCustomListAdapter.getFilter().filter(charSequence);
+//                String text = mSearch.getText().toString().toLowerCase(Locale.getDefault());
+                mCustomListAdapter.filter(charSequence.toString());
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+//                String text = mSearch.getText().toString().toLowerCase(Locale.getDefault());
+//                mCustomListAdapter.filter(text);
             }
         });
 
@@ -94,25 +100,25 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         });
 
 //         get the first visible position for the Alphabets on list scroll.
-//        mListNames.setOnScrollListener(new AbsListView.OnScrollListener() {
-//
-//            @Override
-//            public void onScrollStateChanged(AbsListView view, int scrollState) {
-//                switcher.setVisibility(View.INVISIBLE);
-//            }
-//
-//            @Override
-//            public void onScroll(AbsListView view, int firstVisibleItem,
-//                                 int visibleItemCount, int totalItemCount) {
-//
-//                String firstChar;
-//                firstChar = String.valueOf(mListNames.getChildAt(firstVisibleItem));
-//
-//                switcher.setText(firstChar.subSequence(0, 1));
-//
-//                switcher.setVisibility(View.VISIBLE);
-//            }
-//        });
+        mListNames.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                switcher.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+
+                String firstChar =
+                        String.valueOf(mListNames.getChildAt(firstVisibleItem));
+
+                switcher.setText(firstChar.subSequence(0, 1));
+
+                switcher.setVisibility(View.VISIBLE);
+            }
+        });
 
 
         mAddFloatingButton.setOnClickListener(new View.OnClickListener() {
@@ -226,7 +232,6 @@ public class ListActivity extends AppCompatActivity implements DataListener {
     public void onCompletion(ArrayList<RetrieveContactRecord> userRecords) {
         mProgressbar.setVisibility(View.INVISIBLE);
         mCustomListAdapter = new CustomListAdapter(this, userRecords);
-
         mListNames.setAdapter(mCustomListAdapter);
     }
 

@@ -15,10 +15,6 @@ import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntro2Fragment;
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 
-/**
- * Created by kt_ki on 3/19/2017.
- */
-
 public class IntroActivity extends AppIntro implements ISlideBackgroundColorHolder {
 
     @Override

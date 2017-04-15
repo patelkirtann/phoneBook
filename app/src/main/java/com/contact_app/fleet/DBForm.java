@@ -13,10 +13,6 @@ import java.io.ByteArrayInputStream;
 import java.sql.Blob;
 import java.util.ArrayList;
 
-/**
- * Created by kt_ki on 11/16/2016.
- */
-
 class DBForm extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "MyDBName.db";

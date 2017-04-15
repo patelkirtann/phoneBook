@@ -7,10 +7,6 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
-/**
- * Created by kt_ki on 3/17/2017.
- */
-
 public class SplashScreen extends AppCompatActivity {
     private static final int SPLASH_TIME_OUT = 1000;
     private static int sOnlyOnce = 0;

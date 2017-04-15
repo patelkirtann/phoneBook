@@ -9,24 +9,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-/**
- * Created by kt_ki on 3/21/2017.
- */
-
-class CustomListAdapter extends ArrayAdapter<RetrieveContactRecord> {
+class CustomListAdapter extends ArrayAdapter<RetrieveContactRecord>{
 
     private List<RetrieveContactRecord> mUserRecords;
+    private ArrayList<RetrieveContactRecord> arrayList;
 
     CustomListAdapter(Activity context,
                       List<RetrieveContactRecord> userRecords) {
         super(context, 0, userRecords);
         mUserRecords = userRecords;
+        arrayList = new ArrayList<>();
+        arrayList.addAll(mUserRecords);
     }
 
     @NonNull
@@ -60,4 +60,24 @@ class CustomListAdapter extends ArrayAdapter<RetrieveContactRecord> {
 
         return viewConverter;
     }
+
+    void filter(String charText) {
+        charText = charText.toLowerCase(Locale.getDefault());
+        mUserRecords.clear();
+        if (charText.length() == 0) {
+            mUserRecords.addAll(arrayList);
+        } else {
+            for (RetrieveContactRecord record : arrayList) {
+                if (record.getName().toLowerCase(Locale.getDefault())
+                        .contains(charText)) {
+                    mUserRecords.add(record);
+                }else if (record.getIntro().toLowerCase(Locale.getDefault())
+                        .contains(charText)){
+                    mUserRecords.add(record);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
 }
+

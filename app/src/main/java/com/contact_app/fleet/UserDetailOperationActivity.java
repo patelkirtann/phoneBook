@@ -176,10 +176,18 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent addContactIntent = new Intent(Intent.ACTION_INSERT);
-                        addContactIntent.setType(ContactsContract.Contacts.CONTENT_TYPE);
-                        addContactIntent.putExtra(ContactsContract.Intents.Insert.NAME, name);
-                        addContactIntent.putExtra(ContactsContract.Intents.Insert.PHONE, number);
-                        addContactIntent.putExtra(ContactsContract.Intents.Insert.EMAIL, address);
+                        addContactIntent
+                                .setType(ContactsContract.Contacts.CONTENT_TYPE);
+                        addContactIntent
+                                .putExtra(ContactsContract.Intents.Insert.NAME, name);
+                        addContactIntent
+                                .putExtra(ContactsContract.Intents.Insert.PHONE, number);
+                        addContactIntent
+                                .putExtra(ContactsContract.Intents.Insert.EMAIL, address);
+                        addContactIntent
+                                .putExtra(ContactsContract.Intents.Insert.NOTES, intro);
+                        addContactIntent
+                                .putExtra(ContactsContract.Intents.Insert.POSTAL,location);
                         startActivity(addContactIntent);
                     }
                 })

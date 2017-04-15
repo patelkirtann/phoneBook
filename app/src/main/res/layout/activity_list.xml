@@ -13,17 +13,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/tv_back_border"
-        android:drawableLeft="@drawable/ic_search"
         android:clickable="true"
+        android:drawableLeft="@drawable/ic_search"
         android:focusableInTouchMode="true"
         android:hint="@string/search" />
+
     <TextView
         android:id="@+id/tv_my_contacts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/search_names"
-        android:text="@string/my_contacts"
-        android:layout_margin="8dp"/>
+        android:layout_margin="8dp"
+        android:text="@string/my_contacts" />
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -37,9 +38,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/search_names"
-            android:paddingBottom="88dp"
             android:clipToPadding="false"
-            android:scrollbars="none"/>
+            android:divider="@null"
+            android:paddingBottom="24dp"
+            android:scrollbars="none" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_addContact"
@@ -48,8 +50,7 @@
             android:layout_gravity="bottom|right"
             android:layout_margin="16dp"
             android:clickable="true"
-            android:src="@drawable/ic_person_add"
-            app:layout_anchorGravity="bottom|right|end" />
+            android:src="@drawable/ic_person_add" />
 
     </android.support.design.widget.CoordinatorLayout>
 
@@ -71,14 +72,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone" />
+
         <TextView
             android:id="@+id/ts_alphabets"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="gone"
-            android:textSize="32sp"
             android:textAllCaps="true"
-            android:textColorHint="@color/colorAccent"/>
+            android:textColorHint="@color/colorAccent"
+            android:textSize="32sp"
+            android:visibility="gone" />
     </FrameLayout>
 </RelativeLayout>

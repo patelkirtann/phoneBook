@@ -1,21 +1,21 @@
 package com.contact_app.fleet;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,23 +34,73 @@ public class AddActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_PICTURE_CONTACTS = 1;
     public EditText name, email, phone, street, city, intro;
     public DBForm dbForm = new DBForm(this);
+    TextInputLayout nameLayout;
     byte[] byteArray;
+    boolean check = false;
     private CircleImageView mPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add);
+        setContentView(R.layout.activity_add_update);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-
         mPicture = (CircleImageView) findViewById(R.id.profile_image);
+
+        nameLayout = (TextInputLayout) findViewById(R.id.name_field_layout);
         name = (EditText) findViewById(R.id.name_field);
+        name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (isEmpty(name)) {
+                        check = false;
+                        nameLayout.setErrorEnabled(true);
+                        nameLayout.setError("Put a valid Name");
+//                        name.setError("Valid Name Required");
+                    } else if (dbForm.checkName(name.getText().toString().toLowerCase())) {
+                        check = false;
+                        name.setError("Duplicate Name");
+                    } else {
+                        check = true;
+                        nameLayout.setErrorEnabled(false);
+                    }
+                }
+            }
+        });
+
         email = (EditText) findViewById(R.id.email_field);
+        email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (!email.getText().toString().isEmpty()) {
+                        if (!isEmailValid(email.getText().toString().trim())) {
+                            email.setError("Not a valid Email");
+                        }
+                    }
+                }
+            }
+        });
+
         phone = (EditText) findViewById(R.id.phone_field);
+        phone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (!(phone.length() == 10)) {
+                        phone.setError("Invalid phone Number");
+                        check = false;
+                    } else {
+                        check = true;
+                    }
+                }
+            }
+        });
+
         street = (EditText) findViewById(R.id.street_field);
         city = (EditText) findViewById(R.id.city_field);
         intro = (EditText) findViewById(R.id.tv_auto);
@@ -65,8 +115,7 @@ public class AddActivity extends AppCompatActivity {
     }
 
     private void onSaveClicked() {
-        if (!isEmpty(name) && phone.length() >= 10 &&
-                !dbForm.checkName(name.getText().toString().toLowerCase())) {
+        if (check) {
             final AlertDialog.Builder dialog = new AlertDialog.Builder(AddActivity.this);
             dialog.setTitle("Confirmation");
             dialog.setMessage("Save Contact?");
@@ -99,14 +148,8 @@ public class AddActivity extends AppCompatActivity {
             AlertDialog alert = dialog.create();
             alert.show();
         } else {
-            if (isEmpty(name))
-                name.setError("Invalid Name");
-            if (phone.length() < 10 && phone.length() > 14)
-                phone.setError("Invalid Number");
-            if (dbForm.checkName(name.getText().toString().toLowerCase()))
-                name.setError("Duplicate Name");
-            Toast.makeText(AddActivity.this, " *Enter at least 2 character\n " +
-                    "*Enter valid 10 Digit number ", Toast.LENGTH_LONG).show();
+            Toast.makeText(AddActivity.this, "Fill all required filed with valid input ",
+                    Toast.LENGTH_LONG).show();
         }
     }
 
@@ -115,6 +158,10 @@ public class AddActivity extends AppCompatActivity {
 
         return !(!text.trim().isEmpty() &&
                 text.length() >= 2);
+    }
+
+    boolean isEmailValid(CharSequence email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     private boolean addedToRecords() {
@@ -128,6 +175,7 @@ public class AddActivity extends AppCompatActivity {
 
         dbForm.insertValue(nameText, emailText, phoneText,
                 streetText, cityText, introText, byteArray);
+
 
         return true;
     }
