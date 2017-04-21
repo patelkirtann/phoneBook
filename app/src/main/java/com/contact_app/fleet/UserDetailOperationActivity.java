@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.TransactionTooLargeException;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -103,7 +104,12 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                             .setAction("Add", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    sendDataToUpdate();
+                                    try {
+                                        sendDataToUpdate();
+                                    } catch (TransactionTooLargeException e) {
+                                        Toast.makeText(context,
+                                                "Too large data to handle", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             })
                             .show();
@@ -112,15 +118,15 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         });
     }
 
-    private void sendDataToUpdate() {
+    private void sendDataToUpdate() throws TransactionTooLargeException{
         Intent intent = new Intent(this, UpdateActivity.class);
-        intent.putExtra("NAME_INTENT", name);
+//        intent.putExtra("NAME_INTENT", name);
         intent.putExtra("ID_INTENT", id);
-        intent.putExtra("PHONE_NUMBER_INTENT", number);
-        intent.putExtra("EMAIL_ADDRESS_INTENT", address);
-        intent.putExtra("STREET_INTENT", street);
-        intent.putExtra("CITY_INTENT", city);
-        intent.putExtra("INTRO_INTENT", intro);
+//        intent.putExtra("PHONE_NUMBER_INTENT", number);
+//        intent.putExtra("EMAIL_ADDRESS_INTENT", address);
+//        intent.putExtra("STREET_INTENT", street);
+//        intent.putExtra("CITY_INTENT", city);
+//        intent.putExtra("INTRO_INTENT", intro);
 
         startActivityForResult(intent, 1);
     }
@@ -310,7 +316,12 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                     .setAction("Add", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            sendDataToUpdate();
+                            try {
+                                sendDataToUpdate();
+                            } catch (TransactionTooLargeException e) {
+                                Toast.makeText(context,
+                                        "Too large data to handle", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     })
                     .show();
@@ -321,7 +332,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
     private void setLocationOnClick() {
 
         final Uri[] uri = new Uri[1];
-        if (!location.equals(" ")) {
+        if (!location.equals(", ")) {
 
             final AlertDialog.Builder dialog = new AlertDialog
                     .Builder(UserDetailOperationActivity.this)
@@ -354,7 +365,12 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                     .setAction("Add", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            sendDataToUpdate();
+                            try {
+                                sendDataToUpdate();
+                            } catch (TransactionTooLargeException e) {
+                                Toast.makeText(context,
+                                        "Too large data to handle", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     })
                     .show();
@@ -474,7 +490,11 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                 break;
             case R.id.edit_contact:
 
-                sendDataToUpdate();
+                try {
+                    sendDataToUpdate();
+                } catch (TransactionTooLargeException e) {
+                    Toast.makeText(context, "Too large data to handle", Toast.LENGTH_SHORT).show();
+                }
 
                 break;
         }

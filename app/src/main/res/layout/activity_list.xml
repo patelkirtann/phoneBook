@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     tools:context="com.contact_app.fleet.ListActivity">
-
     <EditText
         android:id="@+id/search_names"
         android:layout_width="match_parent"
@@ -39,9 +38,8 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/search_names"
             android:clipToPadding="false"
-            android:divider="@null"
             android:paddingBottom="24dp"
-            android:scrollbars="none" />
+             />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_addContact"
@@ -50,6 +48,7 @@
             android:layout_gravity="bottom|right"
             android:layout_margin="16dp"
             android:clickable="true"
+            app:fabSize="auto"
             android:src="@drawable/ic_person_add" />
 
     </android.support.design.widget.CoordinatorLayout>

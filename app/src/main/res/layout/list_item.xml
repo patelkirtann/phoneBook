@@ -6,8 +6,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         tools:src="@drawable/ic_person"
         android:layout_margin="4dp"/>
     <LinearLayout
@@ -15,14 +15,12 @@
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:layout_margin="4dp"
         android:orientation="vertical">
         <TextView
             android:id="@+id/list_names"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAllCaps="true"
-            android:paddingTop="8dp"
             android:textSize="16sp"
             android:textStyle="normal"
             tools:text="Kirtan"/>
@@ -31,7 +29,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:textSize="12sp"
+            android:layout_marginBottom="6dp"
+            android:textSize="14sp"
             android:textStyle="normal"
             android:textColor="@color/light_gray_background"
             tools:text="Intro"

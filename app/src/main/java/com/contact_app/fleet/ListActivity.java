@@ -17,25 +17,29 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class ListActivity extends AppCompatActivity implements DataListener {
 
-    ListView mListNames;
-    DBForm dbForm = new DBForm(this);
-    EditText mSearch;
-    TextView mInformationText;
-    FloatingActionButton mAddFloatingButton;
-    CustomListAdapter mCustomListAdapter;
-    ProgressBar mProgressbar;
-    TextView switcher;
+    public static final int DELETE_REQUEST_CODE = 1;
+    public static final int UPDATE_RESULT_OK = 2;
+    public static final int ADD_REQUEST_CODE = 3;
+
+    public ListView mListNames;
+    public DBForm dbForm = new DBForm(this);
+    public EditText mSearch;
+    public TextView mInformationText;
+    public FloatingActionButton mAddFloatingButton;
+    public CustomListAdapter mCustomListAdapter;
+    public ProgressBar mProgressbar;
+    public TextView switcher;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +129,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ListActivity.this, AddActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 3);
             }
         });
     }
@@ -186,7 +190,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                         "-Editing or Deleting contact with preference\n" +
                         "-Call, Email or Search location with a single click\n" +
                         "-Share information" +
-                        "-Search contact by their name\n" +
+                        "-Search contact by their mName\n" +
                         "\n" +
                         "\n" +
                         "Version: " + versionName +
@@ -238,17 +242,22 @@ public class ListActivity extends AppCompatActivity implements DataListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == 1) {
+        if (requestCode == DELETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK)
                 Snackbar.make(findViewById(R.id.activity_list), "1 Contact Deleted",
                         Snackbar.LENGTH_SHORT)
                         .show();
-            }
         }
-        if (resultCode == 2) {
-            Snackbar.make(findViewById(R.id.activity_list), "1 Contact Updated",
-                    Snackbar.LENGTH_SHORT)
-                    .show();
+        if (resultCode == UPDATE_RESULT_OK) {
+                Snackbar.make(findViewById(R.id.activity_list), "1 Contact Updated",
+                        Snackbar.LENGTH_SHORT)
+                        .show();
+        }
+        if (requestCode == ADD_REQUEST_CODE) {
+            if (resultCode == RESULT_OK)
+                Snackbar.make(findViewById(R.id.activity_list), "1 Contact Added",
+                        Snackbar.LENGTH_SHORT)
+                        .show();
         }
     }
 }

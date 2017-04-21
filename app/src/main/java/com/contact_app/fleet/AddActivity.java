@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -32,11 +31,10 @@ public class AddActivity extends AppCompatActivity {
 
     private static final int GALLERY_IMAGE = 5;
     private static final int MY_PERMISSIONS_REQUEST_PICTURE_CONTACTS = 1;
-    public EditText name, email, phone, street, city, intro;
+    public EditText mName, mEmail, mPhone, mStreet, mCity, mIntro;
     public DBForm dbForm = new DBForm(this);
-    TextInputLayout nameLayout;
+    TextInputLayout nameLayout, emailLayout, phoneLayout;
     byte[] byteArray;
-    boolean check = false;
     private CircleImageView mPicture;
 
     @Override
@@ -51,59 +49,35 @@ public class AddActivity extends AppCompatActivity {
         mPicture = (CircleImageView) findViewById(R.id.profile_image);
 
         nameLayout = (TextInputLayout) findViewById(R.id.name_field_layout);
-        name = (EditText) findViewById(R.id.name_field);
-        name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    if (isEmpty(name)) {
-                        check = false;
-                        nameLayout.setErrorEnabled(true);
-                        nameLayout.setError("Put a valid Name");
-//                        name.setError("Valid Name Required");
-                    } else if (dbForm.checkName(name.getText().toString().toLowerCase())) {
-                        check = false;
-                        name.setError("Duplicate Name");
-                    } else {
-                        check = true;
-                        nameLayout.setErrorEnabled(false);
-                    }
-                }
-            }
-        });
+        mName = (EditText) findViewById(R.id.name_field);
 
-        email = (EditText) findViewById(R.id.email_field);
-        email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        emailLayout = (TextInputLayout) findViewById(R.id.email_field_layout);
+        mEmail = (EditText) findViewById(R.id.email_field);
+        mEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                String emailCheck = mEmail.getText().toString().trim();
+                if (hasFocus) {
+                    emailLayout.setErrorEnabled(false);
+                }
                 if (!hasFocus) {
-                    if (!email.getText().toString().isEmpty()) {
-                        if (!isEmailValid(email.getText().toString().trim())) {
-                            email.setError("Not a valid Email");
+                    if (!emailCheck.isEmpty()) {
+                        if (!isEmailValid(emailCheck)) {
+                            emailLayout.setError("Not a valid Email");
+                        } else {
+                            emailLayout.setErrorEnabled(false);
                         }
                     }
                 }
             }
         });
 
-        phone = (EditText) findViewById(R.id.phone_field);
-        phone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    if (!(phone.length() == 10)) {
-                        phone.setError("Invalid phone Number");
-                        check = false;
-                    } else {
-                        check = true;
-                    }
-                }
-            }
-        });
+        phoneLayout = (TextInputLayout) findViewById(R.id.phone_field_layout);
+        mPhone = (EditText) findViewById(R.id.phone_field);
 
-        street = (EditText) findViewById(R.id.street_field);
-        city = (EditText) findViewById(R.id.city_field);
-        intro = (EditText) findViewById(R.id.tv_auto);
+        mStreet = (EditText) findViewById(R.id.street_field);
+        mCity = (EditText) findViewById(R.id.city_field);
+        mIntro = (EditText) findViewById(R.id.tv_auto);
 
         mPicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,45 +89,65 @@ public class AddActivity extends AppCompatActivity {
     }
 
     private void onSaveClicked() {
-        if (check) {
-            final AlertDialog.Builder dialog = new AlertDialog.Builder(AddActivity.this);
-            dialog.setTitle("Confirmation");
-            dialog.setMessage("Save Contact?");
-            dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    if (addedToRecords()) {
+        if (!isNameEmpty(mName)
+                && mPhone.length() == 10
+                && !dbForm.checkName(mName.getText().toString().toLowerCase())) {
+            if (addedToRecords()) {
+                nameLayout.setErrorEnabled(false);
+                phoneLayout.setErrorEnabled(false);
+                emailLayout.setErrorEnabled(false);
+
+                final AlertDialog.Builder dialog = new AlertDialog.Builder(AddActivity.this);
+                dialog.setTitle("Confirmation");
+                dialog.setMessage("Save Contact?");
+                dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
                         Toast.makeText(AddActivity.this, " Contact Saved ",
                                 Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_OK);
                         onBackPressed();
-                    } else {
-                        Toast.makeText(AddActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-            dialog.setNegativeButton("Discard", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    Toast.makeText(AddActivity.this, " Discarded ", Toast.LENGTH_SHORT).show();
-                    onBackPressed();
-                }
-            });
 
-            dialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(AddActivity.this, "Nothing changed", Toast.LENGTH_SHORT).show();
-                }
-            });
-            AlertDialog alert = dialog.create();
-            alert.show();
+                    }
+                });
+                dialog.setNegativeButton("Discard", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(AddActivity.this, " Discarded ", Toast.LENGTH_SHORT).show();
+                        onBackPressed();
+                    }
+                });
+
+                dialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+//                    Toast.makeText(AddActivity.this, "Nothing changed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                AlertDialog alert = dialog.create();
+                alert.show();
+            } else {
+                Toast.makeText(AddActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
+            }
         } else {
-            Toast.makeText(AddActivity.this, "Fill all required filed with valid input ",
+            if (isNameEmpty(mName)) {
+                nameLayout.setError("Put valid name(2 or more character)");
+            } else if (mPhone.length() != 10) {
+                phoneLayout.setError("Put valid number(xxx-xxx-xxxx)");
+                nameLayout.setErrorEnabled(false);
+            } else if (dbForm.checkName(mName.getText().toString().toLowerCase())) {
+                phoneLayout.setErrorEnabled(false);
+                nameLayout.setError("Duplicate name found \n Try something unique");
+            }
+
+            Toast.makeText(AddActivity.this,
+                    "Fill all required filed with valid input",
                     Toast.LENGTH_LONG).show();
         }
     }
 
-    private boolean isEmpty(EditText edit) {
+    private boolean isNameEmpty(EditText edit) {
         String text = edit.getText().toString().replaceAll(" ", "");
 
         return !(!text.trim().isEmpty() &&
@@ -166,18 +160,26 @@ public class AddActivity extends AppCompatActivity {
 
     private boolean addedToRecords() {
 
-        String nameText = name.getText().toString().toLowerCase().trim();
-        String emailText = email.getText().toString().toLowerCase();
-        String phoneText = phone.getText().toString();
-        String streetText = street.getText().toString();
-        String cityText = city.getText().toString();
-        String introText = intro.getText().toString();
+        try {
 
-        dbForm.insertValue(nameText, emailText, phoneText,
-                streetText, cityText, introText, byteArray);
+            String nameText = mName.getText().toString().toLowerCase().trim();
+            String emailText = mEmail.getText().toString().toLowerCase();
+            String phoneText = mPhone.getText().toString();
+            String streetText = mStreet.getText().toString();
+            String cityText = mCity.getText().toString();
+            String introText = mIntro.getText().toString();
 
+            dbForm.insertValue(nameText, emailText, phoneText,
+                    streetText, cityText, introText, byteArray);
 
-        return true;
+            return true;
+
+        } catch (Exception e) {
+            Toast.makeText(this, "Something went wrong while saving contact",
+                    Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -219,7 +221,7 @@ public class AddActivity extends AppCompatActivity {
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         if (yourSelectedImage != null) {
-            yourSelectedImage.compress(Bitmap.CompressFormat.PNG, 0, stream);
+            yourSelectedImage.compress(Bitmap.CompressFormat.JPEG, 0, stream);
         }
         byteArray = stream.toByteArray();
     }
@@ -234,14 +236,13 @@ public class AddActivity extends AppCompatActivity {
 
                     }
                 })
-                .setPositiveButton("Select Picture", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Select", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id1) {
                         if (isExternalStoragePermissionGranted()) {
                             Intent intent = new Intent(Intent.ACTION_PICK);
                             intent.setType("image/*");
                             startActivityForResult(intent, GALLERY_IMAGE);
                         }
-
                     }
                 });
         AlertDialog alert = builder.create();
