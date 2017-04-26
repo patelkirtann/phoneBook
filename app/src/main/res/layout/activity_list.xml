@@ -5,8 +5,10 @@
     android:id="@+id/activity_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
     android:padding="16dp"
     tools:context="com.contact_app.fleet.ListActivity">
+
     <EditText
         android:id="@+id/search_names"
         android:layout_width="match_parent"
@@ -14,7 +16,6 @@
         android:background="@drawable/tv_back_border"
         android:clickable="true"
         android:drawableLeft="@drawable/ic_search"
-        android:focusableInTouchMode="true"
         android:hint="@string/search" />
 
     <TextView
@@ -24,6 +25,11 @@
         android:layout_below="@id/search_names"
         android:layout_margin="8dp"
         android:text="@string/my_contacts" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider"
+        android:layout_below="@id/tv_my_contacts"/>
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -38,8 +44,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/search_names"
             android:clipToPadding="false"
-            android:paddingBottom="24dp"
-             />
+            android:paddingBottom="72dp"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_addContact"
@@ -48,8 +53,8 @@
             android:layout_gravity="bottom|right"
             android:layout_margin="16dp"
             android:clickable="true"
-            app:fabSize="auto"
-            android:src="@drawable/ic_person_add" />
+            android:src="@drawable/ic_person_add"
+            app:fabSize="auto" />
 
     </android.support.design.widget.CoordinatorLayout>
 
@@ -57,13 +62,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true">
-
-        <ProgressBar
-            android:id="@+id/pb_progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_information"

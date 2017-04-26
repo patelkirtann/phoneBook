@@ -26,12 +26,10 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_line"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/dark_gray_background"
-        android:orientation="horizontal" />
+        android:layout_height="1dp"
+        android:background="@color/divider" />
 
     <ScrollView
         android:id="@+id/sv_scroll"
@@ -42,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="48dp">
+            android:padding="32dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
@@ -52,6 +50,7 @@
                 android:src="@drawable/ic_add_a_photo"
                 app:civ_border_color="#00000000"
                 app:civ_border_width="2dp" />
+
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/name_field_layout"
@@ -63,11 +62,10 @@
                     android:id="@+id/name_field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/dark_gray_background"
                     android:drawableLeft="@drawable/ic_person"
                     android:hint="@string/name"
                     android:inputType="textPersonName"
-                    android:padding="8dp" />
+                    android:padding="2dp" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -80,11 +78,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:backgroundTint="@color/dark_gray_background"
                     android:drawableLeft="@drawable/ic_email"
                     android:hint="@string/email"
                     android:inputType="textEmailAddress"
-                    android:padding="8dp" />
+                    android:padding="2dp" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -97,13 +94,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:backgroundTint="@color/dark_gray_background"
                     android:digits="0123456789+"
                     android:drawableLeft="@drawable/ic_phone"
                     android:hint="@string/phone"
                     android:inputType="phone"
-                    android:padding="8dp" />
+                    android:padding="2dp" />
             </android.support.design.widget.TextInputLayout>
+
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -114,11 +111,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:backgroundTint="@color/dark_gray_background"
                     android:drawableLeft="@drawable/ic_add_location"
                     android:hint="@string/street"
                     android:inputType="textPostalAddress"
-                    android:padding="8dp" />
+                    android:padding="2dp" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -130,11 +126,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:backgroundTint="@color/dark_gray_background"
                     android:drawableLeft="@drawable/ic_location_city"
                     android:hint="@string/city"
                     android:inputType="textPersonName"
-                    android:padding="8dp" />
+                    android:padding="2dp" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -146,12 +141,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:backgroundTint="@color/dark_gray_background"
                     android:drawableLeft="@drawable/ic_info"
-                    android:hint="@string/info_max_300"
+                    android:hint="@string/info_max_150"
                     android:inputType="textMultiLine"
                     android:lines="2"
-                    android:maxLength="300"
+                    android:maxLength="150"
                     android:scrollY="@dimen/activity_vertical_margin"
                     android:scrollbars="vertical" />
             </android.support.design.widget.TextInputLayout>

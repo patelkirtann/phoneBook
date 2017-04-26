@@ -16,7 +16,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="delete_all">Delete All</string>
-    <string name="info_max_300">Info(Max. 300)</string>
+    <string name="info_max_150">Info(Max. 150)</string>
     <string name="share">Share</string>
     <string name="search">Search</string>
     <string name="refresh">Refresh</string>
@@ -34,4 +34,8 @@
     <string name="move_to_phone">Move To Phone</string>
     <string name="share_contact">Share Contact</string>
     <string name="edit">Edit</string>
+    <string name="introduction">Introduction</string>
+    <string name="mobile">Mobile</string>
+    <string name="add_email">Add Email</string>
+    <string name="add_location">Add Location</string>
 </resources>

@@ -2,20 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        tools:src="@drawable/ic_person"
-        android:layout_margin="4dp"/>
+        android:layout_margin="4dp"
+        tools:src="@drawable/ic_person_round" />
+
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:orientation="vertical">
+        android:paddingRight="16dp">
+
         <TextView
             android:id="@+id/list_names"
             android:layout_width="match_parent"
@@ -23,17 +26,18 @@
             android:textAllCaps="true"
             android:textSize="16sp"
             android:textStyle="normal"
-            tools:text="Kirtan"/>
+            tools:text="Kirtan" />
+
         <TextView
             android:id="@+id/list_intro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
             android:layout_marginBottom="6dp"
+            android:layout_marginTop="6dp"
+            android:maxLines="1"
+            android:textColor="@color/light_gray_background"
             android:textSize="14sp"
             android:textStyle="normal"
-            android:textColor="@color/light_gray_background"
-            tools:text="Intro"
-            android:maxLines="1"/>
+            tools:text="Intro" />
     </LinearLayout>
 </LinearLayout>

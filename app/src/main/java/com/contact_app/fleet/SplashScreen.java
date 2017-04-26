@@ -10,8 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 public class SplashScreen extends AppCompatActivity {
     private static final int SPLASH_TIME_OUT = 1000;
     private static int sOnlyOnce = 0;
-    final String welcomeScreenShownPref = "welcomeScreenShown";
-    SharedPreferences mPrefs;
+    private final String welcomeScreenShownPref = "welcomeScreenShown";
+    private SharedPreferences mPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

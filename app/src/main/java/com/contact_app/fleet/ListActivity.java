@@ -1,27 +1,44 @@
 package com.contact_app.fleet;
 
+import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 public class ListActivity extends AppCompatActivity implements DataListener {
@@ -29,22 +46,28 @@ public class ListActivity extends AppCompatActivity implements DataListener {
     public static final int DELETE_REQUEST_CODE = 1;
     public static final int UPDATE_RESULT_OK = 2;
     public static final int ADD_REQUEST_CODE = 3;
+    private static final int MY_PERMISSIONS_REQUEST_CALL_CONTACTS = 0;
 
     public ListView mListNames;
-    public DBForm dbForm = new DBForm(this);
+    public DBForm dbForm;
     public EditText mSearch;
     public TextView mInformationText;
     public FloatingActionButton mAddFloatingButton;
     public CustomListAdapter mCustomListAdapter;
-    public ProgressBar mProgressbar;
     public TextView switcher;
-
-
+    public ProgressDialog progressDialog;
+    public String findName;
+    public String sendId;
+    public String number;
+    boolean isDataChanged = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
+        dbForm = DBForm.getInstance(this);
+
         mListNames = (ListView) findViewById(android.R.id.list);
 
         mSearch = (EditText) findViewById(R.id.search_names);
@@ -52,31 +75,31 @@ public class ListActivity extends AppCompatActivity implements DataListener {
 
         mInformationText = (TextView) findViewById(R.id.tv_information);
         mAddFloatingButton = (FloatingActionButton) findViewById(R.id.fab_addContact);
-        mProgressbar = (ProgressBar) findViewById(R.id.pb_progress);
         switcher = (TextView) findViewById(R.id.ts_alphabets);
-        switcher.setVisibility(View.INVISIBLE);
 
         mInformationText.setText("No Contacts");
         mListNames.setEmptyView(mInformationText);
+        registerForContextMenu(mListNames);
 
         mSearch.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                mCustomListAdapter.getFilter().filter(charSequence);
-
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                String text = mSearch.getText().toString().toLowerCase(Locale.getDefault());
-                mCustomListAdapter.filter(charSequence.toString());
+                try {
+                    if (mSearch.hasFocus())
+                        mCustomListAdapter.filter(charSequence.toString());
+                } catch (NullPointerException nullPointer) {
+                    Log.e("onTextChanged", nullPointer.getLocalizedMessage());
+                }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-//                String text = mSearch.getText().toString().toLowerCase(Locale.getDefault());
-//                mCustomListAdapter.filter(text);
+
             }
         });
 
@@ -88,8 +111,8 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                 try {
                     Intent intent = new Intent(ListActivity.this,
                             UserDetailOperationActivity.class);
-                    String findName = mCustomListAdapter.getItem(position).getName();
-                    String sendId = dbForm.getIdByName(findName);
+                    findName = mCustomListAdapter.getItem(position).getName();
+                    sendId = dbForm.getIdByName(findName);
                     Log.d("Name Value", sendId);
                     intent.putExtra("ID_INTENT", sendId);
 
@@ -104,32 +127,33 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         });
 
 //         get the first visible position for the Alphabets on list scroll.
-        mListNames.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-                switcher.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem,
-                                 int visibleItemCount, int totalItemCount) {
-
-                String firstChar =
-                        String.valueOf(mListNames.getChildAt(firstVisibleItem));
-
-                switcher.setText(firstChar.subSequence(0, 1));
-
-                switcher.setVisibility(View.VISIBLE);
-            }
-        });
-
+//        mListNames.setOnScrollListener(new AbsListView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(AbsListView view, int scrollState) {
+//
+//                switcher.setVisibility(View.INVISIBLE);
+//            }
+//
+//            @Override
+//            public void onScroll(AbsListView view, int firstVisibleItem,
+//                                 int visibleItemCount, int totalItemCount) {
+//
+//                String first = (String) mListNames.getItemAtPosition(firstVisibleItem);
+//
+//                if (first != null) {
+//                    mCustomListAdapter.notifyDataSetChanged();
+//                    switcher.setText(first.charAt(0));
+//                }
+//
+//                switcher.setVisibility(View.VISIBLE);
+//            }
+//        });
 
         mAddFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ListActivity.this, AddActivity.class);
-                startActivityForResult(intent, 3);
+                startActivityForResult(intent, ADD_REQUEST_CODE);
             }
         });
     }
@@ -210,10 +234,94 @@ public class ListActivity extends AppCompatActivity implements DataListener {
     }
 
     @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        menu.add(Menu.NONE, v.getId(), 0, "Call");
+        menu.add(Menu.NONE, v.getId(), 0, "SMS");
+
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        AdapterView.AdapterContextMenuInfo info =
+                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        findName = mCustomListAdapter.getItem(info.position).getName();
+        number = dbForm.getPhoneByName(findName);
+
+        switch (item.getTitle().toString()) {
+            case "Call":
+                try {
+                    if (isCallPermissionGranted()) {
+                        makeCall(number);
+                    } else {
+                        Snackbar.make(findViewById(R.id.activity_list),
+                                "Grant permission to make Call", Snackbar.LENGTH_LONG);
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(this, "Try Again", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case "SMS":
+                sendSms(number);
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    protected boolean onPrepareOptionsPanel(View view, Menu menu) {
+        if (menu != null) {
+            if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
+                try {
+                    Method m = menu.getClass().getDeclaredMethod(
+                            "setOptionalIconsVisible", Boolean.TYPE);
+                    m.setAccessible(true);
+                    m.invoke(menu, true);
+                } catch (NoSuchMethodException e) {
+                    Log.e("Menu Error", e.toString());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return super.onPrepareOptionsPanel(view, menu);
+    }
+
+    private void sendSms(String number) {
+        Uri uri = Uri.parse("smsto:" + number);
+        Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
+
+    private void makeCall(String number) {
+        Intent mCallIntent = new Intent(Intent.ACTION_CALL);
+        mCallIntent.setData(Uri.parse("tel:" + number));
+        if (mCallIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(mCallIntent);
+        }
+
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         Log.d("Debug", "onResume");
-        new LoadData(dbForm, this).execute("");
+        try {
+            if (isDataChanged) {
+                new LoadData(dbForm, this).execute("");
+                isDataChanged = false;
+                mSearch.setText("");
+            }
+        } catch (NullPointerException nullPointer) {
+            Log.e("OnResume", nullPointer.getLocalizedMessage());
+        }
+
     }
 
     @Override
@@ -224,7 +332,12 @@ public class ListActivity extends AppCompatActivity implements DataListener {
 
     @Override
     public void onPreExecute() {
-        mProgressbar.setVisibility(View.VISIBLE);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage("Please Wait...");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
     }
 
     @Override
@@ -234,8 +347,9 @@ public class ListActivity extends AppCompatActivity implements DataListener {
 
     @Override
     public void onCompletion(ArrayList<RetrieveContactRecord> userRecords) {
-        mProgressbar.setVisibility(View.INVISIBLE);
+        progressDialog.dismiss();
         mCustomListAdapter = new CustomListAdapter(this, userRecords);
+
         mListNames.setAdapter(mCustomListAdapter);
     }
 
@@ -243,21 +357,71 @@ public class ListActivity extends AppCompatActivity implements DataListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == DELETE_REQUEST_CODE) {
-            if (resultCode == RESULT_OK)
+            if (resultCode == RESULT_OK) {
+                isDataChanged = true;
                 Snackbar.make(findViewById(R.id.activity_list), "1 Contact Deleted",
                         Snackbar.LENGTH_SHORT)
                         .show();
+            }
         }
         if (resultCode == UPDATE_RESULT_OK) {
-                Snackbar.make(findViewById(R.id.activity_list), "1 Contact Updated",
-                        Snackbar.LENGTH_SHORT)
-                        .show();
+            isDataChanged = true;
+            Snackbar.make(findViewById(R.id.activity_list), "1 Contact Updated",
+                    Snackbar.LENGTH_SHORT)
+                    .show();
         }
         if (requestCode == ADD_REQUEST_CODE) {
-            if (resultCode == RESULT_OK)
+            if (resultCode == RESULT_OK) {
+                isDataChanged = true;
                 Snackbar.make(findViewById(R.id.activity_list), "1 Contact Added",
                         Snackbar.LENGTH_SHORT)
                         .show();
+            }
         }
     }
+
+    public boolean isCallPermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(Manifest.permission.CALL_PHONE)
+                    == PackageManager.PERMISSION_GRANTED) {
+
+                return true;
+            } else {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.CALL_PHONE}, 1);
+                return false;
+            }
+        } else {
+            //permission is automatically granted on sdk<23 upon installation
+
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CALL_CONTACTS: {
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    makeCall(number);
+                    Snackbar.make(findViewById(R.id.activity_list), "Permission is granted",
+                            Snackbar.LENGTH_SHORT)
+                            .show();
+
+                } else {
+
+                    Snackbar.make(findViewById(R.id.activity_list), "Permission is Denied",
+                            Snackbar.LENGTH_SHORT)
+                            .show();
+                }
+            }
+        }
+    }
+
 }

@@ -8,15 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
+
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
-class CustomListAdapter extends ArrayAdapter<RetrieveContactRecord>{
+class CustomListAdapter extends ArrayAdapter<RetrieveContactRecord> {
 
     private List<RetrieveContactRecord> mUserRecords;
     private ArrayList<RetrieveContactRecord> arrayList;
@@ -32,30 +30,30 @@ class CustomListAdapter extends ArrayAdapter<RetrieveContactRecord>{
     @NonNull
     @Override
     public View getView(int position, @Nullable View view, @NonNull ViewGroup parent) {
-        //LayoutInflater inflater = context.getLayoutInflater();
         View viewConverter = view;
-        if (view == null)
+        ViewHolder holder;
+        if (view == null) {
             viewConverter =
                     LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
+            holder = new ViewHolder(viewConverter);
+            viewConverter.setTag(holder);
+        } else {
+            holder = (ViewHolder) viewConverter.getTag();
+        }
+
         RetrieveContactRecord currentUser = mUserRecords.get(position);
 
-        TextView txtName =
-                (TextView) viewConverter.findViewById(R.id.list_names);
-        txtName.setText(currentUser.getName());
+        holder.txtName.setText(currentUser.getName());
+        holder.txtIntro.setText(currentUser.getIntro());
 
-        CircleImageView profileImage =
-                (CircleImageView) viewConverter.findViewById(R.id.profile_image);
-
-        TextView txtIntro =
-                (TextView) viewConverter.findViewById(R.id.list_intro);
-        txtIntro.setText(currentUser.getIntro());
 
         byte[] imgByte = currentUser.getPicture();
         if (imgByte != null) {
             ByteArrayInputStream imageStream = new ByteArrayInputStream(imgByte);
-            profileImage.setImageBitmap(BitmapFactory.decodeStream(imageStream));
-        } else {
-            profileImage.setImageResource(R.drawable.ic_person);
+            holder.profileImage.setImageBitmap(BitmapFactory.decodeStream(imageStream));
+        }
+        else {
+            holder.profileImage.setImageResource(R.drawable.ic_person_round);
         }
 
         return viewConverter;
@@ -71,8 +69,8 @@ class CustomListAdapter extends ArrayAdapter<RetrieveContactRecord>{
                 if (record.getName().toLowerCase(Locale.getDefault())
                         .contains(charText)) {
                     mUserRecords.add(record);
-                }else if (record.getIntro().toLowerCase(Locale.getDefault())
-                        .contains(charText)){
+                } else if (record.getIntro().toLowerCase(Locale.getDefault())
+                        .contains(charText)) {
                     mUserRecords.add(record);
                 }
             }
@@ -80,4 +78,6 @@ class CustomListAdapter extends ArrayAdapter<RetrieveContactRecord>{
         notifyDataSetChanged();
     }
 }
+
+
 

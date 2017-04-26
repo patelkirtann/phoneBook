@@ -34,22 +34,24 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class UpdateActivity extends AppCompatActivity {
     private static final int GALLERY_IMAGE = 5;
     private static final int MY_PERMISSIONS_REQUEST_PICTURE_CONTACTS = 1;
-    EditText mName, mEmail, mPhone, mStreet, mCity, mIntro;
-    String id, name, phone, email, street, city, intro;
-    String originalName, originalEmail, originalPhone, originalStreet, originalCity, originalIntro;
-    TextInputLayout nameLayout, emailLayout, phoneLayout;
+    public EditText mName, mEmail, mPhone, mStreet, mCity, mIntro;
+    public String id, name, phone, email, street, city, intro;
+    public String originalName, originalEmail, originalPhone, originalStreet, originalCity, originalIntro;
+    public TextInputLayout nameLayout, emailLayout, phoneLayout;
 
-    byte[] picture;
-    byte[] originalPicture;
-    CircleImageView imageView;
-    boolean check = true;
-    boolean checkOriginal = false;
-    DBForm dbForm = new DBForm(this);
+    public byte[] picture;
+    public byte[] originalPicture;
+    public CircleImageView imageView;
+    public boolean check = true;
+    public boolean checkOriginal = false;
+    public DBForm dbForm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_update);
+
+        dbForm = DBForm.getInstance(this);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -61,72 +63,13 @@ public class UpdateActivity extends AppCompatActivity {
 
         nameLayout = (TextInputLayout) findViewById(R.id.name_field_layout);
         mName = (EditText) findViewById(R.id.name_field);
-        mName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    nameLayout.setErrorEnabled(false);
-                    check = true;
-                }
-                if (!hasFocus)
-                    if (isNameEmpty(mName)) {
-                        check = false;
-                        nameLayout.setErrorEnabled(true);
-                        nameLayout.setError("Put valid name(2 or more character)");
-                    } else if (!mName.getText().toString().equals(originalName)) {
-                        if (dbForm.checkName(mName.getText().toString().toLowerCase())) {
-                            check = false;
-                            mName.setError("Duplicate Name Found");
-                            nameLayout.setError("Try to give unique name");
-                        }
-                    } else {
-                        check = true;
-                        nameLayout.setErrorEnabled(false);
-                    }
-            }
-        });
 
         emailLayout = (TextInputLayout) findViewById(R.id.email_field_layout);
         mEmail = (EditText) findViewById(R.id.email_field);
-        mEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    nameLayout.setErrorEnabled(false);
-                    check = true;
-                }
-                if (!hasFocus) {
-                    if (!mEmail.getText().toString().isEmpty()) {
-                        if (!isEmailValid(mEmail.getText().toString().trim())) {
-                            emailLayout.setError("Not a valid email");
-                        } else {
-                            emailLayout.setErrorEnabled(false);
-                        }
-                    }
-                }
-            }
-        });
 
         phoneLayout = (TextInputLayout) findViewById(R.id.phone_field_layout);
         mPhone = (EditText) findViewById(R.id.phone_field);
-        mPhone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    nameLayout.setErrorEnabled(false);
-                    check = true;
-                }
-                if (!hasFocus) {
-                    if (!(mPhone.length() == 10)) {
-                        phoneLayout.setError("Put valid Number(xxx-xxx-xxxx)");
-                        check = false;
-                    } else {
-                        phoneLayout.setErrorEnabled(false);
-                        check = true;
-                    }
-                }
-            }
-        });
+
         mStreet = (EditText) findViewById(R.id.street_field);
         mCity = (EditText) findViewById(R.id.city_field);
         mIntro = (EditText) findViewById(R.id.tv_auto);
@@ -227,22 +170,28 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
     public void updatePermission() {
-        if (name.equals(originalName)
+        //            Toast.makeText(this, "All values are same", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "New values found", Toast.LENGTH_SHORT).show();
+        checkOriginal = name.equals(originalName)
                 && email.equals(originalEmail)
                 && phone.equals(originalPhone)
                 && street.equals(originalStreet)
                 && city.equals(originalCity)
                 && intro.equals(originalIntro)
-                && Arrays.equals(picture, originalPicture)) {
-            checkOriginal = true;
-//            Toast.makeText(this, "All values are same", Toast.LENGTH_SHORT).show();
-        } else {
-            checkOriginal = false;
-//            Toast.makeText(this, "New values found", Toast.LENGTH_SHORT).show();
-        }
+                && Arrays.equals(picture, originalPicture);
         if (!checkOriginal) {
             if (!isNameEmpty(mName)
-                    && mPhone.length() == 10) {
+                    && mPhone.length() >= 10
+                    && !dbForm.checkName(mName.getText().toString().toLowerCase().trim())) {
+                if (!mEmail.getText().toString().isEmpty()) {
+                    if (!isEmailValid(mEmail.getText().toString().trim())) {
+                        emailLayout.setError("Not a valid email");
+                        check = false;
+                    } else {
+                        emailLayout.setErrorEnabled(false);
+                        check = true;
+                    }
+                }
                 if (check) {
                     final AlertDialog.Builder dialog = new AlertDialog.Builder(UpdateActivity.this);
                     dialog.setTitle("Confirmation")
@@ -265,18 +214,12 @@ public class UpdateActivity extends AppCompatActivity {
 
                                 }
                             })
-                            .setNegativeButton("Discard", new DialogInterface.OnClickListener() {
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     Toast.makeText(UpdateActivity.this, " Canceled ",
                                             Toast.LENGTH_SHORT).show();
                                     onBackPressed();
-                                }
-                            })
-                            .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
                                 }
                             });
 
@@ -290,13 +233,16 @@ public class UpdateActivity extends AppCompatActivity {
             } else {
                 if (isNameEmpty(mName)) {
                     nameLayout.setError("Put valid name(2 or more character)");
-                } else if (mPhone.length() != 10) {
+                } else if (mPhone.length() < 10) {
                     phoneLayout.setError("Put valid number(xxx-xxx-xxxx)");
                     nameLayout.setErrorEnabled(false);
-                } else if (dbForm.checkName(mName.getText().toString().toLowerCase())) {
+                } else if (dbForm.checkName(mName.getText().toString().toLowerCase().trim())) {
                     phoneLayout.setErrorEnabled(false);
                     nameLayout.setError("Try to give same/unique name");
                 }
+                Toast.makeText(UpdateActivity.this,
+                        "Fill all required filed with valid input",
+                        Toast.LENGTH_LONG).show();
             }
         } else {
             Toast.makeText(UpdateActivity.this,
@@ -325,7 +271,7 @@ public class UpdateActivity extends AppCompatActivity {
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         if (yourSelectedImage != null) {
-            yourSelectedImage.compress(Bitmap.CompressFormat.JPEG, 0, stream);
+            yourSelectedImage.compress(Bitmap.CompressFormat.JPEG, 50, stream);
         }
         picture = stream.toByteArray();
     }

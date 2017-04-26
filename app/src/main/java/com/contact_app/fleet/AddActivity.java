@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -32,20 +31,22 @@ public class AddActivity extends AppCompatActivity {
     private static final int GALLERY_IMAGE = 5;
     private static final int MY_PERMISSIONS_REQUEST_PICTURE_CONTACTS = 1;
     public EditText mName, mEmail, mPhone, mStreet, mCity, mIntro;
-    public DBForm dbForm = new DBForm(this);
-    TextInputLayout nameLayout, emailLayout, phoneLayout;
+    public DBForm dbForm;
+    public TextInputLayout nameLayout, emailLayout, phoneLayout;
     byte[] byteArray;
+    boolean check = true;
     private CircleImageView mPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_update);
-
+        dbForm = DBForm.getInstance(this);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+
         mPicture = (CircleImageView) findViewById(R.id.profile_image);
 
         nameLayout = (TextInputLayout) findViewById(R.id.name_field_layout);
@@ -53,24 +54,6 @@ public class AddActivity extends AppCompatActivity {
 
         emailLayout = (TextInputLayout) findViewById(R.id.email_field_layout);
         mEmail = (EditText) findViewById(R.id.email_field);
-        mEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                String emailCheck = mEmail.getText().toString().trim();
-                if (hasFocus) {
-                    emailLayout.setErrorEnabled(false);
-                }
-                if (!hasFocus) {
-                    if (!emailCheck.isEmpty()) {
-                        if (!isEmailValid(emailCheck)) {
-                            emailLayout.setError("Not a valid Email");
-                        } else {
-                            emailLayout.setErrorEnabled(false);
-                        }
-                    }
-                }
-            }
-        });
 
         phoneLayout = (TextInputLayout) findViewById(R.id.phone_field_layout);
         mPhone = (EditText) findViewById(R.id.phone_field);
@@ -90,57 +73,72 @@ public class AddActivity extends AppCompatActivity {
 
     private void onSaveClicked() {
         if (!isNameEmpty(mName)
-                && mPhone.length() == 10
-                && !dbForm.checkName(mName.getText().toString().toLowerCase())) {
-            if (addedToRecords()) {
-                nameLayout.setErrorEnabled(false);
-                phoneLayout.setErrorEnabled(false);
-                emailLayout.setErrorEnabled(false);
+                && mPhone.length() >= 10
+                && !dbForm.checkName(mName.getText().toString().toLowerCase().trim())) {
+            if (!mEmail.getText().toString().isEmpty()) {
+                if (!isEmailValid(mEmail.getText().toString().trim())) {
+                    emailLayout.setError("Not a valid email");
+                    check = false;
+                } else {
+                    emailLayout.setErrorEnabled(false);
+                    check = true;
+                }
+            }
+            if (check) {
+                if (addedToRecords()) {
+                    nameLayout.setErrorEnabled(false);
+                    phoneLayout.setErrorEnabled(false);
+                    emailLayout.setErrorEnabled(false);
 
-                final AlertDialog.Builder dialog = new AlertDialog.Builder(AddActivity.this);
-                dialog.setTitle("Confirmation");
-                dialog.setMessage("Save Contact?");
-                dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    final AlertDialog.Builder dialog = new AlertDialog.Builder(AddActivity.this);
+                    dialog.setTitle("Confirmation");
+                    dialog.setMessage("Save Contact?");
+                    dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
-                        Toast.makeText(AddActivity.this, " Contact Saved ",
-                                Toast.LENGTH_SHORT).show();
-                        setResult(RESULT_OK);
-                        onBackPressed();
+                            Toast.makeText(AddActivity.this, " Contact Saved ",
+                                    Toast.LENGTH_SHORT).show();
+                            setResult(RESULT_OK);
+                            onBackPressed();
 
-                    }
-                });
-                dialog.setNegativeButton("Discard", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(AddActivity.this, " Discarded ", Toast.LENGTH_SHORT).show();
-                        onBackPressed();
-                    }
-                });
+                        }
+                    });
+                    dialog.setNegativeButton("Discard", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Toast.makeText(AddActivity.this, " Discarded ", Toast.LENGTH_SHORT).show();
+                            onBackPressed();
+                        }
+                    });
 
-                dialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    dialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 //                    Toast.makeText(AddActivity.this, "Nothing changed", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                AlertDialog alert = dialog.create();
-                alert.show();
+                        }
+                    });
+                    AlertDialog alert = dialog.create();
+                    alert.show();
+                } else {
+                    Toast.makeText(AddActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
+                }
             } else {
-                Toast.makeText(AddActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(AddActivity.this,
+                        "Fill all required filed with valid input",
+                        Toast.LENGTH_LONG).show();
             }
         } else {
             if (isNameEmpty(mName)) {
                 nameLayout.setError("Put valid name(2 or more character)");
-            } else if (mPhone.length() != 10) {
+            } else if (mPhone.length() < 10) {
                 phoneLayout.setError("Put valid number(xxx-xxx-xxxx)");
                 nameLayout.setErrorEnabled(false);
-            } else if (dbForm.checkName(mName.getText().toString().toLowerCase())) {
+            } else if (dbForm.checkName(mName.getText().toString().toLowerCase().trim())) {
                 phoneLayout.setErrorEnabled(false);
                 nameLayout.setError("Duplicate name found \n Try something unique");
             }
-
             Toast.makeText(AddActivity.this,
                     "Fill all required filed with valid input",
                     Toast.LENGTH_LONG).show();
@@ -169,8 +167,12 @@ public class AddActivity extends AppCompatActivity {
             String cityText = mCity.getText().toString();
             String introText = mIntro.getText().toString();
 
-            dbForm.insertValue(nameText, emailText, phoneText,
-                    streetText, cityText, introText, byteArray);
+            for (int i = 0; i < 50; i++) {
+                dbForm.insertValue(nameText, emailText, phoneText,
+                        streetText, cityText, introText, byteArray);
+                dbForm.close();
+            }
+
 
             return true;
 
@@ -209,44 +211,36 @@ public class AddActivity extends AppCompatActivity {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        Bitmap yourSelectedImage = BitmapFactory.decodeStream(imageStream);
-        Matrix matrix = new Matrix();
+        Bitmap yourSelectedImage = transform(BitmapFactory.decodeStream(imageStream));
 
-        yourSelectedImage = Bitmap.createBitmap(yourSelectedImage, 0, 0,
-                yourSelectedImage.getWidth(),
-                yourSelectedImage.getHeight(), matrix, true);
-
-//        mPicture.setImageURI(selectedImage);
         mPicture.setImageBitmap(yourSelectedImage);
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         if (yourSelectedImage != null) {
-            yourSelectedImage.compress(Bitmap.CompressFormat.JPEG, 0, stream);
+            yourSelectedImage.compress(Bitmap.CompressFormat.JPEG, 30, stream);
         }
         byteArray = stream.toByteArray();
     }
 
-    public void getImageFromSdCard() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Select Photo Source")
-                .setMessage("Select Pictures From Media Library")
-                .setCancelable(false)
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+    public Bitmap transform(Bitmap source) {
+        int size = Math.min(source.getWidth(), source.getHeight());
+        int x = (source.getWidth() - size) / 4;
+        int y = (source.getHeight() - size) / 4;
+        Bitmap result = Bitmap.createBitmap(source, x, y, size, size);
+        if (result != source) {
+            source.recycle();
+        }
+        return result;
+    }
 
-                    }
-                })
-                .setPositiveButton("Select", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id1) {
-                        if (isExternalStoragePermissionGranted()) {
-                            Intent intent = new Intent(Intent.ACTION_PICK);
-                            intent.setType("image/*");
-                            startActivityForResult(intent, GALLERY_IMAGE);
-                        }
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
+    public void getImageFromSdCard() {
+
+        if (isExternalStoragePermissionGranted()) {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            startActivityForResult(intent, GALLERY_IMAGE);
+        }
+
     }
 
     public boolean isExternalStoragePermissionGranted() {
@@ -277,15 +271,10 @@ public class AddActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, "Permission is granted", Toast.LENGTH_SHORT).show();
-//                    Snackbar.make(findViewById(R.id.sv_scroll), "Permission is granted",
-//                            Snackbar.LENGTH_SHORT)
-//                            .show();
+                    getImageFromSdCard();
 
                 } else {
                     Toast.makeText(this, "Permission is Denied", Toast.LENGTH_SHORT).show();
-//                    Snackbar.make(findViewById(R.id.sv_scroll), "Permission is Denied",
-//                            Snackbar.LENGTH_SHORT)
-//                            .show();
                 }
             }
         }
@@ -304,4 +293,5 @@ public class AddActivity extends AppCompatActivity {
             }
         }
     }
+
 }

@@ -17,14 +17,17 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
+import java.lang.reflect.Method;
 
 public class UserDetailOperationActivity extends AppCompatActivity {
 
@@ -33,18 +36,18 @@ public class UserDetailOperationActivity extends AppCompatActivity {
 
     public String name, id, number, address, street, city, location, intro;
     public byte[] imgByte;
+    public Context context = UserDetailOperationActivity.this;
+    Button btCall, btSms, btEmail, btLocation;
+    DBForm dbForm;
+    RetrieveContactRecord record;
     private TextView mName, mPhoneNumber, mEmailAddress, mMapLocation, mIntro;
     private ImageView mDisplayPic;
-
-    public Context context = UserDetailOperationActivity.this;
-    DBForm db = new DBForm(this);
-    RetrieveContactRecord record;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail_operation);
-
+        dbForm = DBForm.getInstance(this);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -52,11 +55,17 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         }
 
         mDisplayPic = (ImageView) findViewById(R.id.iv_photo);
+
         mName = (TextView) findViewById(R.id.tv_name);
         mPhoneNumber = (TextView) findViewById(R.id.tv_phoneNumber);
         mEmailAddress = (TextView) findViewById(R.id.tv_emailAddress);
         mMapLocation = (TextView) findViewById(R.id.tv_location);
         mIntro = (TextView) findViewById(R.id.tv_info);
+
+        btCall = (Button) findViewById(R.id.bt_call);
+        btSms = (Button) findViewById(R.id.bt_sms);
+        btEmail = (Button) findViewById(R.id.bt_email);
+        btLocation = (Button) findViewById(R.id.bt_location);
 
         if (savedInstanceState == null) {
             getData();
@@ -74,21 +83,28 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         }
 
 
-        mPhoneNumber.setOnClickListener(new View.OnClickListener() {
+        btCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setCallOnClick();
             }
         });
 
-        mEmailAddress.setOnClickListener(new View.OnClickListener() {
+        btSms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openSmsOnClick();
+            }
+        });
+
+        btEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setEmailOnClick();
             }
         });
 
-        mMapLocation.setOnClickListener(new View.OnClickListener() {
+        btLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setLocationOnClick();
@@ -108,7 +124,8 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                                         sendDataToUpdate();
                                     } catch (TransactionTooLargeException e) {
                                         Toast.makeText(context,
-                                                "Too large data to handle", Toast.LENGTH_SHORT).show();
+                                                "Too large data to handle",
+                                                Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             })
@@ -118,7 +135,15 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         });
     }
 
-    private void sendDataToUpdate() throws TransactionTooLargeException{
+    private void openSmsOnClick() {
+        Uri uri = Uri.parse("smsto:" + number);
+        Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
+
+    private void sendDataToUpdate() throws TransactionTooLargeException {
         Intent intent = new Intent(this, UpdateActivity.class);
 //        intent.putExtra("NAME_INTENT", name);
         intent.putExtra("ID_INTENT", id);
@@ -135,7 +160,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         Bundle extra = getIntent().getExtras();
         if (extra != null) {
             id = extra.getString("ID_INTENT");
-            record = db.getSingleContactById(id);
+            record = dbForm.getSingleContactById(id);
             name = record.getName();
             address = record.getEmail();
             number = record.getPhone();
@@ -169,7 +194,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         } else {
             mDisplayPic.setImageResource(R.drawable.ic_person_pin);
         }
-        db.close();
+        dbForm.close();
     }
 
 
@@ -193,8 +218,10 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                         addContactIntent
                                 .putExtra(ContactsContract.Intents.Insert.NOTES, intro);
                         addContactIntent
-                                .putExtra(ContactsContract.Intents.Insert.POSTAL,location);
-                        startActivity(addContactIntent);
+                                .putExtra(ContactsContract.Intents.Insert.POSTAL, location);
+                        if (addContactIntent.resolveActivity(getPackageManager()) != null) {
+                            startActivity(addContactIntent);
+                        }
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -243,23 +270,14 @@ public class UserDetailOperationActivity extends AppCompatActivity {
 
     private void setCallOnClick() {
 
-        final AlertDialog.Builder dialog = new AlertDialog
-                .Builder(UserDetailOperationActivity.this)
-                .setTitle("Confirmation")
-                .setMessage("Call " + name + "?")
-                .setPositiveButton("Call", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(context, "Calling...",
-                                Toast.LENGTH_SHORT).show();
-
                         Intent mCallIntent = new Intent(Intent.ACTION_CALL);
                         mCallIntent.setData(Uri.parse("tel:" + number));
                         try {
                             if (isCallPermissionGranted()) {
                                 startActivity(mCallIntent);
                             } else {
-                                Snackbar.make(findViewById(R.id.sv_scroll), "Grant Permission to call",
+                                Snackbar.make(findViewById(R.id.sv_scroll),
+                                        "Grant Permission to call",
                                         Snackbar.LENGTH_SHORT)
                                         .show();
                             }
@@ -268,30 +286,13 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                                     Snackbar.LENGTH_SHORT)
                                     .show();
                         }
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-
-        AlertDialog alert = dialog.create();
-        alert.show();
     }
 
 
     private void setEmailOnClick() {
 
         if (!address.isEmpty()) {
-            final AlertDialog.Builder dialog = new AlertDialog
-                    .Builder(UserDetailOperationActivity.this)
-                    .setTitle("Confirmation")
-                    .setMessage("Send Email to " + address + "?")
-                    .setPositiveButton("Send Email", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+
                             Intent emailIntent = new Intent(Intent.ACTION_SEND);
 
                             emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{address});
@@ -299,17 +300,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                             emailIntent.setType("plain/text");
 
                             startActivity(Intent.createChooser(emailIntent, " Send... "));
-                        }
-                    })
-                    .setNegativeButton("Copy", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
 
-                        }
-                    });
-
-            AlertDialog alert = dialog.create();
-            alert.show();
         } else {
             Snackbar.make(findViewById(R.id.sv_scroll), "Email not found",
                     Snackbar.LENGTH_LONG)
@@ -334,31 +325,12 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         final Uri[] uri = new Uri[1];
         if (!location.equals(", ")) {
 
-            final AlertDialog.Builder dialog = new AlertDialog
-                    .Builder(UserDetailOperationActivity.this)
-                    .setTitle("Confirmation")
-                    .setMessage("Find Location in Map?")
-                    .setPositiveButton("GOTO Map", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
                             uri[0] = Uri.parse("geo:0,0?q=" + location);
                             Intent mapIntent = new Intent(Intent.ACTION_VIEW, uri[0]);
                             mapIntent.setPackage("com.google.android.apps.maps");
                             startActivity(mapIntent);
 
-                        }
-                    })
-                    .setNegativeButton("Copy", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            copyText();
 
-                        }
-                    });
-
-            AlertDialog alert = dialog.create();
-            alert.show();
         } else {
             Snackbar.make(findViewById(R.id.sv_scroll), "Location not found",
                     Snackbar.LENGTH_LONG)
@@ -377,23 +349,23 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         }
     }
 
-    private void copyText() {
-        android.content.ClipboardManager clipboard =
-                (android.content.ClipboardManager)
-                        getSystemService(Context.CLIPBOARD_SERVICE);
-        android.content.ClipData clip =
-                android.content.ClipData.newPlainText("", number);
-        clipboard.setPrimaryClip(clip);
-        Snackbar.make(findViewById(R.id.sv_scroll), "Text Copied",
-                Snackbar.LENGTH_SHORT)
-                .show();
-
-    }
+//    private void copyText() {
+//        android.content.ClipboardManager clipboard =
+//                (android.content.ClipboardManager)
+//                        getSystemService(Context.CLIPBOARD_SERVICE);
+//        android.content.ClipData clip =
+//                android.content.ClipData.newPlainText("", number);
+//        clipboard.setPrimaryClip(clip);
+//        Snackbar.make(findViewById(R.id.sv_scroll), "Text Copied",
+//                Snackbar.LENGTH_SHORT)
+//                .show();
+//
+//    }
 
     private void shareDetails() {
         String mimeType = "text/plain";
         String title = "Share with,";
-        String text = name + "\nPhn:" + number + "\nEmail:" + address;
+        String text = name.toUpperCase() + "\nPhone:" + number + "\nEmail:" + address;
         ShareCompat.IntentBuilder.from(this)
                 .setChooserTitle(title)
                 .setType(mimeType)
@@ -448,7 +420,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putString("ID_INTENT",id);
+        outState.putString("ID_INTENT", id);
         outState.putString("NAME_SAVED", name);
         outState.putString("EMAIL_SAVED", address);
         outState.putString("PHONE_SAVED", number);
@@ -463,6 +435,25 @@ public class UserDetailOperationActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.delete_contact, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected boolean onPrepareOptionsPanel(View view, Menu menu) {
+        if (menu != null) {
+            if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
+                try {
+                    Method m = menu.getClass().getDeclaredMethod(
+                            "setOptionalIconsVisible", Boolean.TYPE);
+                    m.setAccessible(true);
+                    m.invoke(menu, true);
+                } catch (NoSuchMethodException e) {
+                    Log.e("Menu Error", e.toString());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return super.onPrepareOptionsPanel(view, menu);
     }
 
     @Override

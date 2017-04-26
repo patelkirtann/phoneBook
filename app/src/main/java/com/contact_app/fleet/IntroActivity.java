@@ -90,6 +90,5 @@ public class IntroActivity extends AppIntro implements ISlideBackgroundColorHold
         ViewGroup container = (ViewGroup) findViewById(android.R.id.content);
         if (container != null)
             container.setBackgroundColor(backgroundColor);
-
     }
 }
