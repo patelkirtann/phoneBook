@@ -52,14 +52,12 @@ class CustomListAdapter extends ArrayAdapter<RetrieveContactRecord> {
 
         byte[] imgByte = currentUser.getPicture();
         if (imgByte != null) {
-//            ByteArrayInputStream imageStream = new ByteArrayInputStream(imgByte);
-//            holder.profileImage.setImageBitmap(BitmapFactory.decodeStream(imageStream));
+
             Glide.with(getContext())
                     .load(imgByte)
                     .into(holder.profileImage);
         }
         else {
-//            holder.profileImage.setImageResource(R.drawable.ic_person_round);
             Glide.with(getContext())
                     .load(R.drawable.ic_person_round)
                     .into(holder.profileImage);

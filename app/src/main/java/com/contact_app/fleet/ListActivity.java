@@ -2,17 +2,13 @@ package com.contact_app.fleet;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -23,22 +19,15 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.SubMenu;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
@@ -182,10 +171,8 @@ public class ListActivity extends AppCompatActivity implements DataListener {
             case R.id.link_share:
                 String mimeType = "text/plain";
                 String title = "Share";
-                String text = "Greetings, This application will save all of your temporary contacts and" +
-                        " gives the functionality to use those contacts as per the convenience." +
-                        "Download with the given link and share application with friends and family.\n" +
-                        "http://play.google.com/store/apps/details?id=com.contact_app.fleet";
+                String text =
+                        "https://play.google.com/store/apps/details?id=com.contact_app.fleet";
                 ShareCompat.IntentBuilder.from(this)
                         .setChooserTitle(title)
                         .setType(mimeType)
@@ -221,12 +208,12 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                         " you can move all of his details to your regular contact list with a single click.\n" +
                         "\n\n" +
                         "Features:\n" +
-                        "-Adding basic contact details\n" +
+                        "-Adding basic contact details with Picture\n" +
                         "-Accepts only Unique names for better understanding of person \n" +
                         "-Editing or Deleting contact with preference\n" +
                         "-Call, Email or Search location with a single click\n" +
                         "-Share information" +
-                        "-Search contact by their mName\n" +
+                        "-Search contact by their Name or their small introduction\n" +
                         "\n" +
                         "\n" +
                         "Version: " + versionName +
@@ -248,20 +235,20 @@ public class ListActivity extends AppCompatActivity implements DataListener {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+        AdapterView.AdapterContextMenuInfo info =
+                (AdapterView.AdapterContextMenuInfo) menuInfo;
 
-        menu.add(Menu.NONE, v.getId(), 0, "Call");
-        menu.add(Menu.NONE, v.getId(), 0, "SMS");
+        findName = mCustomListAdapter.getItem(info.position).getName();
+        number = dbForm.getPhoneByName(findName);
+
+        menu.setHeaderTitle(findName.toUpperCase() + ",");
+        menu.add(Menu.NONE, v.getId(), 0, "Call" );
+        menu.add(Menu.NONE, v.getId(), 0, "SMS" );
 
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-
-        AdapterView.AdapterContextMenuInfo info =
-                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
-        findName = mCustomListAdapter.getItem(info.position).getName();
-        number = dbForm.getPhoneByName(findName);
 
         switch (item.getTitle().toString()) {
             case "Call":

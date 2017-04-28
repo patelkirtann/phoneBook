@@ -80,22 +80,6 @@ class DBForm extends SQLiteOpenHelper {
         return true;
     }
 
-    ArrayList<String> getID() {
-        ArrayList<String> array_list = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cur = db.rawQuery("select " + CONTACTS_COLUMN_ID + " from " +
-                CONTACTS_TABLE_NAME, null);
-        cur.moveToFirst();
-
-        while (!cur.isAfterLast()) {
-            array_list.add(cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_ID)));
-            cur.moveToNext();
-        }
-        cur.close();
-        db.close();
-        return array_list;
-    }
-
     public ArrayList<String> getName() {
         ArrayList<String> array_list = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();

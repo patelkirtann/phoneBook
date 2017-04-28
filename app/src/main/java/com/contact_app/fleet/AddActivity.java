@@ -20,13 +20,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
-
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AddActivity extends AppCompatActivity {
@@ -77,7 +73,8 @@ public class AddActivity extends AppCompatActivity {
                 if (yourSelectedImage != null) {
                     rotate(degree);
                 } else {
-                    Toast.makeText(AddActivity.this, "Select Image first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddActivity.this,
+                            "Select Image first", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -93,8 +90,8 @@ public class AddActivity extends AppCompatActivity {
 
     private void rotate(int degree) {
         yourSelectedImage = ImageConverter.rotateImageBy(degree, yourSelectedImage);
-        mPicture.setImageBitmap(yourSelectedImage);
         imageByteArray = ImageConverter.convertToByteArray(yourSelectedImage);
+        Glide.with(this).load(imageByteArray).into(mPicture);
     }
 
     private void onSaveClicked() {

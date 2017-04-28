@@ -145,13 +145,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
 
     private void sendDataToUpdate() throws TransactionTooLargeException {
         Intent intent = new Intent(this, UpdateActivity.class);
-//        intent.putExtra("NAME_INTENT", name);
         intent.putExtra("ID_INTENT", id);
-//        intent.putExtra("PHONE_NUMBER_INTENT", number);
-//        intent.putExtra("EMAIL_ADDRESS_INTENT", address);
-//        intent.putExtra("STREET_INTENT", street);
-//        intent.putExtra("CITY_INTENT", city);
-//        intent.putExtra("INTRO_INTENT", intro);
 
         startActivityForResult(intent, 1);
     }
@@ -348,19 +342,6 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                     .show();
         }
     }
-
-//    private void copyText() {
-//        android.content.ClipboardManager clipboard =
-//                (android.content.ClipboardManager)
-//                        getSystemService(Context.CLIPBOARD_SERVICE);
-//        android.content.ClipData clip =
-//                android.content.ClipData.newPlainText("", number);
-//        clipboard.setPrimaryClip(clip);
-//        Snackbar.make(findViewById(R.id.sv_scroll), "Text Copied",
-//                Snackbar.LENGTH_SHORT)
-//                .show();
-//
-//    }
 
     private void shareDetails() {
         String mimeType = "text/plain";

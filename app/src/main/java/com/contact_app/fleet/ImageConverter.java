@@ -5,10 +5,6 @@ import android.graphics.Matrix;
 
 import java.io.ByteArrayOutputStream;
 
-/**
- * Created by kt_ki on 4/26/2017.
- */
-
 public class ImageConverter {
 
     public static Bitmap transform(Bitmap source) {

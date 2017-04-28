@@ -77,7 +77,8 @@
             android:layout_gravity="center"
             android:textAllCaps="true"
             android:textColor="@color/colorAccent"
-            android:textSize="32sp"
+            android:textSize="40sp"
+            android:textStyle="bold"
             android:visibility="gone" />
     </FrameLayout>
 </RelativeLayout>

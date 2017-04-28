@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.paolorotolo.appintro.AppIntro;
-import com.github.paolorotolo.appintro.AppIntro2Fragment;
+import com.github.paolorotolo.appintro.AppIntroFragment;
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 
 public class IntroActivity extends AppIntro implements ISlideBackgroundColorHolder {
@@ -28,20 +28,48 @@ public class IntroActivity extends AppIntro implements ISlideBackgroundColorHold
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            addSlide(AppIntro2Fragment.newInstance("First page", "Description", R.mipmap.ic_launcher,
+            addSlide(AppIntroFragment.newInstance("Add and Save",
+                    "Click on round add button to create new contact",
+                    R.drawable.add_save,
                     getResources().getColor(R.color.first_screen, null)));
-            addSlide(AppIntro2Fragment.newInstance("First page", "Description", R.mipmap.ic_launcher,
+
+            addSlide(AppIntroFragment.newInstance("Long Click",
+                    "Long press on any contact to get call/sms menu",
+                    R.drawable.long_click,
                     getResources().getColor(R.color.second_screen, null)));
-            addSlide(AppIntro2Fragment.newInstance("First page", "Description", R.mipmap.ic_launcher,
+
+            addSlide(AppIntroFragment.newInstance("Search By,",
+                    "Search contact by their Name or Introduction",
+                    R.drawable.name_intro,
                     getResources().getColor(R.color.third_screen, null)));
 
+            addSlide(AppIntroFragment.newInstance("Move To regular Contact",
+                    "When you feel the contact is valuable" +
+                            " then move them to your regular contact list",
+                    R.drawable.detail_move,
+                    getResources().getColor(R.color.fourth_screen, null)));
+
         } else {
-            addSlide(AppIntro2Fragment.newInstance("", "Description", R.mipmap.ic_launcher,
+            addSlide(AppIntroFragment.newInstance("Add and Save",
+                    "Click on round add button to create new contact",
+                    R.drawable.add_save,
                     getResources().getColor(R.color.first_screen)));
-            addSlide(AppIntro2Fragment.newInstance("First page", "Description", R.mipmap.ic_launcher,
+
+            addSlide(AppIntroFragment.newInstance("Long Click",
+                    "Long press on any contact to get call/sms menu",
+                    R.drawable.long_click,
                     getResources().getColor(R.color.second_screen)));
-            addSlide(AppIntro2Fragment.newInstance("First page", "Description", R.mipmap.ic_launcher,
+
+            addSlide(AppIntroFragment.newInstance("Search By,",
+                    "Search contact by their Name or Introduction",
+                    R.drawable.name_intro,
                     getResources().getColor(R.color.third_screen)));
+
+            addSlide(AppIntroFragment.newInstance("Move To regular Contact",
+                    "When you feel the contact is valuable" +
+                            " then move them to your regular contact list",
+                    R.drawable.detail_move,
+                    getResources().getColor(R.color.fourth_screen)));
         }
 
     }
@@ -83,6 +111,7 @@ public class IntroActivity extends AppIntro implements ISlideBackgroundColorHold
     public void onSlideChanged(@Nullable Fragment oldFragment, @Nullable Fragment newFragment) {
         super.onSlideChanged(oldFragment, newFragment);
         // Do something when the slide changes.
+
     }
 
     @Override

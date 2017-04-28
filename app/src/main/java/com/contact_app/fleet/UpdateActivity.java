@@ -112,8 +112,8 @@ public class UpdateActivity extends AppCompatActivity {
 
     private void rotate(int degree) {
         yourSelectedImage = ImageConverter.rotateImageBy(degree, yourSelectedImage);
-        imageView.setImageBitmap(yourSelectedImage);
         imageByteArray = ImageConverter.convertToByteArray(yourSelectedImage);
+        Glide.with(this).load(imageByteArray).into(imageView);
     }
 
     private boolean isNameEmpty(EditText edit) {
