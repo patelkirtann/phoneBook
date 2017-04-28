@@ -26,6 +26,7 @@ import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.SubMenu;
 import android.view.View;
 import android.widget.AbsListView;
@@ -46,7 +47,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
     public static final int DELETE_REQUEST_CODE = 1;
     public static final int UPDATE_RESULT_OK = 2;
     public static final int ADD_REQUEST_CODE = 3;
-    private static final int MY_PERMISSIONS_REQUEST_CALL_CONTACTS = 0;
+    private static final int MY_PERMISSIONS_REQUEST_CALL_CONTACTS = 1;
 
     public ListView mListNames;
     public DBForm dbForm;
@@ -60,6 +61,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
     public String sendId;
     public String number;
     boolean isDataChanged = true;
+    boolean onScroll = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +109,6 @@ public class ListActivity extends AppCompatActivity implements DataListener {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 position = mListNames.getPositionForView(view);
-
                 try {
                     Intent intent = new Intent(ListActivity.this,
                             UserDetailOperationActivity.class);
@@ -127,27 +128,38 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         });
 
 //         get the first visible position for the Alphabets on list scroll.
-//        mListNames.setOnScrollListener(new AbsListView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(AbsListView view, int scrollState) {
-//
-//                switcher.setVisibility(View.INVISIBLE);
-//            }
-//
-//            @Override
-//            public void onScroll(AbsListView view, int firstVisibleItem,
-//                                 int visibleItemCount, int totalItemCount) {
-//
-//                String first = (String) mListNames.getItemAtPosition(firstVisibleItem);
-//
-//                if (first != null) {
-//                    mCustomListAdapter.notifyDataSetChanged();
-//                    switcher.setText(first.charAt(0));
-//                }
-//
-//                switcher.setVisibility(View.VISIBLE);
-//            }
-//        });
+        mListNames.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (scrollState == SCROLL_STATE_IDLE) {
+                    switcher.setVisibility(View.GONE);
+                    Log.d("OnScrollCHanged", "not scrolling");
+                    onScroll = false;
+                }
+                if (scrollState == SCROLL_STATE_TOUCH_SCROLL) {
+                    onScroll = true;
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+                Log.d("OnScroll", "scrolling");
+
+                if (mCustomListAdapter != null && !view.isLayoutRequested() && onScroll) {
+                    int firstChar = mListNames.getFirstVisiblePosition();
+                    if (mListNames.getChildAt(0).getTop() < 0) {
+                        firstChar = (mListNames.getFirstVisiblePosition() + 1);
+                    }
+                    switcher.setText(
+                            mCustomListAdapter
+                                    .getItem(firstChar)
+                                    .getName().subSequence(0, 1));
+                    switcher.setVisibility(View.VISIBLE);
+
+                }
+            }
+        });
 
         mAddFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -239,7 +251,6 @@ public class ListActivity extends AppCompatActivity implements DataListener {
 
         menu.add(Menu.NONE, v.getId(), 0, "Call");
         menu.add(Menu.NONE, v.getId(), 0, "SMS");
-
 
     }
 
@@ -347,7 +358,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
 
     @Override
     public void onCompletion(ArrayList<RetrieveContactRecord> userRecords) {
-        progressDialog.dismiss();
+        onPause();
         mCustomListAdapter = new CustomListAdapter(this, userRecords);
 
         mListNames.setAdapter(mCustomListAdapter);
@@ -380,6 +391,12 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         }
     }
 
+    @Override
+    protected void onPause() {
+        progressDialog.dismiss();
+        super.onPause();
+    }
+
     public boolean isCallPermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(Manifest.permission.CALL_PHONE)
@@ -410,15 +427,11 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     makeCall(number);
-                    Snackbar.make(findViewById(R.id.activity_list), "Permission is granted",
-                            Snackbar.LENGTH_SHORT)
-                            .show();
+                    Toast.makeText(this, "Permission is granted", Toast.LENGTH_SHORT).show();
 
                 } else {
+                    Toast.makeText(this, "Permission is Denied", Toast.LENGTH_SHORT).show();
 
-                    Snackbar.make(findViewById(R.id.activity_list), "Permission is Denied",
-                            Snackbar.LENGTH_SHORT)
-                            .show();
                 }
             }
         }

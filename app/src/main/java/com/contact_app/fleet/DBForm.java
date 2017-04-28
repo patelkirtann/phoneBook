@@ -207,12 +207,12 @@ class DBForm extends SQLiteOpenHelper {
         return id;
     }
 
-    String getPhoneByName(String name) {
+    String getPhoneByName(String findName) {
         String phone;
         SQLiteDatabase db = this.getReadableDatabase();
         String qu = "select " + CONTACTS_COLUMN_PHONE + " from " + CONTACTS_TABLE_NAME
                 + " where " + CONTACTS_COLUMN_NAME
-                + " = '" + name + "'";
+                + " = '" + findName + "'";
         Cursor cur = db.rawQuery(qu, null);
         cur.moveToFirst();
         phone = cur.getString(cur.getColumnIndex(CONTACTS_COLUMN_PHONE));

@@ -44,7 +44,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/search_names"
             android:clipToPadding="false"
-            android:paddingBottom="72dp"/>
+            android:paddingBottom="80dp"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_addContact"
@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textAllCaps="true"
-            android:textColorHint="@color/colorAccent"
+            android:textColor="@color/colorAccent"
             android:textSize="32sp"
             android:visibility="gone" />
     </FrameLayout>

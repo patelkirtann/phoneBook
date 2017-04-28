@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.TransactionTooLargeException;
@@ -20,12 +19,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
@@ -35,16 +37,18 @@ public class UpdateActivity extends AppCompatActivity {
     private static final int GALLERY_IMAGE = 5;
     private static final int MY_PERMISSIONS_REQUEST_PICTURE_CONTACTS = 1;
     public EditText mName, mEmail, mPhone, mStreet, mCity, mIntro;
+    public ImageButton btClockwise;
+
     public String id, name, phone, email, street, city, intro;
-    public String originalName, originalEmail, originalPhone, originalStreet, originalCity, originalIntro;
+    public String originalName, originalEmail,
+            originalPhone, originalStreet, originalCity, originalIntro;
     public TextInputLayout nameLayout, emailLayout, phoneLayout;
 
-    public byte[] picture;
-    public byte[] originalPicture;
+    public byte[] imageByteArray;
+    public byte[] originalImageByteArray;
     public CircleImageView imageView;
-    public boolean check = true;
-    public boolean checkOriginal = false;
     public DBForm dbForm;
+    public Bitmap yourSelectedImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,13 +77,29 @@ public class UpdateActivity extends AppCompatActivity {
         mStreet = (EditText) findViewById(R.id.street_field);
         mCity = (EditText) findViewById(R.id.city_field);
         mIntro = (EditText) findViewById(R.id.tv_auto);
+
         imageView = (CircleImageView) findViewById(R.id.profile_image);
+        btClockwise = (ImageButton) findViewById(R.id.bt_rotate_clockwise);
+        btClockwise.setVisibility(View.GONE);
 
         try {
             getDataToAutoFill();
         } catch (TransactionTooLargeException e) {
             Toast.makeText(this, "Too large data to handle", Toast.LENGTH_SHORT).show();
         }
+
+        btClockwise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int degree = 90;
+                if (yourSelectedImage != null) {
+                    rotate(degree);
+                } else {
+                    Toast.makeText(UpdateActivity.this,
+                            "Select Image first", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +108,12 @@ public class UpdateActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void rotate(int degree) {
+        yourSelectedImage = ImageConverter.rotateImageBy(degree, yourSelectedImage);
+        imageView.setImageBitmap(yourSelectedImage);
+        imageByteArray = ImageConverter.convertToByteArray(yourSelectedImage);
     }
 
     private boolean isNameEmpty(EditText edit) {
@@ -125,11 +151,16 @@ public class UpdateActivity extends AppCompatActivity {
         originalIntro = record.getIntro();
         mIntro.setText(originalIntro);
 
-        picture = record.getPicture();
-        originalPicture = picture;
-        if (picture != null) {
-            ByteArrayInputStream imageStream = new ByteArrayInputStream(picture);
-            imageView.setImageBitmap(BitmapFactory.decodeStream(imageStream));
+        imageByteArray = record.getPicture();
+        originalImageByteArray = imageByteArray;
+        if (imageByteArray != null) {
+            ByteArrayInputStream imageStream = new ByteArrayInputStream(imageByteArray);
+            yourSelectedImage = BitmapFactory.decodeStream(imageStream);
+//            imageView.setImageBitmap(yourSelectedImage);
+            btClockwise.setVisibility(View.VISIBLE);
+            Glide.with(this).load(imageByteArray).asBitmap().into(imageView);
+        }else {
+            btClockwise.setVisibility(View.GONE);
         }
     }
 
@@ -169,31 +200,27 @@ public class UpdateActivity extends AppCompatActivity {
 
     }
 
-    public void updatePermission() {
-        //            Toast.makeText(this, "All values are same", Toast.LENGTH_SHORT).show();
-//            Toast.makeText(this, "New values found", Toast.LENGTH_SHORT).show();
-        checkOriginal = name.equals(originalName)
+    public boolean isValuesOriginal() {
+        return name.equals(originalName)
                 && email.equals(originalEmail)
                 && phone.equals(originalPhone)
                 && street.equals(originalStreet)
                 && city.equals(originalCity)
                 && intro.equals(originalIntro)
-                && Arrays.equals(picture, originalPicture);
-        if (!checkOriginal) {
+                && Arrays.equals(imageByteArray, originalImageByteArray);
+    }
+
+    public void updatePermission() {
+
+        if (!isValuesOriginal()) {
+
             if (!isNameEmpty(mName)
-                    && mPhone.length() >= 10
-                    && !dbForm.checkName(mName.getText().toString().toLowerCase().trim())) {
-                if (!mEmail.getText().toString().isEmpty()) {
-                    if (!isEmailValid(mEmail.getText().toString().trim())) {
-                        emailLayout.setError("Not a valid email");
-                        check = false;
-                    } else {
-                        emailLayout.setErrorEnabled(false);
-                        check = true;
-                    }
-                }
-                if (check) {
-                    final AlertDialog.Builder dialog = new AlertDialog.Builder(UpdateActivity.this);
+                    && mPhone.length() >= 10) {
+
+                if (isNameOk() && isEmailOk()) {
+
+                    final AlertDialog.Builder dialog =
+                            new AlertDialog.Builder(UpdateActivity.this);
                     dialog.setTitle("Confirmation")
                             .setIcon(R.drawable.ic_warning)
                             .setMessage("Update Contact?")
@@ -201,9 +228,8 @@ public class UpdateActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
 
-
                                     dbForm.updateContact(id, name, email,
-                                            phone, street, city, intro, picture);
+                                            phone, street, city, intro, imageByteArray);
                                     Intent intent = new Intent();
                                     intent.putExtra("ID_INTENT",
                                             id);
@@ -236,9 +262,6 @@ public class UpdateActivity extends AppCompatActivity {
                 } else if (mPhone.length() < 10) {
                     phoneLayout.setError("Put valid number(xxx-xxx-xxxx)");
                     nameLayout.setErrorEnabled(false);
-                } else if (dbForm.checkName(mName.getText().toString().toLowerCase().trim())) {
-                    phoneLayout.setErrorEnabled(false);
-                    nameLayout.setError("Try to give same/unique name");
                 }
                 Toast.makeText(UpdateActivity.this,
                         "Fill all required filed with valid input",
@@ -253,6 +276,37 @@ public class UpdateActivity extends AppCompatActivity {
         }
     }
 
+    public boolean isNameOk() {
+        boolean duplicateName = dbForm.checkName(
+                mName.getText()
+                        .toString()
+                        .toLowerCase()
+                        .trim());
+
+        if (mName.getText().toString().toLowerCase().trim().equals(originalName)){
+            return true;
+        } else if (duplicateName) {
+            phoneLayout.setErrorEnabled(false);
+            nameLayout.setError("Duplicate Name Found \nTry to give Same/Unique Name");
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    public boolean isEmailOk() {
+        if (!mEmail.getText().toString().isEmpty()) {
+            if (!isEmailValid(mEmail.getText().toString().trim())) {
+                emailLayout.setError("Not a valid email");
+                return false;
+            } else {
+                emailLayout.setErrorEnabled(false);
+                return true;
+            }
+        }
+        return true;
+    }
+
     public void setImageFromSdCard(Uri selectedImage) {
 
         InputStream imageStream = null;
@@ -261,51 +315,62 @@ public class UpdateActivity extends AppCompatActivity {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        Bitmap yourSelectedImage = BitmapFactory.decodeStream(imageStream);
-        Matrix matrix = new Matrix();
-//        matrix.postRotate(-90);
-        yourSelectedImage = Bitmap.createBitmap(yourSelectedImage, 0, 0,
-                yourSelectedImage.getWidth(),
-                yourSelectedImage.getHeight(), matrix, true);
-        imageView.setImageBitmap(yourSelectedImage);
 
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        if (yourSelectedImage != null) {
-            yourSelectedImage.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+        yourSelectedImage = ImageConverter.transform(BitmapFactory.decodeStream(imageStream));
+        try {
+            imageStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        picture = stream.toByteArray();
+
+//        imageView.setImageBitmap(yourSelectedImage);
+
+        imageByteArray = ImageConverter.convertToByteArray(yourSelectedImage);
+
+        Glide.with(this).load(imageByteArray).asBitmap().into(imageView);
+
     }
 
     public void getImageFromSdCard() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Select Photo Source")
-                .setMessage("Select Pictures From Media Library")
-                .setCancelable(false)
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
 
-                    }
-                })
-                .setPositiveButton("Select", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id1) {
-                        if (isExternalStoragePermissionGranted()) {
-                            Intent intent = new Intent(Intent.ACTION_PICK);
-                            intent.setType("image/*");
-                            startActivityForResult(intent, GALLERY_IMAGE);
+        if (imageByteArray != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Select Photo Source")
+                    .setMessage("Select Pictures From Media Library")
+                    .setCancelable(false)
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
                         }
+                    })
+                    .setPositiveButton("Select", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id1) {
+                            if (isExternalStoragePermissionGranted()) {
+                                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                                intent.setType("image/*");
+                                if (intent.resolveActivity(getPackageManager()) != null) {
+                                    startActivityForResult(intent, GALLERY_IMAGE);
+                                }
+                            }
 
-                    }
-                })
-                .setNeutralButton("Remove", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        picture = null;
-                        imageView.setImageResource(R.drawable.ic_add_a_photo);
-                    }
-                });
+                        }
+                    })
+                    .setNeutralButton("Remove", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            btClockwise.setVisibility(View.GONE);
+                            imageByteArray = null;
+                            imageView.setImageResource(R.drawable.ic_add_a_photo);
+                        }
+                    });
 
-        AlertDialog alert = builder.create();
-        alert.show();
+            AlertDialog alert = builder.create();
+            alert.show();
+        } else if (isExternalStoragePermissionGranted()) {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            startActivityForResult(intent, GALLERY_IMAGE);
+        }
     }
 
     public boolean isExternalStoragePermissionGranted() {
@@ -352,6 +417,7 @@ public class UpdateActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == GALLERY_IMAGE) {
+                btClockwise.setVisibility(View.VISIBLE);
 
                 Uri selectedImage = data.getData();
                 setImageFromSdCard(selectedImage);
@@ -365,4 +431,7 @@ public class UpdateActivity extends AppCompatActivity {
         setResult(RESULT_CANCELED);
         super.onBackPressed();
     }
+
+
+
 }

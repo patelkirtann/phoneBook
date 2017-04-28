@@ -18,9 +18,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
+
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
@@ -31,9 +34,11 @@ public class AddActivity extends AppCompatActivity {
     private static final int GALLERY_IMAGE = 5;
     private static final int MY_PERMISSIONS_REQUEST_PICTURE_CONTACTS = 1;
     public EditText mName, mEmail, mPhone, mStreet, mCity, mIntro;
+    public ImageButton btClockwise;
     public DBForm dbForm;
     public TextInputLayout nameLayout, emailLayout, phoneLayout;
-    byte[] byteArray;
+    public byte[] imageByteArray = null;
+    public Bitmap yourSelectedImage = null;
     boolean check = true;
     private CircleImageView mPicture;
 
@@ -62,6 +67,21 @@ public class AddActivity extends AppCompatActivity {
         mCity = (EditText) findViewById(R.id.city_field);
         mIntro = (EditText) findViewById(R.id.tv_auto);
 
+        btClockwise = (ImageButton) findViewById(R.id.bt_rotate_clockwise);
+        btClockwise.setVisibility(View.GONE);
+
+        btClockwise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int degree = 90;
+                if (yourSelectedImage != null) {
+                    rotate(degree);
+                } else {
+                    Toast.makeText(AddActivity.this, "Select Image first", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         mPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,6 +89,12 @@ public class AddActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void rotate(int degree) {
+        yourSelectedImage = ImageConverter.rotateImageBy(degree, yourSelectedImage);
+        mPicture.setImageBitmap(yourSelectedImage);
+        imageByteArray = ImageConverter.convertToByteArray(yourSelectedImage);
     }
 
     private void onSaveClicked() {
@@ -85,44 +111,39 @@ public class AddActivity extends AppCompatActivity {
                 }
             }
             if (check) {
-                if (addedToRecords()) {
-                    nameLayout.setErrorEnabled(false);
-                    phoneLayout.setErrorEnabled(false);
-                    emailLayout.setErrorEnabled(false);
-
-                    final AlertDialog.Builder dialog = new AlertDialog.Builder(AddActivity.this);
-                    dialog.setTitle("Confirmation");
-                    dialog.setMessage("Save Contact?");
-                    dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
+                final AlertDialog.Builder dialog = new AlertDialog.Builder(AddActivity.this);
+                dialog.setTitle("Confirmation");
+                dialog.setMessage("Save Contact?");
+                dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (addedToRecords()) {
+                            nameLayout.setErrorEnabled(false);
+                            phoneLayout.setErrorEnabled(false);
+                            emailLayout.setErrorEnabled(false);
                             Toast.makeText(AddActivity.this, " Contact Saved ",
                                     Toast.LENGTH_SHORT).show();
                             setResult(RESULT_OK);
                             onBackPressed();
-
                         }
-                    });
-                    dialog.setNegativeButton("Discard", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Toast.makeText(AddActivity.this, " Discarded ", Toast.LENGTH_SHORT).show();
-                            onBackPressed();
-                        }
-                    });
+                    }
+                });
+                dialog.setNegativeButton("Discard", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(AddActivity.this, " Discarded ", Toast.LENGTH_SHORT).show();
+                        onBackPressed();
+                    }
+                });
 
-                    dialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                dialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 //                    Toast.makeText(AddActivity.this, "Nothing changed", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    AlertDialog alert = dialog.create();
-                    alert.show();
-                } else {
-                    Toast.makeText(AddActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
-                }
+                    }
+                });
+                AlertDialog alert = dialog.create();
+                alert.show();
             } else {
 
                 Toast.makeText(AddActivity.this,
@@ -167,12 +188,9 @@ public class AddActivity extends AppCompatActivity {
             String cityText = mCity.getText().toString();
             String introText = mIntro.getText().toString();
 
-            for (int i = 0; i < 50; i++) {
-                dbForm.insertValue(nameText, emailText, phoneText,
-                        streetText, cityText, introText, byteArray);
-                dbForm.close();
-            }
-
+            dbForm.insertValue(nameText, emailText, phoneText,
+                    streetText, cityText, introText, imageByteArray);
+            dbForm.close();
 
             return true;
 
@@ -211,31 +229,53 @@ public class AddActivity extends AppCompatActivity {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        Bitmap yourSelectedImage = transform(BitmapFactory.decodeStream(imageStream));
+        yourSelectedImage = ImageConverter.transform(BitmapFactory.decodeStream(imageStream));
 
-        mPicture.setImageBitmap(yourSelectedImage);
+//        mPicture.setImageBitmap(yourSelectedImage);
 
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        if (yourSelectedImage != null) {
-            yourSelectedImage.compress(Bitmap.CompressFormat.JPEG, 30, stream);
-        }
-        byteArray = stream.toByteArray();
-    }
+        imageByteArray = ImageConverter.convertToByteArray(yourSelectedImage);
 
-    public Bitmap transform(Bitmap source) {
-        int size = Math.min(source.getWidth(), source.getHeight());
-        int x = (source.getWidth() - size) / 4;
-        int y = (source.getHeight() - size) / 4;
-        Bitmap result = Bitmap.createBitmap(source, x, y, size, size);
-        if (result != source) {
-            source.recycle();
-        }
-        return result;
+        Glide.with(this).load(imageByteArray).asBitmap().into(mPicture);
     }
 
     public void getImageFromSdCard() {
+        if (imageByteArray != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Select Photo Source")
+                    .setMessage("Select Pictures From Media Library")
+                    .setCancelable(false)
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
 
-        if (isExternalStoragePermissionGranted()) {
+                        }
+                    })
+                    .setPositiveButton("Select", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id1) {
+
+
+                            if (isExternalStoragePermissionGranted()) {
+                                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                                intent.setType("image/*");
+                                if (intent.resolveActivity(getPackageManager()) != null) {
+                                    startActivityForResult(intent, GALLERY_IMAGE);
+                                }
+                            }
+
+                        }
+                    })
+                    .setNeutralButton("Remove", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            btClockwise.setVisibility(View.GONE);
+
+                            imageByteArray = null;
+                            mPicture.setImageResource(R.drawable.ic_add_a_photo);
+                        }
+                    });
+
+            AlertDialog alert = builder.create();
+            alert.show();
+        } else if (isExternalStoragePermissionGranted()) {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
             startActivityForResult(intent, GALLERY_IMAGE);
@@ -286,6 +326,7 @@ public class AddActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == GALLERY_IMAGE) {
+                btClockwise.setVisibility(View.VISIBLE);
 
                 Uri selectedImage = data.getData();
                 setImageFromSdCard(selectedImage);

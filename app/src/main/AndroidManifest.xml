@@ -3,10 +3,8 @@
     package="com.contact_app.fleet">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -31,10 +29,13 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name="com.contact_app.fleet.AddActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name="com.contact_app.fleet.UserDetailOperationActivity" />
+        <activity
+            android:name="com.contact_app.fleet.UserDetailOperationActivity" />
         <activity
             android:name="com.contact_app.fleet.UpdateActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".IntroActivity"

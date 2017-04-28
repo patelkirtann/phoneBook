@@ -9,6 +9,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.paolorotolo.appintro.AppIntro;
@@ -20,6 +21,10 @@ public class IntroActivity extends AppIntro implements ISlideBackgroundColorHold
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

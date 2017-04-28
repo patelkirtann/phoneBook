@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">F L E E T</string>
+    <string name="app_name">Fleet</string>
     <string name="multiautocompletetextview">MultiAutoCompleteTextView</string>
     <string name="city">City</string>
     <string name="email">Email</string>
@@ -38,4 +38,6 @@
     <string name="mobile">Mobile</string>
     <string name="add_email">Add Email</string>
     <string name="add_location">Add Location</string>
+    <string name="anti_clockwise">antiClockwise</string>
+    <string name="clockwise">Clockwise</string>
 </resources>
