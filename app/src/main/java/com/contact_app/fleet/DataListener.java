@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 interface DataListener {
     void onPreExecute();
+
     void onProgress(int progress);
+
     void onCompletion(ArrayList<RetrieveContactRecord> userRecords);
 }

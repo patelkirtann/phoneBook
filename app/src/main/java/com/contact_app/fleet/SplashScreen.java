@@ -35,7 +35,7 @@ public class SplashScreen extends AppCompatActivity {
                         SharedPreferences.Editor editor = mPrefs.edit();
                         editor.putBoolean(welcomeScreenShownPref, true);
                         editor.apply();
-                    }else {
+                    } else {
                         startActivity(i);
                         finish();
                     }

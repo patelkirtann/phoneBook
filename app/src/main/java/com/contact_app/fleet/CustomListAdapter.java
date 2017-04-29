@@ -1,8 +1,6 @@
 package com.contact_app.fleet;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -11,9 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.model.ModelLoader;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -56,8 +52,7 @@ class CustomListAdapter extends ArrayAdapter<RetrieveContactRecord> {
             Glide.with(getContext())
                     .load(imgByte)
                     .into(holder.profileImage);
-        }
-        else {
+        } else {
             Glide.with(getContext())
                     .load(R.drawable.ic_person_round)
                     .into(holder.profileImage);

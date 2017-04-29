@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
 import java.sql.Blob;
 import java.util.ArrayList;
 
@@ -25,15 +26,15 @@ class DBForm extends SQLiteOpenHelper {
 
     private static DBForm dbForm = null;
 
-    static DBForm getInstance(Context context){
-        if (dbForm == null){
+    DBForm(Context context) {
+        super(context, DATABASE_NAME, null, 3);
+    }
+
+    static DBForm getInstance(Context context) {
+        if (dbForm == null) {
             dbForm = new DBForm(context.getApplicationContext());
         }
         return dbForm;
-    }
-
-    DBForm(Context context) {
-        super(context, DATABASE_NAME, null, 3);
     }
 
     @Override
@@ -129,7 +130,7 @@ class DBForm extends SQLiteOpenHelper {
         RetrieveContactRecord userRecord = new RetrieveContactRecord();
         SQLiteDatabase db = this.getReadableDatabase();
         String qu = "select * from " + CONTACTS_TABLE_NAME + " where " + CONTACTS_COLUMN_ID
-                + " = " + id ;
+                + " = " + id;
         Cursor cur = db.rawQuery(qu, null);
         cur.moveToFirst();
 

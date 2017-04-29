@@ -25,11 +25,12 @@
         android:layout_below="@id/search_names"
         android:layout_margin="8dp"
         android:text="@string/my_contacts" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/divider"
-        android:layout_below="@id/tv_my_contacts"/>
+        android:layout_below="@id/tv_my_contacts"
+        android:background="@color/divider" />
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -44,7 +45,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/search_names"
             android:clipToPadding="false"
-            android:paddingBottom="80dp"/>
+            android:paddingBottom="80dp" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_addContact"

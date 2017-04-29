@@ -96,7 +96,7 @@ public class UpdateActivity extends AppCompatActivity {
                     rotate(degree);
                 } else {
                     Toast.makeText(UpdateActivity.this,
-                            "Select Image first", Toast.LENGTH_SHORT).show();
+                            "Select an Image first", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -156,17 +156,17 @@ public class UpdateActivity extends AppCompatActivity {
         if (imageByteArray != null) {
             ByteArrayInputStream imageStream = new ByteArrayInputStream(imageByteArray);
             yourSelectedImage = BitmapFactory.decodeStream(imageStream);
-//            imageView.setImageBitmap(yourSelectedImage);
+
             btClockwise.setVisibility(View.VISIBLE);
             Glide.with(this).load(imageByteArray).asBitmap().into(imageView);
-        }else {
+        } else {
             btClockwise.setVisibility(View.GONE);
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.update_contact, menu);
+        getMenuInflater().inflate(R.menu.update_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -253,24 +253,24 @@ public class UpdateActivity extends AppCompatActivity {
                     alert.show();
                 } else {
                     Toast.makeText(UpdateActivity.this,
-                            "Fill all required filed with valid input",
+                            "Fill all required filed with a valid input",
                             Toast.LENGTH_LONG).show();
                 }
             } else {
                 if (isNameEmpty(mName)) {
-                    nameLayout.setError("Put valid name(2 or more character)");
+                    nameLayout.setError("Put a valid Name(2 or more character)");
                 } else if (mPhone.length() < 10) {
-                    phoneLayout.setError("Put valid number(xxx-xxx-xxxx)");
+                    phoneLayout.setError("Put a valid Number(XXX-XXX-XXXX)");
                     nameLayout.setErrorEnabled(false);
                 }
                 Toast.makeText(UpdateActivity.this,
-                        "Fill all required filed with valid input",
+                        "Fill all required filed with a valid input",
                         Toast.LENGTH_LONG).show();
             }
         } else {
             Toast.makeText(UpdateActivity.this,
                     "No Data Updated. Please modify data" +
-                            " and press Update or Click Back",
+                            " and Click Update or Click Back",
                     Toast.LENGTH_LONG).show();
 
         }
@@ -283,13 +283,13 @@ public class UpdateActivity extends AppCompatActivity {
                         .toLowerCase()
                         .trim());
 
-        if (mName.getText().toString().toLowerCase().trim().equals(originalName)){
+        if (mName.getText().toString().toLowerCase().trim().equals(originalName)) {
             return true;
         } else if (duplicateName) {
             phoneLayout.setErrorEnabled(false);
-            nameLayout.setError("Duplicate Name Found \nTry to give Same/Unique Name");
+            nameLayout.setError("Duplicate Name Found \nTry to give the Same/Unique Name");
             return false;
-        }else {
+        } else {
             return true;
         }
     }
@@ -335,7 +335,7 @@ public class UpdateActivity extends AppCompatActivity {
 
         if (imageByteArray != null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Select Photo Source")
+            builder.setTitle("Select Source")
                     .setMessage("Select Pictures From Media Library")
                     .setCancelable(false)
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -400,11 +400,11 @@ public class UpdateActivity extends AppCompatActivity {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Permission is granted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
 
 
                 } else {
-                    Toast.makeText(this, "Permission is Denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -431,7 +431,6 @@ public class UpdateActivity extends AppCompatActivity {
         setResult(RESULT_CANCELED);
         super.onBackPressed();
     }
-
 
 
 }

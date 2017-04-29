@@ -18,7 +18,7 @@ public class ImageConverter {
         return yourSelectedImage;
     }
 
-    public static Bitmap rotateImageBy(int degree , Bitmap yourSelectedImage) {
+    public static Bitmap rotateImageBy(int degree, Bitmap yourSelectedImage) {
 
         Matrix matrix = new Matrix();
         matrix.postRotate(degree);

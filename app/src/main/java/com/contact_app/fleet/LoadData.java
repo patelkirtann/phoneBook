@@ -1,6 +1,7 @@
 package com.contact_app.fleet;
 
 import android.os.AsyncTask;
+
 import java.util.ArrayList;
 
 class LoadData extends AsyncTask<Object, Object, ArrayList<RetrieveContactRecord>> {

@@ -20,9 +20,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
+
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AddActivity extends AppCompatActivity {
@@ -100,7 +103,7 @@ public class AddActivity extends AppCompatActivity {
                 && !dbForm.checkName(mName.getText().toString().toLowerCase().trim())) {
             if (!mEmail.getText().toString().isEmpty()) {
                 if (!isEmailValid(mEmail.getText().toString().trim())) {
-                    emailLayout.setError("Not a valid email");
+                    emailLayout.setError("Not a valid Email");
                     check = false;
                 } else {
                     emailLayout.setErrorEnabled(false);
@@ -144,21 +147,21 @@ public class AddActivity extends AppCompatActivity {
             } else {
 
                 Toast.makeText(AddActivity.this,
-                        "Fill all required filed with valid input",
+                        "Fill all required filed with a valid input",
                         Toast.LENGTH_LONG).show();
             }
         } else {
             if (isNameEmpty(mName)) {
-                nameLayout.setError("Put valid name(2 or more character)");
+                nameLayout.setError("Put a valid Name(2 or more character)");
             } else if (mPhone.length() < 10) {
-                phoneLayout.setError("Put valid number(xxx-xxx-xxxx)");
+                phoneLayout.setError("Put a valid Number(XXX-XXX-XXXX)");
                 nameLayout.setErrorEnabled(false);
             } else if (dbForm.checkName(mName.getText().toString().toLowerCase().trim())) {
                 phoneLayout.setErrorEnabled(false);
-                nameLayout.setError("Duplicate name found \n Try something unique");
+                nameLayout.setError("Duplicate Name found \n Try something Unique");
             }
             Toast.makeText(AddActivity.this,
-                    "Fill all required filed with valid input",
+                    "Fill all required filed with a valid input",
                     Toast.LENGTH_LONG).show();
         }
     }
@@ -192,7 +195,7 @@ public class AddActivity extends AppCompatActivity {
             return true;
 
         } catch (Exception e) {
-            Toast.makeText(this, "Something went wrong while saving contact",
+            Toast.makeText(this, "Something went wrong while saving the contact",
                     Toast.LENGTH_SHORT).show();
             e.printStackTrace();
             return false;
@@ -201,7 +204,7 @@ public class AddActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.save_contact, menu);
+        getMenuInflater().inflate(R.menu.save_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -238,7 +241,7 @@ public class AddActivity extends AppCompatActivity {
     public void getImageFromSdCard() {
         if (imageByteArray != null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Select Photo Source")
+            builder.setTitle("Select Source")
                     .setMessage("Select Pictures From Media Library")
                     .setCancelable(false)
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -307,11 +310,11 @@ public class AddActivity extends AppCompatActivity {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Permission is granted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
                     getImageFromSdCard();
 
                 } else {
-                    Toast.makeText(this, "Permission is Denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
                 }
             }
         }

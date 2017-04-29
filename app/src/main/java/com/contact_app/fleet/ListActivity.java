@@ -28,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
@@ -161,7 +162,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.share_details, menu);
+        getMenuInflater().inflate(R.menu.list_activity_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -241,9 +242,9 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         findName = mCustomListAdapter.getItem(info.position).getName();
         number = dbForm.getPhoneByName(findName);
 
-        menu.setHeaderTitle(findName.toUpperCase() + ",");
-        menu.add(Menu.NONE, v.getId(), 0, "Call" );
-        menu.add(Menu.NONE, v.getId(), 0, "SMS" );
+        menu.setHeaderTitle(findName.toUpperCase());
+        menu.add(Menu.NONE, v.getId(), 0, "Call");
+        menu.add(Menu.NONE, v.getId(), 0, "SMS");
 
     }
 
@@ -257,7 +258,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                         makeCall(number);
                     } else {
                         Snackbar.make(findViewById(R.id.activity_list),
-                                "Grant permission to make Call", Snackbar.LENGTH_LONG);
+                                "Grant permission to make a Call", Snackbar.LENGTH_LONG);
                     }
                 } catch (Exception e) {
                     Toast.makeText(this, "Try Again", Toast.LENGTH_SHORT).show();
@@ -294,6 +295,8 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
+        } else {
+            Toast.makeText(this, "No Application found to handle this Action.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -302,6 +305,8 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         mCallIntent.setData(Uri.parse("tel:" + number));
         if (mCallIntent.resolveActivity(getPackageManager()) != null) {
             startActivity(mCallIntent);
+        } else {
+            Toast.makeText(this, "No Application found to handle this Action.", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -414,10 +419,10 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     makeCall(number);
-                    Toast.makeText(this, "Permission is granted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
 
                 } else {
-                    Toast.makeText(this, "Permission is Denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
 
                 }
             }

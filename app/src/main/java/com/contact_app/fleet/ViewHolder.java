@@ -10,7 +10,7 @@ class ViewHolder {
     TextView txtIntro;
     CircleImageView profileImage;
 
-    ViewHolder(View viewConverter){
+    ViewHolder(View viewConverter) {
         txtName = (TextView) viewConverter.findViewById(R.id.list_names);
         profileImage = (CircleImageView) viewConverter.findViewById(R.id.profile_image);
         txtIntro = (TextView) viewConverter.findViewById(R.id.list_intro);

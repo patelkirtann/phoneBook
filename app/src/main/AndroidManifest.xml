@@ -31,8 +31,7 @@
             android:name="com.contact_app.fleet.AddActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name="com.contact_app.fleet.UserDetailOperationActivity" />
+        <activity android:name="com.contact_app.fleet.UserDetailOperationActivity" />
         <activity
             android:name="com.contact_app.fleet.UpdateActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"

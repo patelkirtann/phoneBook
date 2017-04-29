@@ -264,22 +264,22 @@ public class UserDetailOperationActivity extends AppCompatActivity {
 
     private void setCallOnClick() {
 
-                        Intent mCallIntent = new Intent(Intent.ACTION_CALL);
-                        mCallIntent.setData(Uri.parse("tel:" + number));
-                        try {
-                            if (isCallPermissionGranted()) {
-                                startActivity(mCallIntent);
-                            } else {
-                                Snackbar.make(findViewById(R.id.sv_scroll),
-                                        "Grant Permission to call",
-                                        Snackbar.LENGTH_SHORT)
-                                        .show();
-                            }
-                        } catch (Exception e) {
-                            Snackbar.make(findViewById(R.id.sv_scroll), "Try Again",
-                                    Snackbar.LENGTH_SHORT)
-                                    .show();
-                        }
+        Intent mCallIntent = new Intent(Intent.ACTION_CALL);
+        mCallIntent.setData(Uri.parse("tel:" + number));
+        try {
+            if (isCallPermissionGranted()) {
+                startActivity(mCallIntent);
+            } else {
+                Snackbar.make(findViewById(R.id.sv_scroll),
+                        "Grant Permission to call",
+                        Snackbar.LENGTH_SHORT)
+                        .show();
+            }
+        } catch (Exception e) {
+            Snackbar.make(findViewById(R.id.sv_scroll), "Try Again",
+                    Snackbar.LENGTH_SHORT)
+                    .show();
+        }
     }
 
 
@@ -287,13 +287,12 @@ public class UserDetailOperationActivity extends AppCompatActivity {
 
         if (!address.isEmpty()) {
 
-                            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
 
-                            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{address});
-                            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Sending from Fleet");
-                            emailIntent.setType("plain/text");
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{address});
+            emailIntent.setType("plain/text");
 
-                            startActivity(Intent.createChooser(emailIntent, " Send... "));
+            startActivity(Intent.createChooser(emailIntent, " Send... "));
 
         } else {
             Snackbar.make(findViewById(R.id.sv_scroll), "Email not found",
@@ -319,10 +318,10 @@ public class UserDetailOperationActivity extends AppCompatActivity {
         final Uri[] uri = new Uri[1];
         if (!location.equals(", ")) {
 
-                            uri[0] = Uri.parse("geo:0,0?q=" + location);
-                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, uri[0]);
-                            mapIntent.setPackage("com.google.android.apps.maps");
-                            startActivity(mapIntent);
+            uri[0] = Uri.parse("geo:0,0?q=" + location);
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, uri[0]);
+            mapIntent.setPackage("com.google.android.apps.maps");
+            startActivity(mapIntent);
 
 
         } else {
@@ -383,13 +382,13 @@ public class UserDetailOperationActivity extends AppCompatActivity {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Snackbar.make(findViewById(R.id.sv_scroll), "Permission is granted",
+                    Snackbar.make(findViewById(R.id.sv_scroll), "Permission granted",
                             Snackbar.LENGTH_SHORT)
                             .show();
 
                 } else {
 
-                    Snackbar.make(findViewById(R.id.sv_scroll), "Permission is Denied",
+                    Snackbar.make(findViewById(R.id.sv_scroll), "Permission Denied",
                             Snackbar.LENGTH_SHORT)
                             .show();
                 }
@@ -414,7 +413,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.delete_contact, menu);
+        getMenuInflater().inflate(R.menu.user_detail_activity_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

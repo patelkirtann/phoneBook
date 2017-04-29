@@ -29,21 +29,21 @@ public class IntroActivity extends AppIntro implements ISlideBackgroundColorHold
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             addSlide(AppIntroFragment.newInstance("Add and Save",
-                    "Click on round add button to create new contact",
+                    "Click on round add button to create a new contact",
                     R.drawable.add_save,
                     getResources().getColor(R.color.first_screen, null)));
 
             addSlide(AppIntroFragment.newInstance("Long Click",
-                    "Long press on any contact to get call/sms menu",
+                    "Long press on any contact to get the call/sms menu",
                     R.drawable.long_click,
                     getResources().getColor(R.color.second_screen, null)));
 
-            addSlide(AppIntroFragment.newInstance("Search By,",
-                    "Search contact by their Name or Introduction",
+            addSlide(AppIntroFragment.newInstance("Search By",
+                    "Search contacts by their Name or Introduction",
                     R.drawable.name_intro,
                     getResources().getColor(R.color.third_screen, null)));
 
-            addSlide(AppIntroFragment.newInstance("Move To regular Contact",
+            addSlide(AppIntroFragment.newInstance("Move To regular Contacts",
                     "When you feel the contact is valuable" +
                             " then move them to your regular contact list",
                     R.drawable.detail_move,
@@ -51,21 +51,21 @@ public class IntroActivity extends AppIntro implements ISlideBackgroundColorHold
 
         } else {
             addSlide(AppIntroFragment.newInstance("Add and Save",
-                    "Click on round add button to create new contact",
+                    "Click on round add button to create a new contact",
                     R.drawable.add_save,
                     getResources().getColor(R.color.first_screen)));
 
             addSlide(AppIntroFragment.newInstance("Long Click",
-                    "Long press on any contact to get call/sms menu",
+                    "Long press on any contact to get the call/sms menu",
                     R.drawable.long_click,
                     getResources().getColor(R.color.second_screen)));
 
-            addSlide(AppIntroFragment.newInstance("Search By,",
-                    "Search contact by their Name or Introduction",
+            addSlide(AppIntroFragment.newInstance("Search By",
+                    "Search contacts by their Name or Introduction",
                     R.drawable.name_intro,
                     getResources().getColor(R.color.third_screen)));
 
-            addSlide(AppIntroFragment.newInstance("Move To regular Contact",
+            addSlide(AppIntroFragment.newInstance("Move To regular Contacts",
                     "When you feel the contact is valuable" +
                             " then move them to your regular contact list",
                     R.drawable.detail_move,
