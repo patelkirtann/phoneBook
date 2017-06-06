@@ -33,6 +33,7 @@ import android.widget.Toast;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+// DataListener is an Interface which will Listen for the Data from the DataBase.
 public class ListActivity extends AppCompatActivity implements DataListener {
 
     public static final int DELETE_REQUEST_CODE = 1;
@@ -59,6 +60,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
+        // Database class instance to use methods of database class.
         dbForm = DBForm.getInstance(this);
 
         mListNames = (ListView) findViewById(android.R.id.list);
@@ -72,8 +74,11 @@ public class ListActivity extends AppCompatActivity implements DataListener {
 
         mInformationText.setText("No Contacts");
         mListNames.setEmptyView(mInformationText);
+
+        // To populate the context menu we need to register a view for it which here is a Listview.
         registerForContextMenu(mListNames);
 
+        // The search bar function to search through The list of contacts via Name or Description.
         mSearch.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -96,6 +101,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
             }
         });
 
+        // The list where click on contact will get you the Detailed of that contact.
         mListNames.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -118,7 +124,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
             }
         });
 
-//         get the first visible position for the Alphabets on list scroll.
+        // get the first visible position for the Alphabets on list scroll.
         mListNames.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -132,6 +138,8 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                 }
             }
 
+            // When user will scroll the list, This function will get the first letter of
+            // first visible item in the list
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem,
                                  int visibleItemCount, int totalItemCount) {
@@ -152,6 +160,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
             }
         });
 
+        // The floating action button to add contacts.
         mAddFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -161,12 +170,14 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         });
     }
 
+    // Creates the option menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.list_activity_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
+    // The menu options and their operations are defined here
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -234,8 +245,10 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         return super.onOptionsItemSelected(item);
     }
 
+    // The context menu will open when your long click on any contact to access quick functionality.
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         AdapterView.AdapterContextMenuInfo info =
                 (AdapterView.AdapterContextMenuInfo) menuInfo;
@@ -249,6 +262,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
 
     }
 
+    // The context menu options and their operations are defined here
     @Override
     public boolean onContextItemSelected(MenuItem item) {
 
@@ -272,6 +286,8 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         return true;
     }
 
+
+    // This function let us add the Icons with the text in the Menu.
     @Override
     protected boolean onPrepareOptionsPanel(View view, Menu menu) {
         if (menu != null) {
@@ -291,27 +307,32 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         return super.onPrepareOptionsPanel(view, menu);
     }
 
+    // This will call the intent to open the default SMS service on the phone.
     private void sendSms(String number) {
         Uri uri = Uri.parse("smsto:" + number);
         Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         } else {
-            Toast.makeText(this, "No Application found to handle this Action.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No Application found to handle this Action.",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
+    // This will directly call the contact apon click.
     private void makeCall(String number) {
         Intent mCallIntent = new Intent(Intent.ACTION_CALL);
         mCallIntent.setData(Uri.parse("tel:" + number));
         if (mCallIntent.resolveActivity(getPackageManager()) != null) {
             startActivity(mCallIntent);
         } else {
-            Toast.makeText(this, "No Application found to handle this Action.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No Application found to handle this Action.",
+                    Toast.LENGTH_SHORT).show();
         }
 
     }
 
+    // The contact list data is loaded every time if there is a change in the list on onResume method.
     @Override
     protected void onResume() {
         super.onResume();
@@ -328,12 +349,13 @@ public class ListActivity extends AppCompatActivity implements DataListener {
 
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-//        onRestart();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+////        onRestart();
+//    }
 
+    // This is DataListener interface method which will show a progress bar until all the data is Loaded.
     @Override
     public void onPreExecute() {
         progressDialog = new ProgressDialog(this);
@@ -349,6 +371,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
 
     }
 
+    // This method loads the data in the background in the list from created Database.
     @Override
     public void onCompletion(ArrayList<RetrieveContactRecord> userRecords) {
         onPause();
@@ -357,6 +380,8 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         mListNames.setAdapter(mCustomListAdapter);
     }
 
+    // Here I'm checking every time when this activity calls after the activities which can change the
+    // data in the database. And if any changes are made then the list will update otherwise not.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -384,12 +409,15 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         }
     }
 
+    // Here i'm stopping the Progress bar after list are loaded successfully.
     @Override
     protected void onPause() {
         progressDialog.dismiss();
         super.onPause();
     }
 
+    // This method will check the call permission which is mandatory to allow by the user if they want
+    // to make a direct call from the application.
     public boolean isCallPermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(Manifest.permission.CALL_PHONE)
@@ -409,6 +437,8 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         }
     }
 
+    // If the permission hasn't granted yet, this function will call every time to ask the user to
+    // grant the permission if they wanna use the calling function.
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[],
