@@ -101,7 +101,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
             }
         });
 
-        // The list where click on contact will get you the Detailed of that contact.
+        // The list where click on contact will get you the Details of that contact.
         mListNames.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -245,7 +245,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         return super.onOptionsItemSelected(item);
     }
 
-    // The context menu will open when your long click on any contact to access quick functionality.
+    // The context menu will open when you long click on any contact to access quick functionality.
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
