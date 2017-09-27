@@ -2,7 +2,7 @@ package com.contact_app.fleet;
 
 import java.util.ArrayList;
 
-interface DataListener {
+public interface DataListener {
     void onPreExecute();
 
     void onProgress(int progress);

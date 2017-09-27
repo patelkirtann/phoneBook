@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.contact_app.fleet.CallLog.CallLogActivity;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -32,13 +33,13 @@ public class AddActivity extends AppCompatActivity {
 
     private static final int GALLERY_IMAGE = 5;
     private static final int MY_PERMISSIONS_REQUEST_PICTURE_CONTACTS = 1;
-    public EditText mName, mEmail, mPhone, mStreet, mCity, mIntro;
-    public ImageButton btClockwise;
-    public DBForm dbForm;
-    public TextInputLayout nameLayout, emailLayout, phoneLayout;
-    public byte[] imageByteArray = null;
-    public Bitmap yourSelectedImage = null;
-    boolean check = true;
+    private EditText mName, mEmail, mPhone, mStreet, mCity, mIntro;
+    private ImageButton btClockwise;
+    private DBForm dbForm;
+    private TextInputLayout nameLayout, emailLayout, phoneLayout;
+    private byte[] imageByteArray = null;
+    private Bitmap yourSelectedImage = null;
+    private boolean check = true;
     private CircleImageView mPicture;
 
     @Override
@@ -61,6 +62,12 @@ public class AddActivity extends AppCompatActivity {
 
         phoneLayout = (TextInputLayout) findViewById(R.id.phone_field_layout);
         mPhone = (EditText) findViewById(R.id.phone_field);
+
+        Bundle bundle = getIntent().getExtras();
+
+        if (bundle != null){
+            mPhone.setText(String.valueOf(bundle.getString("LOG_PHONE_NUMBER")));
+        }
 
         mStreet = (EditText) findViewById(R.id.street_field);
         mCity = (EditText) findViewById(R.id.city_field);
@@ -124,6 +131,7 @@ public class AddActivity extends AppCompatActivity {
                             Toast.makeText(AddActivity.this, " Contact Saved ",
                                     Toast.LENGTH_SHORT).show();
                             setResult(RESULT_OK);
+//                            startActivity(new Intent(getApplicationContext(), ListActivity.class));
                             onBackPressed();
                         }
                     }
