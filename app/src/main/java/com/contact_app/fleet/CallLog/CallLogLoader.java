@@ -16,7 +16,6 @@ public class CallLogLoader extends AsyncTask<Object, Object, ArrayList<RetrieveC
 
     private final Context context;
     private final DataListener dataListener;
-    private final RetrieveContactRecord contactRecord;
     private final int startPos;
     private final int endPos;
 
@@ -26,7 +25,6 @@ public class CallLogLoader extends AsyncTask<Object, Object, ArrayList<RetrieveC
                   int endPos) {
         this.context = context;
         this.dataListener = dataListener;
-        this.contactRecord = new RetrieveContactRecord();
         this.startPos = startPos;
         this.endPos = endPos;
     }

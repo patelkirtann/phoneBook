@@ -28,6 +28,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.contact_app.fleet.Add_Update.AddActivity;
 import com.contact_app.fleet.CallLog.CallLogActivity;
 
 import java.lang.reflect.Method;
@@ -117,15 +118,8 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                     Log.d("Name Value", sendId);
                     intent.putExtra("ID_INTENT", sendId);
 
-//                    Pair<View, String> p1 = Pair.create(view.findViewById(R.id.profile_image), "profile");
-//                    Pair<View, String> p2 = Pair.create(view.findViewById(R.id.tv_name), "name");
-//                    ActivityOptionsCompat options = ActivityOptionsCompat.
-//                            makeSceneTransitionAnimation(ListActivity.this , p1, p2);
-
-//                    startActivityForResult(intent, 1, options.toBundle());
-
                     startActivityForResult(intent, 1);
-                    overridePendingTransition(R.anim.pull_in_right, 0);
+//                    overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(ListActivity.this, "No Contact Found",

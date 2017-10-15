@@ -29,10 +29,10 @@ public class CallLogActivity extends AppCompatActivity implements DataListener {
     private static final String TAG = "CallLogActivity";
     private static final int MY_PERMISSIONS_REQUEST_CALL_CONTACTS = 1;
     private static final int ADD_NEW = 3;
-    private int SET_RESULT = RESULT_CANCELED;
-    RecyclerView recyclerView;
-    CallLogAdapter recyclerAdapter;
+    private RecyclerView recyclerView;
+    private CallLogAdapter recyclerAdapter;
     boolean isRefreshing = false;
+    private int SET_RESULT = RESULT_CANCELED;
     private boolean hasData = false;
     private int startPos = 0;
     private int endPos = 25;
@@ -49,9 +49,7 @@ public class CallLogActivity extends AppCompatActivity implements DataListener {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        
+
         retrieveData(startPos, endPos);
         recyclerView = (RecyclerView) findViewById(R.id.rv_callLogList);
 
@@ -65,7 +63,6 @@ public class CallLogActivity extends AppCompatActivity implements DataListener {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
                 if (dy < 0) {
                     // Recycle view scrolling up...
                     Log.d(TAG, "Scrolling up");
@@ -93,6 +90,7 @@ public class CallLogActivity extends AppCompatActivity implements DataListener {
 
                     if (layoutManager.findLastVisibleItemPosition()
                             == recyclerAdapter.getItemCount() - 10) {
+                        recyclerView.stopScroll();
                         if (recyclerAdapter.getItemCount() == endPos + 1 &&
                                 recyclerAdapter.getItemCount() > endPos) {
                             startPos = endPos + 1;
@@ -216,8 +214,8 @@ public class CallLogActivity extends AppCompatActivity implements DataListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ADD_NEW){
-            if (resultCode == RESULT_OK){
+        if (requestCode == ADD_NEW) {
+            if (resultCode == RESULT_OK) {
                 SET_RESULT = RESULT_OK;
             }
         }

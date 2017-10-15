@@ -20,6 +20,7 @@ public class CallLogViewHolder extends RecyclerView.ViewHolder {
     TextView time;
     ImageButton add;
     TextView date;
+    TextView duration;
 
     public CallLogViewHolder(View itemView) {
         super(itemView);
@@ -28,6 +29,7 @@ public class CallLogViewHolder extends RecyclerView.ViewHolder {
         imageView = (CircleImageView) itemView.findViewById(R.id.civ_log_image);
         add = (ImageButton) itemView.findViewById(R.id.bt_addCallLogContact);
         date = (TextView) itemView.findViewById(R.id.tv_log_date);
+        duration = (TextView) itemView.findViewById(R.id.tv_log_duration);
     }
 }
 

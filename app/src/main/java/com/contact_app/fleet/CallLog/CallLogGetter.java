@@ -19,11 +19,9 @@ import com.contact_app.fleet.RetrieveContactRecord;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -61,7 +59,11 @@ public class CallLogGetter {
                         int seconds = (int) (time % 60);
                         String str = String.format(new Locale(String.valueOf(time)), "%02d:%02d",
                                 minutes, seconds);
-                        logModel.setLogDuration(str + " min");
+                        if (minutes == 0){
+                            logModel.setLogDuration(str + " sec");
+                        }else {
+                            logModel.setLogDuration(str + " min");
+                        }
 
                         // Get Contact Name
 //                        String name = c.getString(c.getColumnIndex(CallLog.Calls.CACHED_NAME));

@@ -26,6 +26,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.contact_app.fleet.Add_Update.UpdateActivity;
+
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.Method;
 
@@ -452,7 +454,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
             case android.R.id.home:
 
                 onBackPressed();
-                overridePendingTransition(R.anim.pull_in_left, 0 );
+//                overridePendingTransition(R.anim.pull_in_left, R.anim.push_out_right );
 
                 break;
             case R.id.share_contact:

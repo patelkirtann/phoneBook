@@ -10,8 +10,8 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginLeft="36dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:transitionName="profile"
         tools:src="@drawable/ic_person_round" />
 
@@ -43,5 +43,9 @@
             android:textSize="14sp"
             android:textStyle="normal"
             tools:text="Intro" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/divider"/>
     </LinearLayout>
 </LinearLayout>

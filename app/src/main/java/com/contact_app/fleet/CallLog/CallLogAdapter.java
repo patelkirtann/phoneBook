@@ -8,12 +8,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.contact_app.fleet.AddActivity;
+import com.contact_app.fleet.Add_Update.AddActivity;
 import com.contact_app.fleet.R;
 import com.contact_app.fleet.RetrieveContactRecord;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +23,8 @@ import java.util.List;
 
 public class CallLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int MAIN_VIEW = 1;
-    private static final int DATE_VIEW = 2;
     private Context mContext;
     private final ArrayList<RetrieveContactRecord> logList;
-
     private String currentDateValue;
 
     CallLogAdapter(ArrayList<RetrieveContactRecord> logList) {
@@ -67,6 +64,7 @@ public class CallLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             ((CallLogViewHolder) holder).time.setText(record.getLogTime());
             ((CallLogViewHolder) holder).imageView.setImageBitmap(record.getLogCallImage());
+            ((CallLogViewHolder) holder).duration.setText(record.getLogDuration());
 
             if (record.getLogName().equals("Unknown")){
                 ((CallLogViewHolder) holder).add.setVisibility(View.VISIBLE);

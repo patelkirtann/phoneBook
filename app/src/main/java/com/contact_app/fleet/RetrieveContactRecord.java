@@ -85,51 +85,51 @@ public class RetrieveContactRecord {
 
     }
 
-    String getEmail() {
+    public String getEmail() {
         return mEmail;
     }
 
-    void setEmail(String mEmail) {
+    public void setEmail(String mEmail) {
         this.mEmail = mEmail;
     }
 
-    String getPhone() {
+    public String getPhone() {
         return mPhone;
     }
 
-    void setPhone(String mPhone) {
+    public void setPhone(String mPhone) {
         this.mPhone = mPhone;
     }
 
-    String getStreet() {
+    public String getStreet() {
         return mStreet;
     }
 
-    void setStreet(String mStreet) {
+    public void setStreet(String mStreet) {
         this.mStreet = mStreet;
     }
 
-    String getCity() {
+    public String getCity() {
         return mCity;
     }
 
-    void setCity(String mCity) {
+    public void setCity(String mCity) {
         this.mCity = mCity;
     }
 
-    String getIntro() {
+    public String getIntro() {
         return mIntro;
     }
 
-    void setIntro(String mIntro) {
+    public void setIntro(String mIntro) {
         this.mIntro = mIntro;
     }
 
-    byte[] getPicture() {
+    public byte[] getPicture() {
         return mPicture;
     }
 
-    void setPicture(byte[] mPicture) {
+    public void setPicture(byte[] mPicture) {
         this.mPicture = mPicture;
     }
 

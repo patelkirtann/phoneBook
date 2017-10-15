@@ -6,20 +6,11 @@
     android:orientation="vertical"
     tools:context="com.contact_app.fleet.CallLog.CallLogActivity">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Phone Log"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@color/colorAccent"/>
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="16dp">
+        android:layout_margin="16dp">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_callLogList"
