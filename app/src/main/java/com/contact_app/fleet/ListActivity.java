@@ -9,19 +9,18 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -29,6 +28,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.contact_app.fleet.Add_Update.AddActivity;
+import com.contact_app.fleet.CallLog.CallLogActivity;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -45,7 +47,8 @@ public class ListActivity extends AppCompatActivity implements DataListener {
     public DBForm dbForm;
     public EditText mSearch;
     public TextView mInformationText;
-    public FloatingActionButton mAddFloatingButton;
+    public com.github.clans.fab.FloatingActionButton mAddFloatingButton;
+    public com.github.clans.fab.FloatingActionButton mCallLogFloatingButton;
     public CustomListAdapter mCustomListAdapter;
     public TextView switcher;
     public ProgressDialog progressDialog;
@@ -69,7 +72,8 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         mSearch.setSingleLine(true);
 
         mInformationText = (TextView) findViewById(R.id.tv_information);
-        mAddFloatingButton = (FloatingActionButton) findViewById(R.id.fab_addContact);
+        mAddFloatingButton = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.fab_addContact);
+        mCallLogFloatingButton = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.fab_CallLogContact);
         switcher = (TextView) findViewById(R.id.ts_alphabets);
 
         mInformationText.setText("No Contacts");
@@ -111,10 +115,12 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                             UserDetailOperationActivity.class);
                     findName = mCustomListAdapter.getItem(position).getName();
                     sendId = dbForm.getIdByName(findName);
+
                     Log.d("Name Value", sendId);
                     intent.putExtra("ID_INTENT", sendId);
 
                     startActivityForResult(intent, 1);
+//                    overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(ListActivity.this, "No Contact Found",
@@ -165,6 +171,14 @@ public class ListActivity extends AppCompatActivity implements DataListener {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ListActivity.this, AddActivity.class);
+                startActivityForResult(intent, ADD_REQUEST_CODE);
+            }
+        });
+
+        mCallLogFloatingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ListActivity.this, CallLogActivity.class);
                 startActivityForResult(intent, ADD_REQUEST_CODE);
             }
         });
@@ -240,6 +254,12 @@ public class ListActivity extends AppCompatActivity implements DataListener {
 
                 AlertDialog alertDialog = dialog.create();
                 alertDialog.show();
+                break;
+            case R.id.policy:
+                String url = "https://patelkirtann.github.io/fleet-policy/";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -402,7 +422,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         if (requestCode == ADD_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 isDataChanged = true;
-                Snackbar.make(findViewById(R.id.activity_list), "1 Contact Added",
+                Snackbar.make(findViewById(R.id.activity_list), "Contact Added",
                         Snackbar.LENGTH_SHORT)
                         .show();
             }

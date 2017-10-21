@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
-    android:padding="16dp"
+    android:layout_margin="16dp"
     tools:context="com.contact_app.fleet.ListActivity">
 
     <EditText
@@ -44,18 +44,37 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/search_names"
+            android:divider="@android:color/transparent"
             android:clipToPadding="false"
             android:paddingBottom="80dp" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_addContact"
+        <com.github.clans.fab.FloatingActionMenu
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
-            android:layout_margin="16dp"
-            android:clickable="true"
-            android:src="@drawable/ic_person_add"
-            app:fabSize="auto" />
+            >
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_addContact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:clickable="true"
+                android:src="@drawable/ic_person_add"
+                app:fabSize="auto"
+                app:fab_label="Create New"
+                app:fab_size="mini"/>
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_CallLogContact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:clickable="true"
+                android:src="@drawable/ic_call_log_add"
+                app:fabSize="auto"
+                app:fab_label="Create From Log"
+                app:fab_size="mini"/>
+        </com.github.clans.fab.FloatingActionMenu>
 
     </android.support.design.widget.CoordinatorLayout>
 

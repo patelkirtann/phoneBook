@@ -34,7 +34,8 @@ class CustomListAdapter extends ArrayAdapter<RetrieveContactRecord> {
         ViewHolder holder;
         if (view == null) {
             viewConverter =
-                    LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
+                    LayoutInflater.from(getContext()).inflate(R.layout.list_item_view,
+                            parent, false);
             holder = new ViewHolder(viewConverter);
             viewConverter.setTag(holder);
         } else {

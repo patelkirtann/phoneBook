@@ -25,11 +25,12 @@
                 android:orientation="vertical">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/iv_photo"
+                    android:id="@+id/profile_image"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
+                    android:transitionName="profile"
                     android:background="@drawable/ic_person_pin"
                     android:contentDescription="@string/contacts" />
 
@@ -40,6 +41,7 @@
                     android:layout_marginTop="10dp"
                     android:gravity="center"
                     android:text="@string/name"
+                    android:transitionName="name"
                     android:textAllCaps="true"
                     android:textColor="@color/whiteText"
                     android:textSize="20sp"

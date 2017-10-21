@@ -10,7 +10,7 @@ import android.util.Log;
 import java.sql.Blob;
 import java.util.ArrayList;
 
-class DBForm extends SQLiteOpenHelper {
+public class DBForm extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "MyDBName.db";
     private static final String CONTACTS_TABLE_NAME = "contacts";
@@ -30,7 +30,7 @@ class DBForm extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, 3);
     }
 
-    static DBForm getInstance(Context context) {
+    public static DBForm getInstance(Context context) {
         if (dbForm == null) {
             dbForm = new DBForm(context.getApplicationContext());
         }
@@ -63,7 +63,7 @@ class DBForm extends SQLiteOpenHelper {
 //        onCreate(db);
     }
 
-    boolean insertValue(String name, String email, String phone,
+    public boolean insertValue(String name, String email, String phone,
                         String street, String city, String intro, byte[] picture) {
         ContentValues contentValues = new ContentValues();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -98,7 +98,7 @@ class DBForm extends SQLiteOpenHelper {
         return array_list;
     }
 
-    void deleteContactByName(String name) {
+    public void deleteContactByName(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cur = db.rawQuery("delete from contacts where name='" + name + "'", null);
         cur.moveToFirst();
@@ -106,7 +106,7 @@ class DBForm extends SQLiteOpenHelper {
         db.close();
     }
 
-    void updateContact(String id, String name, String email, String phone, String street,
+    public void updateContact(String id, String name, String email, String phone, String street,
                        String city, String intro, byte[] picture) {
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues cv = new ContentValues();
@@ -125,7 +125,7 @@ class DBForm extends SQLiteOpenHelper {
 
     }
 
-    RetrieveContactRecord getSingleContactById(String id) {
+    public RetrieveContactRecord getSingleContactById(String id) {
         Log.d("DbForm", "Value of Name: " + id);
         RetrieveContactRecord userRecord = new RetrieveContactRecord();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -148,7 +148,7 @@ class DBForm extends SQLiteOpenHelper {
         return userRecord;
     }
 
-    ArrayList<RetrieveContactRecord> getListData() {
+    public ArrayList<RetrieveContactRecord> getListData() {
 
         ArrayList<RetrieveContactRecord> userList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -173,11 +173,11 @@ class DBForm extends SQLiteOpenHelper {
         return userList;
     }
 
-    boolean checkName(String name) {
+    public boolean checkName(String name) {
         return getName().contains(name);
     }
 
-    String getIdByName(String name) {
+    public String getIdByName(String name) {
         String id;
         SQLiteDatabase db = this.getReadableDatabase();
         String qu = "select " + CONTACTS_COLUMN_ID + " from " + CONTACTS_TABLE_NAME
@@ -192,7 +192,7 @@ class DBForm extends SQLiteOpenHelper {
         return id;
     }
 
-    String getPhoneByName(String findName) {
+    public String getPhoneByName(String findName) {
         String phone;
         SQLiteDatabase db = this.getReadableDatabase();
         String qu = "select " + CONTACTS_COLUMN_PHONE + " from " + CONTACTS_TABLE_NAME

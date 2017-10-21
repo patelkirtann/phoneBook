@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.contact_app.fleet.AddActivity">
+    tools:context="com.contact_app.fleet.Add_Update.AddActivity">
 
     <LinearLayout
         android:id="@+id/ll_new_contact"

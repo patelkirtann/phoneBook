@@ -9,7 +9,10 @@
         android:id="@+id/profile_image"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_margin="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:transitionName="profile"
         tools:src="@drawable/ic_person_round" />
 
     <LinearLayout
@@ -20,24 +23,29 @@
         android:paddingRight="16dp">
 
         <TextView
-            android:id="@+id/list_names"
+            android:id="@+id/tv_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAllCaps="true"
+            android:transitionName="name"
             android:textSize="16sp"
             android:textStyle="normal"
-            tools:text="Name" />
+            tools:text="Name"
+            android:layout_marginTop="8dp"/>
 
         <TextView
             android:id="@+id/list_intro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginBottom="4dp"
             android:maxLines="1"
             android:textColor="@color/light_gray_background"
             android:textSize="14sp"
             android:textStyle="normal"
             tools:text="Intro" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/divider"/>
     </LinearLayout>
 </LinearLayout>

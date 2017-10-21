@@ -26,6 +26,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.contact_app.fleet.Add_Update.UpdateActivity;
+
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.Method;
 
@@ -54,7 +56,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
             getSupportActionBar().setElevation(0);
         }
 
-        mDisplayPic = (ImageView) findViewById(R.id.iv_photo);
+        mDisplayPic = (ImageView) findViewById(R.id.profile_image);
 
         mName = (TextView) findViewById(R.id.tv_name);
         mPhoneNumber = (TextView) findViewById(R.id.tv_phoneNumber);
@@ -72,7 +74,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
 
         } else {
             id = savedInstanceState.getString("ID_INTENT");
-            name = savedInstanceState.getString("NAME_INTENT");
+            name = savedInstanceState.getString("NAME_SAVED");
             address = savedInstanceState.getString("EMAIL_SAVED");
             number = savedInstanceState.getString("PHONE_SAVED");
             street = savedInstanceState.getString("STREET_SAVED");
@@ -452,6 +454,7 @@ public class UserDetailOperationActivity extends AppCompatActivity {
             case android.R.id.home:
 
                 onBackPressed();
+//                overridePendingTransition(R.anim.pull_in_left, R.anim.push_out_right );
 
                 break;
             case R.id.share_contact:

@@ -1,4 +1,4 @@
-package com.contact_app.fleet;
+package com.contact_app.fleet.Add_Update;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -24,6 +24,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.contact_app.fleet.DBForm;
+import com.contact_app.fleet.ImageConverter;
+import com.contact_app.fleet.R;
+import com.contact_app.fleet.RetrieveContactRecord;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
