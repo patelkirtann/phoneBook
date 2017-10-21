@@ -44,7 +44,9 @@ public class CallLogActivity extends AppCompatActivity implements DataListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_call_log);
 
-        isRequiredPermissionGranted();
+        if (!isRequiredPermissionGranted()){
+            finish();
+        }
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -124,6 +126,7 @@ public class CallLogActivity extends AppCompatActivity implements DataListener {
             retrieveData(0, 25);
             hasData = true;
             Log.d(TAG, "Its false right now onResume");
+
         } else if (recyclerAdapter.getItemCount() > 0) {
 //            attachAdapterWithDataList(listData);
             Log.d(TAG, "Its true right now onResume");
@@ -178,11 +181,13 @@ public class CallLogActivity extends AppCompatActivity implements DataListener {
                     == PackageManager.PERMISSION_GRANTED &&
                     checkSelfPermission(Manifest.permission.READ_CONTACTS)
                             == PackageManager.PERMISSION_GRANTED) {
+
                 return true;
             } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.READ_CALL_LOG,
-                                Manifest.permission.READ_CONTACTS}, 1);
+                                Manifest.permission.READ_CONTACTS},
+                        MY_PERMISSIONS_REQUEST_CALL_CONTACTS);
                 return true;
             }
         } else {
@@ -202,8 +207,10 @@ public class CallLogActivity extends AppCompatActivity implements DataListener {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    hasData = false;
                     Log.d("Permission", "Granted");
                 } else {
+                    finish();
                     Log.d("Permission", "Denied");
 
                 }

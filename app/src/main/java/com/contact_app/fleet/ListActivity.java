@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -254,6 +255,12 @@ public class ListActivity extends AppCompatActivity implements DataListener {
                 AlertDialog alertDialog = dialog.create();
                 alertDialog.show();
                 break;
+            case R.id.policy:
+                String url = "https://patelkirtann.github.io/fleet-policy/";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -265,8 +272,7 @@ public class ListActivity extends AppCompatActivity implements DataListener {
         super.onCreateContextMenu(menu, v, menuInfo);
         AdapterView.AdapterContextMenuInfo info =
                 (AdapterView.AdapterContextMenuInfo) menuInfo;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        }
+
         findName = mCustomListAdapter.getItem(info.position).getName();
         number = dbForm.getPhoneByName(findName);
 

@@ -85,8 +85,8 @@
             android:tint="@color/colorAccent"
             android:src="@drawable/ic_person_add"
             android:contentDescription="Image"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp" />
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp" />
 
     </RelativeLayout>
     <View

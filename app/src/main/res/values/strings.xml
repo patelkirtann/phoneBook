@@ -41,4 +41,6 @@
     <string name="anti_clockwise">antiClockwise</string>
     <string name="clockwise">Clockwise</string>
     <string name="title_activity_call_log">Your Call Log</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="app_info">App Info</string>
 </resources>

@@ -6,9 +6,20 @@
         android:icon="@drawable/ic_action_share"
         android:title="@string/share"
         app:showAsAction="collapseActionView"/>
-    <item
-        android:id="@+id/about"
-        android:icon="@drawable/ic_action_description"
+    <item android:id="@+id/info"
         android:title="@string/about"
-        app:showAsAction="never" />
+        android:icon="@drawable/ic_action_description"
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/about"
+                android:title="@string/app_info"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/policy"
+                android:title="@string/privacy_policy"
+                app:showAsAction="never"/>
+        </menu>
+    </item>
+
 </menu>
