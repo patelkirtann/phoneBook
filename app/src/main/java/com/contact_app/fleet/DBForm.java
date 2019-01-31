@@ -27,7 +27,7 @@ public class DBForm extends SQLiteOpenHelper {
     private static DBForm dbForm = null;
 
     DBForm(Context context) {
-        super(context, DATABASE_NAME, null, 3);
+        super(context, DATABASE_NAME, null, 4);
     }
 
     public static DBForm getInstance(Context context) {

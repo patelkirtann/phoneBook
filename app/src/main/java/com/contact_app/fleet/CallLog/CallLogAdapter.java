@@ -13,7 +13,6 @@ import com.contact_app.fleet.Add_Update.AddActivity;
 import com.contact_app.fleet.R;
 import com.contact_app.fleet.RetrieveContactRecord;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
